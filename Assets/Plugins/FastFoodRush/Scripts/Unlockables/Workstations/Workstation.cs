@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class Workstation : Unlockable
+    public class Workstation :Unlockable
     {
         [SerializeField, Tooltip("The working spot where the worker performs tasks")]
         private WorkingSpot workingSpot;

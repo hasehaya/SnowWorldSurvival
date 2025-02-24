@@ -49,6 +49,10 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Prefab for the employee.")]
         private EmployeeController employeePrefab;
 
+        [Header("Employee (Log)")]
+        [SerializeField, Tooltip("Log用の従業員プレハブ")]
+        private LogEmployeeController logEmployeePrefab;
+
         [SerializeField, Tooltip("Radius within which employees will spawn.")]
         private float employeeSpawnRadius = 3f;
 
@@ -132,7 +136,7 @@ namespace CryingSnow.FastFoodRush
 
             // Spawn the number of employees based on the saved data.
             for (int i = 0; i < data.EmployeeAmount; i++)
-                SpawnEmployee();
+                SpawnLogEmployees();
         }
 
         void Start()
@@ -193,6 +197,36 @@ namespace CryingSnow.FastFoodRush
 
             // Instantiate a new employee at the calculated random position and the predefined rotation.
             Instantiate(employeePrefab, randomPos, employeePoint.rotation);
+        }
+
+        void SpawnLogEmployees()
+        {
+            TreeParent treeParent = FindObjectOfType<TreeParent>();
+            if (treeParent == null)
+            {
+                Debug.LogWarning("TreeParent がシーン内に見つかりません。従来の方法で生成します。");
+                SpawnEmployee();
+                return;
+            }
+
+            // TreeParent から各列のパトロール地点（A, B）を取得
+            List<TreeParent.PatrolPoints> patrolPointsList = treeParent.GetPatrolPointsPerColumn();
+            foreach (var patrol in patrolPointsList)
+            {
+                // A, B 用の空オブジェクトを生成して座標を保持（管理しやすいように親子関係を整備）
+                GameObject pointAObj = new GameObject("PatrolPointA");
+                pointAObj.transform.position = patrol.pointA;
+                pointAObj.transform.parent = transform; // RestaurantManager を親とする
+
+                GameObject pointBObj = new GameObject("PatrolPointB");
+                pointBObj.transform.position = patrol.pointB;
+                pointBObj.transform.parent = transform;
+
+                // ColumnEmployeeController を A の位置に生成
+                LogEmployeeController employee = Instantiate(logEmployeePrefab, patrol.pointA, Quaternion.identity);
+                // 外部からパトロール地点を設定する
+                employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
+            }
         }
 
         void Update()
@@ -343,7 +377,7 @@ namespace CryingSnow.FastFoodRush
 
             case Upgrade.EmployeeAmount:
                 data.EmployeeAmount++; // Increase the number of employees in the restaurant
-                SpawnEmployee(); // Spawn a new employee
+                SpawnLogEmployees(); // Spawn a new employee
                 break;
 
             case Upgrade.PlayerSpeed:
