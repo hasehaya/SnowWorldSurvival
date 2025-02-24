@@ -1,77 +1,70 @@
-using CryingSnow.FastFoodRush;
+using DG.Tweening;
 
 using UnityEngine;
 
-public class Tree :MonoBehaviour
+namespace CryingSnow.FastFoodRush
 {
-    [SerializeField] private int treeHealth = 5;      // ツリーの初期ヘルス
-    [SerializeField] private int logCount = 3;        // ヘルスが1減るごとに生成するログ数
-    [SerializeField] private float decreaseInterval = 3f; // ヘルスが減る間隔(秒)
-    [SerializeField] private float upwardForce = 5f;  // ログを上に跳ね上げる力
-
-    private float timer = 0f;
-
-    private void OnTriggerStay(Collider other)
+    public class Tree :Interactable
     {
-        // プレイヤーがトリガー内にいる場合のみ処理
-        if (other.CompareTag("Player"))
+        [SerializeField] private int treeHealth = 5;
+        [SerializeField] private int logCount = 3;
+        [SerializeField] private float decreaseInterval = 1f;
+        private float timer = 0f;
+
+        private void OnTriggerStay(Collider other)
         {
-            // トリガー内にいる間、経過時間を加算
-            timer += Time.deltaTime;
-
-            // 一定時間を超えたらヘルスを減らし、ログ生成
-            if (timer >= decreaseInterval)
+            if (other.CompareTag("Player"))
             {
-                // ヘルスを1減らす
-                treeHealth--;
-
-                // ログを生成
-                SpawnLogs();
-
-                // ヘルスがなくなったら木を破壊
-                if (treeHealth <= 0)
+                timer += Time.deltaTime;
+                if (timer >= decreaseInterval)
                 {
-                    Destroy(gameObject);
-                }
+                    treeHealth--;
+                    SpawnLogs();
 
-                // タイマーをリセット
+                    if (treeHealth <= 0)
+                    {
+                        Destroy(gameObject);
+                    }
+                    timer = 0f;
+                }
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
                 timer = 0f;
             }
         }
-    }
 
-    private void OnTriggerExit(Collider other)
-    {
-        // プレイヤーがトリガーから出たらタイマーをリセット(触れていない間は減らないようにする)
-        if (other.CompareTag("Player"))
+        // ログを生成してジャンプアニメーションを実行
+        private void SpawnLogs()
         {
-            timer = 0f;
-        }
-    }
-
-    /// <summary>
-    /// logCount 分のログを生成して、上に跳ね上げる
-    /// </summary>
-    private void SpawnLogs()
-    {
-        for (int i = 0; i < logCount; i++)
-        {
-            // PoolManager を使っている場合の例 (なければ Instantiate でもOK)
-            var log = PoolManager.Instance.SpawnObject("Log");
-
-            // 少しずつ高さをずらして生成
-            log.transform.position = transform.position + Vector3.up * (0.5f * i);
-
-            var rb = log.GetComponent<Rigidbody>();
-            if (rb != null)
+            for (int i = 0; i < logCount; i++)
             {
-                // プールされたオブジェクトのため、念のため速度をリセット
-                rb.velocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-
-                // 上方向に瞬間的な力を加える => 跳ねてその後落下
-                rb.AddForce(Vector3.up * upwardForce, ForceMode.Impulse);
+                SpawnLog(i);
             }
         }
+
+        // ログを生成し、ランダム方向へジャンプ後、1秒後にプレイヤーへジャンプして回収
+        private void SpawnLog(int index)
+        {
+            var log = PoolManager.Instance.SpawnObject("Log");
+            Vector3 startPos = transform.position + Vector3.up * index;
+            log.transform.position = startPos;
+
+            Vector3 randomXZ = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
+            float randomDistance = Random.Range(0.5f, 1f);
+            Vector3 firstJumpTarget = startPos + randomXZ * randomDistance + Vector3.up * 5;
+
+            Sequence seq = DOTween.Sequence()
+                .Append(log.transform.DOJump(firstJumpTarget, 2f, 1, 0.5f))
+                .Append(log.transform.DOJump(player.transform.position + Vector3.up * 2f, 3f, 1, 0.5f))
+                .OnComplete(() => PoolManager.Instance.ReturnObject(log));
+        }
+
+        protected override void OnPlayerEnter() { }
+        protected override void OnPlayerExit() { }
     }
 }
