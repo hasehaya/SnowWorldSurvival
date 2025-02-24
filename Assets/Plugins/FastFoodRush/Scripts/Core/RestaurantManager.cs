@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
+
+using DG.Tweening;
+
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using TMPro;
-using DG.Tweening;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class RestaurantManager : MonoBehaviour
+    public class RestaurantManager :MonoBehaviour
     {
         public static RestaurantManager Instance { get; private set; }
 
@@ -35,6 +38,9 @@ namespace CryingSnow.FastFoodRush
 
         [SerializeField, Tooltip("Offset distance for package items in the stack.")]
         private float packageOffset = 0.3f;
+
+        [SerializeField, Tooltip("Offset distance for package items in the stack.")]
+        private float logOffset = 0.3f;
 
         [Header("Employee")]
         [SerializeField, Tooltip("The point where employees will spawn.")]
@@ -118,13 +124,15 @@ namespace CryingSnow.FastFoodRush
             data = SaveSystem.LoadData<RestaurantData>(restaurantID);
 
             // If no data is found, initialize with default values (starting money and empty data).
-            if (data == null) data = new RestaurantData(restaurantID, startingMoney);
+            if (data == null)
+                data = new RestaurantData(restaurantID, startingMoney);
 
             // Adjust the money with 0 adjustment to update the UI only.
             AdjustMoney(0);
 
             // Spawn the number of employees based on the saved data.
-            for (int i = 0; i < data.EmployeeAmount; i++) SpawnEmployee();
+            for (int i = 0; i < data.EmployeeAmount; i++)
+                SpawnEmployee();
         }
 
         void Start()
@@ -141,9 +149,12 @@ namespace CryingSnow.FastFoodRush
             // Loop through all ObjectPile instances and add them to the appropriate list (TrashPiles, FoodPiles, or assign PackagePile).
             foreach (var pile in objectPiles)
             {
-                if (pile.StackType == StackType.Trash) TrashPiles.Add(pile);
-                else if (pile.StackType == StackType.Food) FoodPiles.Add(pile);
-                else if (pile.StackType == StackType.Package) PackagePile = pile;
+                if (pile.StackType == StackType.Trash)
+                    TrashPiles.Add(pile);
+                else if (pile.StackType == StackType.Food)
+                    FoodPiles.Add(pile);
+                else if (pile.StackType == StackType.Package)
+                    PackagePile = pile;
             }
 
             // Find the TrashBin object in the scene and assign it to TrashBin.
@@ -155,8 +166,10 @@ namespace CryingSnow.FastFoodRush
             // Loop through all ObjectStack instances and assign them to the corresponding list or object (FoodStacks or PackageStack).
             foreach (var stack in objectStacks)
             {
-                if (stack.StackType == StackType.Food) FoodStacks.Add(stack);
-                else if (stack.StackType == StackType.Package) PackageStack = stack;
+                if (stack.StackType == StackType.Food)
+                    FoodStacks.Add(stack);
+                else if (stack.StackType == StackType.Package)
+                    PackageStack = stack;
             }
 
             // Initialize unlocked Unlockables based on the data (UnlockCount).
@@ -204,6 +217,7 @@ namespace CryingSnow.FastFoodRush
             StackType.Food => foodOffset,
             StackType.Trash => trashOffset,
             StackType.Package => packageOffset,
+            StackType.Log => logOffset,
             StackType.None => 0f,
             _ => 0f
         };
@@ -294,11 +308,16 @@ namespace CryingSnow.FastFoodRush
         /// <returns>A string representing the money value in a readable format (e.g., "1.5k", "2.3m", etc.).</returns>
         public string GetFormattedMoney(long money)
         {
-            if (money < 1000) return money.ToString(); // No suffix for values under 1000
-            else if (money < 1000000) return (money / 1000f).ToString("0.##") + "k"; // Thousands (k)
-            else if (money < 1000000000) return (money / 1000000f).ToString("0.##") + "m"; // Millions (m)
-            else if (money < 1000000000000) return (money / 1000000000f).ToString("0.##") + "b"; // Billions (b)
-            else return (money / 1000000000000f).ToString("0.##") + "t"; // Trillions (t)
+            if (money < 1000)
+                return money.ToString(); // No suffix for values under 1000
+            else if (money < 1000000)
+                return (money / 1000f).ToString("0.##") + "k"; // Thousands (k)
+            else if (money < 1000000000)
+                return (money / 1000000f).ToString("0.##") + "m"; // Millions (m)
+            else if (money < 1000000000000)
+                return (money / 1000000000f).ToString("0.##") + "b"; // Billions (b)
+            else
+                return (money / 1000000000000f).ToString("0.##") + "t"; // Trillions (t)
         }
 
         /// <summary>
@@ -314,33 +333,33 @@ namespace CryingSnow.FastFoodRush
             // Apply the selected upgrade based on its type
             switch (upgrade)
             {
-                case Upgrade.EmployeeSpeed:
-                    data.EmployeeSpeed++; // Increase employee speed
-                    break;
+            case Upgrade.EmployeeSpeed:
+                data.EmployeeSpeed++; // Increase employee speed
+                break;
 
-                case Upgrade.EmployeeCapacity:
-                    data.EmployeeCapacity++; // Increase the number of items an employee can carry
-                    break;
+            case Upgrade.EmployeeCapacity:
+                data.EmployeeCapacity++; // Increase the number of items an employee can carry
+                break;
 
-                case Upgrade.EmployeeAmount:
-                    data.EmployeeAmount++; // Increase the number of employees in the restaurant
-                    SpawnEmployee(); // Spawn a new employee
-                    break;
+            case Upgrade.EmployeeAmount:
+                data.EmployeeAmount++; // Increase the number of employees in the restaurant
+                SpawnEmployee(); // Spawn a new employee
+                break;
 
-                case Upgrade.PlayerSpeed:
-                    data.PlayerSpeed++; // Increase the player's movement speed
-                    break;
+            case Upgrade.PlayerSpeed:
+                data.PlayerSpeed++; // Increase the player's movement speed
+                break;
 
-                case Upgrade.PlayerCapacity:
-                    data.PlayerCapacity++; // Increase the player's carrying capacity
-                    break;
+            case Upgrade.PlayerCapacity:
+                data.PlayerCapacity++; // Increase the player's carrying capacity
+                break;
 
-                case Upgrade.Profit:
-                    data.Profit++; // Increase the profit multiplier
-                    break;
+            case Upgrade.Profit:
+                data.Profit++; // Increase the profit multiplier
+                break;
 
-                default:
-                    break;
+            default:
+                break;
             }
 
             AudioManager.Instance.PlaySFX(AudioID.Kaching); // Play a sound effect to indicate the upgrade has been purchased
@@ -387,7 +406,8 @@ namespace CryingSnow.FastFoodRush
         public void LoadRestaurant(int index)
         {
             int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            if (index == currentSceneIndex) return; // Avoid reloading the current scene
+            if (index == currentSceneIndex)
+                return; // Avoid reloading the current scene
 
             // Fade out the current screen and load the new scene after saving the data
             screenFader.FadeIn(() =>
@@ -411,7 +431,8 @@ namespace CryingSnow.FastFoodRush
 #if UNITY_EDITOR
         void OnDrawGizmos()
         {
-            if (employeePoint == null) return;
+            if (employeePoint == null)
+                return;
 
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(employeePoint.position, employeeSpawnRadius);

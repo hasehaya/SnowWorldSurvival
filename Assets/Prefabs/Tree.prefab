@@ -68,9 +68,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeebd4bed42d96d40a628c96e7760437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  treeHealth: 3
-  logCount: 3
+  treeHealth: 2
+  logCount: 2
   decreaseInterval: 0.3
+  treeModel: {fileID: 6439221091145675747}
+  regrowDelay: 4
+  growthDuration: 0.5
 --- !u!1 &6912978779625550378
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,5 +181,10 @@ PrefabInstance:
 --- !u!4 &5915308630558681433 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2039430814229735666, guid: 8fc257ba2c0252a41b28f851e028f6b9, type: 3}
+  m_PrefabInstance: {fileID: 5646078378414342571}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6439221091145675747 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1659104951254020680, guid: 8fc257ba2c0252a41b28f851e028f6b9, type: 3}
   m_PrefabInstance: {fileID: 5646078378414342571}
   m_PrefabAsset: {fileID: 0}

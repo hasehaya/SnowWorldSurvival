@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+
 using DG.Tweening;
+
+using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class WobblingStack : MonoBehaviour
+    public class WobblingStack :MonoBehaviour
     {
         [SerializeField, Tooltip("The range for the wobble rate. X = base stack, Y = topmost items.")]
         private Vector2 rateRange = new Vector2(0.8f, 0.4f);
@@ -31,7 +33,8 @@ namespace CryingSnow.FastFoodRush
         void Update()
         {
             // If the stack is empty, there's nothing to update
-            if (stack.Count == 0) return;
+            if (stack.Count == 0)
+                return;
 
             // Get the horizontal and vertical input for wobbling movement
             movement.x = SimpleInput.GetAxis("Horizontal");
@@ -88,7 +91,8 @@ namespace CryingSnow.FastFoodRush
         public Transform RemoveFromStack()
         {
             // If the stack is empty, return null
-            if (height == 0) return null;
+            if (height == 0)
+                return null;
 
             // Get the last item in the stack
             var lastChild = stack.LastOrDefault();
@@ -109,5 +113,5 @@ namespace CryingSnow.FastFoodRush
         }
     }
 
-    public enum StackType { None, Food, Trash, Package }  // Enum to define the type of stack
+    public enum StackType { None, Food, Trash, Package, Log }  // Enum to define the type of stack
 }
