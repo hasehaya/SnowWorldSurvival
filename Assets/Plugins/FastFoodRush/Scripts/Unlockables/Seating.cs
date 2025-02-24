@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class Seating : Unlockable
+    public class Seating :Unlockable
     {
+        /*
         [SerializeField, Tooltip("Base time it takes for a customer to finish eating")]
         private float baseEatTime = 5f;
 
@@ -149,5 +151,6 @@ namespace CryingSnow.FastFoodRush
 
             customers.Clear();  // Clear customer list after eating process
         }
+        */
     }
 }

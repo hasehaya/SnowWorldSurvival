@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class CounterTable : Workstation
+    public class CounterTable :Workstation
     {
         [SerializeField, Tooltip("Base time interval for customer spawn in seconds.")]
         private float baseInterval = 1.5f;
@@ -117,7 +118,8 @@ namespace CryingSnow.FastFoodRush
         void HandleFoodServing()
         {
             // Do nothing if there are no customers or if the first customer doesn't have an order.
-            if (customers.Count == 0 || !firstCustomer.HasOrder) return;
+            if (customers.Count == 0 || !firstCustomer.HasOrder)
+                return;
 
             serveTimer += Time.deltaTime;
 
@@ -135,10 +137,9 @@ namespace CryingSnow.FastFoodRush
                 }
 
                 // If the order is complete, assign the customer to a seat if available.
-                if (firstCustomer.OrderCount == 0 && CheckAvailableSeating(out Transform seat))
+                if (firstCustomer.OrderCount == 0)
                 {
                     var servedCustomer = customers.Dequeue();
-                    servedCustomer.AssignSeat(seat);
                     UpdateQueuePositions();
                 }
             }
@@ -158,28 +159,28 @@ namespace CryingSnow.FastFoodRush
         /// <summary>
         /// Checks if there is available seating for a customer.
         /// </summary>
-        private bool CheckAvailableSeating(out Transform seat)
-        {
-            // Prioritize semi-full seating if available.
-            var semiFullSeating = seatings.Where(seating => seating.gameObject.activeInHierarchy && seating.IsSemiFull).FirstOrDefault();
-            if (semiFullSeating != null)
-            {
-                seat = semiFullSeating.Occupy(firstCustomer);
-                return true;
-            }
+        //private bool CheckAvailableSeating(out Transform seat)
+        //{
+        //    // Prioritize semi-full seating if available.
+        //    var semiFullSeating = seatings.Where(seating => seating.gameObject.activeInHierarchy && seating.IsSemiFull).FirstOrDefault();
+        //    if (semiFullSeating != null)
+        //    {
+        //        seat = semiFullSeating.Occupy(firstCustomer);
+        //        return true;
+        //    }
 
-            // Otherwise, look for completely empty seating.
-            var emptySeatings = seatings.Where(seating => seating.gameObject.activeInHierarchy && seating.IsEmpty).ToList();
-            if (emptySeatings.Count > 0)
-            {
-                int randomIndex = Random.Range(0, emptySeatings.Count);
-                seat = emptySeatings[randomIndex].Occupy(firstCustomer);
-                return true;
-            }
+        //    // Otherwise, look for completely empty seating.
+        //    var emptySeatings = seatings.Where(seating => seating.gameObject.activeInHierarchy && seating.IsEmpty).ToList();
+        //    if (emptySeatings.Count > 0)
+        //    {
+        //        int randomIndex = Random.Range(0, emptySeatings.Count);
+        //        seat = emptySeatings[randomIndex].Occupy(firstCustomer);
+        //        return true;
+        //    }
 
-            seat = null;
-            return false;
-        }
+        //    seat = null;
+        //    return false;
+        //}
 
         /// <summary>
         /// Updates the queue positions of all customers after a customer is served.

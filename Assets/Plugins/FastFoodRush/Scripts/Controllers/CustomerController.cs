@@ -1,4 +1,5 @@
 using System.Collections;
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -6,7 +7,7 @@ namespace CryingSnow.FastFoodRush
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(NavMeshAgent))]
-    public class CustomerController : MonoBehaviour
+    public class CustomerController :MonoBehaviour
     {
         [SerializeField, Tooltip("Max number of orders a customer can place")]
         private int maxOrder = 5;
@@ -23,7 +24,9 @@ namespace CryingSnow.FastFoodRush
         public Vector3 ExitPoint { get; set; } // The exit point where the customer will leave after eating
         public bool HasOrder { get; private set; } // Whether the customer has placed an order
         public int OrderCount { get; private set; } // The number of items in the customer's order
-        public bool ReadyToEat { get; private set; } // Whether the customer is ready to eat
+
+        // 席に行く処理を削除するため、ReadyToEat フラグは使わないようにコメントアウト
+        //public bool ReadyToEat { get; private set; } // Whether the customer is ready to eat
 
         private OrderInfo orderInfo => RestaurantManager.Instance.FoodOrderInfo; // Access to the food order information
 
@@ -94,7 +97,8 @@ namespace CryingSnow.FastFoodRush
         {
             agent.SetDestination(queuePoint.position); // Move to the queue point
 
-            if (isFirst) StartCoroutine(PlaceOrder()); // If first in line, place an order
+            if (isFirst)
+                StartCoroutine(PlaceOrder()); // If first in line, place an order
         }
 
         /// <summary>
@@ -107,37 +111,42 @@ namespace CryingSnow.FastFoodRush
             stack.AddToStack(food, StackType.Food); // Add food to the customer's stack
 
             orderInfo.ShowInfo(transform, OrderCount); // Update the order info display
+
+            // すべての注文を受け取り終わったら直接退店
+            if (OrderCount <= 0)
+            {
+                // 注文情報を隠す
+                orderInfo.HideInfo();
+                // 退店アニメーションを再生
+                animator.SetTrigger("Leave");
+                // 退店処理へ
+                agent.SetDestination(ExitPoint);
+                StartCoroutine(WalkToExit());
+            }
         }
 
-        /// <summary>
-        /// Assigns a seat to the customer and starts the walking animation to the seat.
-        /// </summary>
-        /// <param name="seat">The seat the customer will walk to.</param>
+        // 席に座る処理は不要になるため、AssignSeat() は空実装にしておくか削除する
+        // もし外部から呼ばれないようにする場合は削除しても良い
         public void AssignSeat(Transform seat)
         {
-            orderInfo.HideInfo(); // Hide the order info as the customer begins searching for a seat
-
-            StartCoroutine(WalkToSeat(seat)); // Start the walk to the seat
+            // 席に向かう処理を削除・無効化
+            // orderInfo.HideInfo();
+            // StartCoroutine(WalkToSeat(seat));
         }
 
-        /// <summary>
-        /// Triggers the eating animation for the customer.
-        /// </summary>
-        public void TriggerEat()
-        {
-            animator.SetTrigger("Eat");
-        }
+        // 食べるアクションも不要なため削除または無効化
+        //public void TriggerEat()
+        //{
+        //    animator.SetTrigger("Eat");
+        //}
 
-        /// <summary>
-        /// Handles the process of finishing eating and moving the customer to the exit.
-        /// </summary>
-        public void FinishEating()
-        {
-            agent.SetDestination(ExitPoint); // Set the destination to the exit
-            animator.SetTrigger("Leave"); // Trigger the leaving animation
-
-            StartCoroutine(WalkToExit()); // Start the walk to the exit
-        }
+        // FinishEating も不要
+        //public void FinishEating()
+        //{
+        //    agent.SetDestination(ExitPoint); 
+        //    animator.SetTrigger("Leave"); 
+        //    StartCoroutine(WalkToExit());
+        //}
 
         /// <summary>
         /// Places an order by waiting until the customer has arrived, then randomly choosing an order count.
@@ -152,37 +161,14 @@ namespace CryingSnow.FastFoodRush
             orderInfo.ShowInfo(transform, OrderCount); // Update the order info display
         }
 
-        /// <summary>
-        /// Makes the customer walk to their assigned seat.
-        /// </summary>
-        /// <param name="seat">The seat the customer is walking to.</param>
-        IEnumerator WalkToSeat(Transform seat)
-        {
-            yield return new WaitForSeconds(0.3f); // Wait for the last food item to land
-
-            agent.SetDestination(seat.position); // Set destination to the seat
-
-            yield return new WaitUntil(() => HasArrived()); // Wait until the customer has arrived
-
-            // Align the customer's rotation to match the seat's rotation
-            while (Vector3.Angle(transform.forward, seat.forward) > 0.1f)
-            {
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, seat.rotation, Time.deltaTime * 270f);
-                yield return null;
-            }
-
-            var seating = seat.GetComponentInParent<Seating>();
-            // Place the food items on the table
-            while (stack.Count > 0)
-            {
-                seating.AddFoodOnTable(stack.RemoveFromStack());
-                yield return new WaitForSeconds(0.05f); // Wait between placing items
-            }
-
-            ReadyToEat = true; // Mark the customer as ready to eat
-
-            animator.SetTrigger("Sit"); // Trigger the sitting animation
-        }
+        // 席に向かう処理も不要なので削除または無効化
+        //IEnumerator WalkToSeat(Transform seat)
+        //{
+        //    yield return new WaitForSeconds(0.3f); // Wait for the last food item to land
+        //    agent.SetDestination(seat.position);
+        //    yield return new WaitUntil(() => HasArrived());
+        //    // ...
+        //}
 
         /// <summary>
         /// Makes the customer walk to the exit and destroys the customer object once they leave.
@@ -190,9 +176,7 @@ namespace CryingSnow.FastFoodRush
         IEnumerator WalkToExit()
         {
             StartCoroutine(CheckEntrance()); // Check if the entrance is clear
-
             yield return new WaitUntil(() => HasArrived()); // Wait until the customer arrives at the exit
-
             Destroy(gameObject); // Destroy the customer object when they leave
         }
 
