@@ -4,6 +4,8 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
+using CryingSnow.FastFoodRush;
+
 public class GridGenerator :MonoBehaviour
 {
     [SerializeField] private string childBaseName = "Child";
@@ -50,6 +52,12 @@ public class GridGenerator :MonoBehaviour
                 if (sourcePrefab != null)
                 {
                     clone = (GameObject)PrefabUtility.InstantiatePrefab(sourcePrefab, parent.transform);
+                    var tree = clone.GetComponent<CryingSnow.FastFoodRush.Tree>();
+                    if (tree != null)
+                    {
+                        tree.Row = row + 1;
+                        tree.Column = col + 1;
+                    }
                 }
                 else
                 {

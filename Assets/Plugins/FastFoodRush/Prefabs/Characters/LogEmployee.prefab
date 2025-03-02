@@ -445,9 +445,10 @@ GameObject:
   - component: {fileID: 7991684774145955542}
   - component: {fileID: 3169494392372190175}
   - component: {fileID: -9109334660229177427}
+  - component: {fileID: -1656015386102720917}
   m_Layer: 0
   m_Name: LogEmployee
-  m_TagString: Untagged
+  m_TagString: Employee
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -525,10 +526,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e25cdfc5ccc596c4b836c99f89e59f05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointA: {fileID: 0}
-  pointB: {fileID: 0}
   leftHandTarget: {fileID: 6833413534109660066}
   rightHandTarget: {fileID: 7193315603692477269}
+  stack: {fileID: 3453252986456316324}
+  capacity: 3
+--- !u!143 &-1656015386102720917
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3694032023809398294}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 2
+  m_Radius: 0.3
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.05
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &3817049634957651387
 GameObject:
   m_ObjectHideFlags: 0

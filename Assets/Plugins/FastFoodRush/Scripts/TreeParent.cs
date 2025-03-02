@@ -8,10 +8,21 @@ namespace CryingSnow.FastFoodRush
     {
         [SerializeField] private Transform treeGrid;
         private List<GameObject> treeObjects = new List<GameObject>();
+        private bool isInitialized = false; // 初期化済みかのフラグ
 
         protected override void Awake()
         {
             base.Awake();
+            InitializeTreeObjects();
+        }
+
+        /// <summary>
+        /// ツリーオブジェクトの初期化（遅延初期化にも対応）
+        /// </summary>
+        private void InitializeTreeObjects()
+        {
+            if (isInitialized)
+                return;
 
             // treeGrid 配下のすべての Tree コンポーネントを取得
             var treeList = treeGrid.GetComponentsInChildren<Tree>();
@@ -19,6 +30,7 @@ namespace CryingSnow.FastFoodRush
             {
                 treeObjects.Add(tree.gameObject);
             }
+            isInitialized = true;
         }
 
         protected override void UpdateStats()
@@ -31,7 +43,7 @@ namespace CryingSnow.FastFoodRush
             }
 
             var treeCount = 4 * unlockLevel;
-            for (int i = 0; i < treeCount; i++)
+            for (int i = 0; i < treeCount && i < treeObjects.Count; i++)
             {
                 var tree = treeObjects[i];
                 tree.SetActive(true);
@@ -44,31 +56,48 @@ namespace CryingSnow.FastFoodRush
         /// </summary>
         public List<PatrolPoints> GetPatrolPointsPerColumn()
         {
-            List<PatrolPoints> patrolPointsList = new List<PatrolPoints>();
-
-            // X 座標がほぼ同じものを同じ列とみなす（小数点第2位まで）
-            Dictionary<float, List<Transform>> columns = new Dictionary<float, List<Transform>>();
-            foreach (var treeObj in treeObjects)
+            // 遅延初期化：まだ初期化されていなければ実施
+            if (!isInitialized)
             {
-                Transform t = treeObj.transform;
-                float xKey = Mathf.Round(t.localPosition.x * 100f) / 100f;
-                if (!columns.ContainsKey(xKey))
-                    columns[xKey] = new List<Transform>();
-                columns[xKey].Add(t);
+                InitializeTreeObjects();
             }
 
-            // 各列ごとに、Z 座標でソートして先頭と末尾を取得
+            List<PatrolPoints> patrolPointsList = new List<PatrolPoints>();
+
+            // Column プロパティでグループ化する（キーは整数）、Tree コンポーネントでグループ化
+            Dictionary<int, List<Tree>> columns = new Dictionary<int, List<Tree>>();
+            foreach (var treeObj in treeObjects)
+            {
+                // アクティブな木のみ対象とする
+                if (!treeObj.activeInHierarchy)
+                    continue;
+
+                Tree treeComponent = treeObj.GetComponent<Tree>();
+                if (treeComponent == null)
+                    continue;
+
+                int column = treeComponent.Column;
+                if (!columns.ContainsKey(column))
+                    columns[column] = new List<Tree>();
+
+                columns[column].Add(treeComponent);
+            }
+
+            // 各列ごとに、Row プロパティでソートして先頭と末尾を取得
             foreach (var kvp in columns)
             {
-                var list = kvp.Value;
-                list.Sort((a, b) => a.localPosition.z.CompareTo(b.localPosition.z));
-                if (list.Count > 0)
+                var treeList = kvp.Value;
+                if (treeList.Count == 0)
+                    continue;
+
+                treeList.Sort((a, b) => a.Row.CompareTo(b.Row));
+
+                PatrolPoints points = new PatrolPoints
                 {
-                    PatrolPoints points = new PatrolPoints();
-                    points.pointA = list[0].position;                     // Row1
-                    points.pointB = list[list.Count - 1].position;          // MaxRow
-                    patrolPointsList.Add(points);
-                }
+                    pointA = treeList[0].transform.position,                  // 最小の Row の木の位置
+                    pointB = treeList[treeList.Count - 1].transform.position    // 最大の Row の木の位置
+                };
+                patrolPointsList.Add(points);
             }
 
             return patrolPointsList;

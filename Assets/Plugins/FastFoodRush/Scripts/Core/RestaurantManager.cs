@@ -53,6 +53,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Log用の従業員プレハブ")]
         private LogEmployeeController logEmployeePrefab;
 
+        [SerializeField]
+        private ObjectStack logStack;
+
         [SerializeField, Tooltip("Radius within which employees will spawn.")]
         private float employeeSpawnRadius = 3f;
 
@@ -226,6 +229,7 @@ namespace CryingSnow.FastFoodRush
                 LogEmployeeController employee = Instantiate(logEmployeePrefab, patrol.pointA, Quaternion.identity);
                 // 外部からパトロール地点を設定する
                 employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
+                employee.logStack = logStack;
             }
         }
 

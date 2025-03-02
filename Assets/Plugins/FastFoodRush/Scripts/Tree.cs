@@ -4,10 +4,14 @@ using DG.Tweening;
 
 using UnityEngine;
 
+using Random = UnityEngine.Random;
+
 namespace CryingSnow.FastFoodRush
 {
     public class Tree :Interactable
     {
+        public int Row;
+        public int Column;
         [SerializeField] private int treeHealth = 3;                // 現在の体力
         [SerializeField] private int logCount = 3;                  // 体力減少時に生成するログ数
         [SerializeField] private float decreaseInterval = 0.3f;     // 体力が減る間隔
@@ -29,13 +33,31 @@ namespace CryingSnow.FastFoodRush
 
         private void OnTriggerStay(Collider other)
         {
+            // Playerの場合の処理
             if (other.CompareTag("Player") && !isFallen)
             {
                 timer += Time.deltaTime;
                 if (timer >= decreaseInterval)
                 {
                     treeHealth--;
-                    SpawnLogs();
+                    SpawnLogs();  // Player用のログ生成
+
+                    if (treeHealth <= 0)
+                    {
+                        isFallen = true;
+                        StartCoroutine(RegrowTree());
+                    }
+                    timer = 0f;
+                }
+            }
+            // Employeeの場合は、LogEmployeeController を利用してログを収集
+            else if (other.CompareTag("Employee") && !isFallen)
+            {
+                timer += Time.deltaTime;
+                if (timer >= decreaseInterval)
+                {
+                    treeHealth--;
+                    SpawnLogsForLogEmployee(other);  // LogEmployeeController 用のログ生成
 
                     if (treeHealth <= 0)
                     {
@@ -49,13 +71,13 @@ namespace CryingSnow.FastFoodRush
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Player"))
+            if (other.CompareTag("Player") || other.CompareTag("Employee"))
             {
                 timer = 0f;
             }
         }
 
-        // ログを生成してジャンプアニメーションを実行
+        // Player用：ログを生成してジャンプアニメーションを実行
         private void SpawnLogs()
         {
             for (int i = 0; i < logCount; i++)
@@ -64,7 +86,7 @@ namespace CryingSnow.FastFoodRush
             }
         }
 
-        // ログを生成し、ランダム方向へジャンプ後、プレイヤーへジャンプして回収
+        // Player用のログ生成処理
         private void SpawnLog(int index)
         {
             var log = PoolManager.Instance.SpawnObject("Log");
@@ -79,11 +101,53 @@ namespace CryingSnow.FastFoodRush
                 .Append(log.transform.DOJump(firstJumpTarget, 2f, 1, 0.5f))
                 .OnComplete(() =>
                 {
-                    if (player.Stack.StackType == StackType.None || player.Stack.StackType == StackType.Log)
+                    // playerはInteractable側で取得できる前提
+                    if (player != null && (player.Stack.StackType == StackType.None || player.Stack.StackType == StackType.Log))
                     {
                         if (player.Stack.Height < player.Capacity)
                         {
                             player.Stack.AddToStack(log.transform, StackType.Log);
+                        }
+                    }
+                });
+        }
+
+        // LogEmployeeController 用のログ生成処理
+        private void SpawnLogsForLogEmployee(Collider employeeCollider)
+        {
+            // LogEmployeeController を取得
+            LogEmployeeController logEmployee = employeeCollider.GetComponent<LogEmployeeController>();
+            if (logEmployee == null)
+                return;
+
+            for (int i = 0; i < logCount; i++)
+            {
+                SpawnLogForLogEmployee(i, logEmployee);
+            }
+        }
+
+        // LogEmployeeController 用の個別ログ生成処理
+        private void SpawnLogForLogEmployee(int index, LogEmployeeController logEmployee)
+        {
+            var log = PoolManager.Instance.SpawnObject("Log");
+            Vector3 startPos = transform.position + Vector3.up * index;
+            log.transform.position = startPos;
+
+            Vector3 randomXZ = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized;
+            float randomDistance = Random.Range(0.5f, 1f);
+            Vector3 firstJumpTarget = startPos + randomXZ * randomDistance + Vector3.up * 5;
+
+            Sequence seq = DOTween.Sequence()
+                .Append(log.transform.DOJump(firstJumpTarget, 2f, 1, 0.5f))
+                .OnComplete(() =>
+                {
+                    // LogEmployeeController の Stack と Capacity を利用してログを追加
+                    if (logEmployee != null &&
+                        (logEmployee.Stack.StackType == StackType.None || logEmployee.Stack.StackType == StackType.Log))
+                    {
+                        if (logEmployee.Stack.Height < logEmployee.Capacity)
+                        {
+                            logEmployee.Stack.AddToStack(log.transform, StackType.Log);
                         }
                     }
                 });
