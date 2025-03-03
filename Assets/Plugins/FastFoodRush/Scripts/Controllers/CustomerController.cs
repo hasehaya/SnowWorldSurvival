@@ -9,6 +9,9 @@ namespace CryingSnow.FastFoodRush
     [RequireComponent(typeof(NavMeshAgent))]
     public class CustomerController :MonoBehaviour
     {
+        // どのキューに並ぶかを示すプロパティ（CounterTable から設定されます）
+        public int QueueIndex { get; set; }
+
         [SerializeField, Tooltip("Max number of orders a customer can place")]
         private int maxOrder = 5;
 
@@ -25,51 +28,33 @@ namespace CryingSnow.FastFoodRush
         public bool HasOrder { get; private set; } // Whether the customer has placed an order
         public int OrderCount { get; private set; } // The number of items in the customer's order
 
-        // 席に行く処理を削除するため、ReadyToEat フラグは使わないようにコメントアウト
-        //public bool ReadyToEat { get; private set; } // Whether the customer is ready to eat
+        private OrderInfo orderInfo => RestaurantManager.Instance.FoodOrderInfo;
 
-        private OrderInfo orderInfo => RestaurantManager.Instance.FoodOrderInfo; // Access to the food order information
-
-        private Animator animator; // Reference to the customer's animator component
-        private NavMeshAgent agent; // Reference to the customer's NavMeshAgent for navigation
-
-        private LayerMask entranceLayer; // Layer mask to detect entrance doors
-
-        private float IK_Weight; // Weight for controlling the IK of the customer's hands
+        private Animator animator;
+        private NavMeshAgent agent;
+        private LayerMask entranceLayer;
+        private float IK_Weight;
 
         void Awake()
         {
-            // Initializes the customer controller with references to the animator and nav mesh agent.
             animator = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
-
-            // Sets up the entrance layer mask.
             entranceLayer = 1 << LayerMask.NameToLayer("Entrance");
         }
 
-        /// <summary>
-        /// Checks if the customer has arrived at the entrance and opens/closes the doors accordingly.
-        /// </summary>
         IEnumerator CheckEntrance()
         {
             RaycastHit hit;
-
-            // Wait until the customer reaches the entrance
             while (!Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, 0.5f, entranceLayer, QueryTriggerInteraction.Collide))
             {
                 yield return null;
             }
-
-            // Open the doors if the customer is at the entrance
             var doors = hit.transform.GetComponentsInChildren<Door>();
             foreach (var door in doors)
             {
                 door.OpenDoor(transform);
             }
-
-            yield return new WaitForSeconds(1f); // Wait for doors to open
-
-            // Close the doors after the delay
+            yield return new WaitForSeconds(1f);
             foreach (var door in doors)
             {
                 door.CloseDoor();
@@ -78,139 +63,85 @@ namespace CryingSnow.FastFoodRush
 
         void Start()
         {
-            // Starts the check for entrance doors when the customer spawns.
             StartCoroutine(CheckEntrance());
         }
 
         void Update()
         {
-            // Updates the customer's movement state based on the NavMeshAgent's velocity.
             animator.SetBool("IsMoving", agent.velocity.sqrMagnitude > 0.1f);
         }
 
         /// <summary>
-        /// Updates the customer's queue position and optionally places an order.
+        /// Updates the customer's queue position.
+        /// This method is called externally (by CounterTable) with the correct queue waiting point.
+        /// If the customer is first in line, the order placement process is started.
         /// </summary>
-        /// <param name="queuePoint">The queue point the customer should move to.</param>
-        /// <param name="isFirst">Whether this customer is the first in the queue to place an order.</param>
+        /// <param name="queuePoint">The target waiting point for this customer.</param>
+        /// <param name="isFirst">True if this customer is first in its queue.</param>
         public void UpdateQueue(Transform queuePoint, bool isFirst)
         {
-            agent.SetDestination(queuePoint.position); // Move to the queue point
-
+            agent.SetDestination(queuePoint.position);
             if (isFirst)
-                StartCoroutine(PlaceOrder()); // If first in line, place an order
+                StartCoroutine(PlaceOrder());
         }
 
         /// <summary>
-        /// Fills the customer's order by adding food to their stack and updating the order count.
+        /// Waits until arrival at the queue point, then randomly determines the order count and displays order info.
         /// </summary>
-        /// <param name="food">The food item being delivered to the customer.</param>
+        IEnumerator PlaceOrder()
+        {
+            yield return new WaitUntil(() => HasArrived());
+            OrderCount = Random.Range(1, maxOrder + 1);
+            HasOrder = true;
+            orderInfo.ShowInfo(transform, OrderCount);
+        }
+
+        /// <summary>
+        /// Fills the customer's order by reducing the order count, adding the delivered food to the customer's stack,
+        /// and updating the order info display. Once all orders are filled, the customer leaves.
+        /// </summary>
+        /// <param name="food">The food item delivered.</param>
         public void FillOrder(Transform food)
         {
-            OrderCount--; // Decrease the order count
-            stack.AddToStack(food, StackType.Food); // Add food to the customer's stack
+            OrderCount--;
+            stack.AddToStack(food, StackType.Food);
+            orderInfo.ShowInfo(transform, OrderCount);
 
-            orderInfo.ShowInfo(transform, OrderCount); // Update the order info display
-
-            // すべての注文を受け取り終わったら直接退店
             if (OrderCount <= 0)
             {
-                // 注文情報を隠す
                 orderInfo.HideInfo();
-                // 退店アニメーションを再生
                 animator.SetTrigger("Leave");
-                // 退店処理へ
                 agent.SetDestination(ExitPoint);
                 StartCoroutine(WalkToExit());
             }
         }
 
-        // 席に座る処理は不要になるため、AssignSeat() は空実装にしておくか削除する
-        // もし外部から呼ばれないようにする場合は削除しても良い
-        public void AssignSeat(Transform seat)
-        {
-            // 席に向かう処理を削除・無効化
-            // orderInfo.HideInfo();
-            // StartCoroutine(WalkToSeat(seat));
-        }
-
-        // 食べるアクションも不要なため削除または無効化
-        //public void TriggerEat()
-        //{
-        //    animator.SetTrigger("Eat");
-        //}
-
-        // FinishEating も不要
-        //public void FinishEating()
-        //{
-        //    agent.SetDestination(ExitPoint); 
-        //    animator.SetTrigger("Leave"); 
-        //    StartCoroutine(WalkToExit());
-        //}
-
-        /// <summary>
-        /// Places an order by waiting until the customer has arrived, then randomly choosing an order count.
-        /// </summary>
-        IEnumerator PlaceOrder()
-        {
-            yield return new WaitUntil(() => HasArrived()); // Wait until the customer arrives
-
-            OrderCount = Random.Range(1, maxOrder + 1); // Randomly set the order count
-            HasOrder = true; // Mark the customer as having placed an order
-
-            orderInfo.ShowInfo(transform, OrderCount); // Update the order info display
-        }
-
-        // 席に向かう処理も不要なので削除または無効化
-        //IEnumerator WalkToSeat(Transform seat)
-        //{
-        //    yield return new WaitForSeconds(0.3f); // Wait for the last food item to land
-        //    agent.SetDestination(seat.position);
-        //    yield return new WaitUntil(() => HasArrived());
-        //    // ...
-        //}
-
-        /// <summary>
-        /// Makes the customer walk to the exit and destroys the customer object once they leave.
-        /// </summary>
         IEnumerator WalkToExit()
         {
-            StartCoroutine(CheckEntrance()); // Check if the entrance is clear
-            yield return new WaitUntil(() => HasArrived()); // Wait until the customer arrives at the exit
-            Destroy(gameObject); // Destroy the customer object when they leave
+            StartCoroutine(CheckEntrance());
+            yield return new WaitUntil(() => HasArrived());
+            Destroy(gameObject);
         }
 
-        /// <summary>
-        /// Checks if the customer has arrived at their destination.
-        /// </summary>
-        /// <returns>True if the customer has arrived, false otherwise.</returns>
         private bool HasArrived()
         {
-            // Check if the NavMeshAgent has reached its destination
             if (!agent.pathPending)
             {
                 if (agent.remainingDistance <= agent.stoppingDistance)
                 {
                     if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-                    {
                         return true;
-                    }
                 }
             }
-
-            return false; // Customer has not arrived yet
+            return false;
         }
 
-        /// <summary>
-        /// Handles the IK for the customer's hands to adjust their position based on the stack's height.
-        /// </summary>
         void OnAnimatorIK()
         {
-            IK_Weight = Mathf.MoveTowards(IK_Weight, Mathf.Clamp01(stack.Height), Time.deltaTime * 3.5f); // Smoothly adjust the IK weight
+            IK_Weight = Mathf.MoveTowards(IK_Weight, Mathf.Clamp01(stack.Height), Time.deltaTime * 3.5f);
 
             if (leftHandTarget != null)
             {
-                // Set the IK position and rotation for the left hand
                 animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, IK_Weight);
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, IK_Weight);
                 animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTarget.position);
@@ -219,11 +150,29 @@ namespace CryingSnow.FastFoodRush
 
             if (rightHandTarget != null)
             {
-                // Set the IK position and rotation for the right hand
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, IK_Weight);
                 animator.SetIKRotationWeight(AvatarIKGoal.RightHand, IK_Weight);
                 animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position);
                 animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
+            }
+        }
+
+        /// <summary>
+        /// OnDestroy で、CustomerController が破棄される際に自身の stack に残っている Log を PoolManager に返却します。
+        /// </summary>
+        void OnDestroy()
+        {
+            if (stack != null)
+            {
+                // ここでは stack.Count プロパティと RemoveFromStack() メソッドを利用して、すべての Log を返却します。
+                while (stack.Count > 0)
+                {
+                    Transform log = stack.RemoveFromStack();
+                    if (log != null)
+                    {
+                        PoolManager.Instance.ReturnObject(log.gameObject);
+                    }
+                }
             }
         }
     }

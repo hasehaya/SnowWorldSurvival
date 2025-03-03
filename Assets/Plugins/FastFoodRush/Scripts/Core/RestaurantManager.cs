@@ -136,10 +136,6 @@ namespace CryingSnow.FastFoodRush
 
             // Adjust the money with 0 adjustment to update the UI only.
             AdjustMoney(0);
-
-            // Spawn the number of employees based on the saved data.
-            for (int i = 0; i < data.EmployeeAmount; i++)
-                SpawnLogEmployees();
         }
 
         void Start()
@@ -188,6 +184,8 @@ namespace CryingSnow.FastFoodRush
             // Update the UnlockableBuyer UI to reflect the current unlockable state.
             UpdateUnlockableBuyer();
 
+            SpawnLogEmployees();
+
             // Play background music once the scene has loaded.
             AudioManager.Instance.PlayBGM(backgroundMusic);
         }
@@ -212,23 +210,43 @@ namespace CryingSnow.FastFoodRush
                 return;
             }
 
-            // TreeParent から各列のパトロール地点（A, B）を取得
-            List<TreeParent.PatrolPoints> patrolPointsList = treeParent.GetPatrolPointsPerColumn();
-            foreach (var patrol in patrolPointsList)
-            {
-                // A, B 用の空オブジェクトを生成して座標を保持（管理しやすいように親子関係を整備）
-                GameObject pointAObj = new GameObject("PatrolPointA");
-                pointAObj.transform.position = patrol.pointA;
-                pointAObj.transform.parent = transform; // RestaurantManager を親とする
+            // 現在の LogEmployeeController 数との差分だけ生成
+            int currentCount = FindObjectsOfType<LogEmployeeController>().Length;
+            int toSpawn = data.EmployeeAmount - currentCount;
+            if (toSpawn <= 0)
+                return;
 
-                GameObject pointBObj = new GameObject("PatrolPointB");
+            // 列数は固定で 4 とする
+            int numberOfColumns = 4;
+
+            // i: 全体のインデックス (既存の数も含む)
+            for (int i = currentCount; i < data.EmployeeAmount; i++)
+            {
+                int columnIndex = i % numberOfColumns; // 0～3
+                int rowIndex = (i / numberOfColumns) + 1;
+
+                // 指定列番号は 1～ とするので、columnIndex + 1 を渡す
+                TreeParent.PatrolPoints patrol = treeParent.GetPatrolPointsForColumn(columnIndex + 1);
+                if (patrol == null)
+                {
+                    Debug.LogWarning("Column " + (columnIndex + 1) + " のパトロール地点が取得できません。");
+                    continue;
+                }
+
+                // 一時的に PatrolPoint オブジェクトを生成
+                GameObject pointAObj = new GameObject("PatrolPointA_Column" + (columnIndex + 1));
+                pointAObj.transform.position = patrol.pointA;
+                pointAObj.transform.parent = transform;
+
+                GameObject pointBObj = new GameObject("PatrolPointB_Column" + (columnIndex + 1));
                 pointBObj.transform.position = patrol.pointB;
                 pointBObj.transform.parent = transform;
 
-                // ColumnEmployeeController を A の位置に生成
-                LogEmployeeController employee = Instantiate(logEmployeePrefab, patrol.pointA, Quaternion.identity);
-                // 外部からパトロール地点を設定する
+                // 各従業員は、所属する列の A 地点に生成
+                LogEmployeeController employee = Instantiate(logEmployeePrefab, pointAObj.transform.position, Quaternion.identity);
                 employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
+                employee.Column = columnIndex + 1;
+                employee.Row = rowIndex;
                 employee.logStack = logStack;
             }
         }

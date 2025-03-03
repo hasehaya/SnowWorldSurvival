@@ -24,13 +24,17 @@ namespace CryingSnow.FastFoodRush
             if (isInitialized)
                 return;
 
+            isInitialized = true;
+
             // treeGrid 配下のすべての Tree コンポーネントを取得
             var treeList = treeGrid.GetComponentsInChildren<Tree>();
+            treeObjects.Clear();
             foreach (var tree in treeList)
             {
                 treeObjects.Add(tree.gameObject);
             }
-            isInitialized = true;
+
+            UpdateStats();
         }
 
         protected override void UpdateStats()
@@ -48,59 +52,69 @@ namespace CryingSnow.FastFoodRush
                 var tree = treeObjects[i];
                 tree.SetActive(true);
             }
+
+            // LogEmployeeController の巡回地点を更新
+            UpdateEmployeePatrolPoints();
         }
 
         /// <summary>
-        /// グリッド上の木を、ローカル座標の X 値（列）ごとにグループ化し、
-        /// 各列の先頭（Row1）と最終行（MaxRow）のワールド座標を返します。
+        /// 指定した列番号に属するアクティブな木から、先頭（最小 Row）と末尾（最大 Row）の位置を取得します。
+        /// 指定列に木が存在しなければ null を返します。
         /// </summary>
-        public List<PatrolPoints> GetPatrolPointsPerColumn()
+        public PatrolPoints GetPatrolPointsForColumn(int column)
         {
-            // 遅延初期化：まだ初期化されていなければ実施
             if (!isInitialized)
-            {
                 InitializeTreeObjects();
-            }
 
-            List<PatrolPoints> patrolPointsList = new List<PatrolPoints>();
-
-            // Column プロパティでグループ化する（キーは整数）、Tree コンポーネントでグループ化
-            Dictionary<int, List<Tree>> columns = new Dictionary<int, List<Tree>>();
+            List<Tree> treesInColumn = new List<Tree>();
             foreach (var treeObj in treeObjects)
             {
-                // アクティブな木のみ対象とする
                 if (!treeObj.activeInHierarchy)
                     continue;
-
                 Tree treeComponent = treeObj.GetComponent<Tree>();
                 if (treeComponent == null)
                     continue;
-
-                int column = treeComponent.Column;
-                if (!columns.ContainsKey(column))
-                    columns[column] = new List<Tree>();
-
-                columns[column].Add(treeComponent);
+                if (treeComponent.Column == column)
+                    treesInColumn.Add(treeComponent);
             }
+            if (treesInColumn.Count == 0)
+                return null;
 
-            // 各列ごとに、Row プロパティでソートして先頭と末尾を取得
-            foreach (var kvp in columns)
+            treesInColumn.Sort((a, b) => a.Row.CompareTo(b.Row));
+
+            return new PatrolPoints
             {
-                var treeList = kvp.Value;
-                if (treeList.Count == 0)
-                    continue;
+                pointA = treesInColumn[0].transform.position,
+                pointB = treesInColumn[treesInColumn.Count - 1].transform.position
+            };
+        }
 
-                treeList.Sort((a, b) => a.Row.CompareTo(b.Row));
-
-                PatrolPoints points = new PatrolPoints
+        /// <summary>
+        /// シーン内のすべての LogEmployeeController の巡回地点を、各従業員の所属列に合わせて更新します。
+        /// 一時的に PatrolPoint オブジェクトを生成して更新しています（必要に応じて管理方法を変更してください）。
+        /// </summary>
+        private void UpdateEmployeePatrolPoints()
+        {
+            LogEmployeeController[] employees = FindObjectsOfType<LogEmployeeController>();
+            foreach (var employee in employees)
+            {
+                int col = employee.Column; // 1～の値
+                PatrolPoints patrol = GetPatrolPointsForColumn(col);
+                if (patrol == null)
                 {
-                    pointA = treeList[0].transform.position,                  // 最小の Row の木の位置
-                    pointB = treeList[treeList.Count - 1].transform.position    // 最大の Row の木の位置
-                };
-                patrolPointsList.Add(points);
-            }
+                    Debug.LogWarning("指定された列 " + col + " にアクティブな木がありません。");
+                    continue;
+                }
 
-            return patrolPointsList;
+                // 一時的な PatrolPoint オブジェクトを生成して更新
+                GameObject tempA = new GameObject("TempPatrolPointA_Column" + col);
+                tempA.transform.position = patrol.pointA;
+                GameObject tempB = new GameObject("TempPatrolPointB_Column" + col);
+                tempB.transform.position = patrol.pointB;
+                employee.SetPatrolPoints(tempA.transform, tempB.transform);
+
+                // ※必要に応じて、生成した一時オブジェクトは Destroy() するか、管理側で再利用してください。
+            }
         }
 
         /// <summary>

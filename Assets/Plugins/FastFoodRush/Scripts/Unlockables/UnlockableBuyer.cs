@@ -1,12 +1,15 @@
 using System.Collections;
+
+using DG.Tweening;
+
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using DG.Tweening;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class UnlockableBuyer : Interactable
+    public class UnlockableBuyer :Interactable
     {
         [SerializeField, Tooltip("The interval between each payment during the buying process.")]
         private float payingInterval = 0.03f;

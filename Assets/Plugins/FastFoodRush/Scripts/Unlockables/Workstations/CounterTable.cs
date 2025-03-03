@@ -25,8 +25,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Point where customers exit after being served.")]
         private Transform despawnPoint;
 
-        [SerializeField, Tooltip("Waypoints defining the customer queue.")]
-        private Waypoints queuePoints;
+        // 複数の QueuePoints を使えるように配列に変更
+        [SerializeField, Tooltip("Waypoints defining the customer queues for each working spot.")]
+        private Waypoints[] queuePoints;
 
         [SerializeField, Tooltip("Prefab for customer objects.")]
         private CustomerController customerPrefab;
@@ -37,27 +38,29 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Pile where earned money is stored.")]
         private MoneyPile moneyPile;
 
-        private Queue<CustomerController> customers = new Queue<CustomerController>(); // Tracks customers in the queue.
-        private CustomerController firstCustomer => customers.Peek(); // Reference to the first customer in the queue.
-        private List<Seating> seatings; // List of available seating areas.
+        // 顧客管理キュー
+        private Queue<CustomerController> customers = new Queue<CustomerController>();
 
-        private float spawnInterval; // Time interval between spawning customers.
-        private float serveInterval; // Time interval between serving food.
-        private int sellPrice; // Current price of food based on profit upgrades.
-        private float spawnTimer; // Tracks elapsed time for spawning customers.
-        private float serveTimer; // Tracks elapsed time for serving food.
+        // 次に割り当てる Queue (queuePoints 配列のインデックス) をラウンドロビンで更新
+        private int nextQueueIndex = 0;
 
-        const int maxCustomers = 10; // Maximum number of customers allowed in the queue.
+        private float spawnInterval; // 顧客生成間隔
+        private float serveInterval; // 食事提供間隔
+        private int sellPrice;       // 現在の食事価格
+        private float spawnTimer;    // 顧客生成用タイマー
+        private float serveTimer;    // 食事提供用タイマー
+
+        // 最大顧客数は unlockLevel に応じて増加する
+        // ここでは基本値 10 に対して、unlockLevel 毎に 2 人追加する例です
+        private int maxCustomers => 10 + unlockLevel * 2;
 
         void Start()
         {
-            // Initializes seatings at the start.
-            seatings = FindObjectsOfType<Seating>(true).ToList();
+            // Initializes seatings or other initializations as needed.
         }
 
         void Update()
         {
-            // Handles customer spawning and food serving.
             HandleCustomerSpawn();
             HandleFoodServing();
         }
@@ -67,12 +70,10 @@ namespace CryingSnow.FastFoodRush
         /// </summary>
         protected override void UpdateStats()
         {
-            // Spawn interval decreases, serve interval decreases, and food stack capacity increases with unlock level.
             spawnInterval = (baseInterval * 3) - unlockLevel;
             serveInterval = baseInterval / unlockLevel;
-            foodStack.MaxStack = baseStack + unlockLevel * 5;
+            foodStack.MaxStack = baseStack + 10 * unlockLevel;
 
-            // Calculate food price based on profit upgrades.
             int profitLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.Profit);
             sellPrice = Mathf.RoundToInt(Mathf.Pow(priceIncrementRate, profitLevel) * basePrice);
         }
@@ -84,31 +85,36 @@ namespace CryingSnow.FastFoodRush
         {
             spawnTimer += Time.deltaTime;
 
-            // Spawn a new customer if the timer exceeds the interval and the queue isn't full.
+            // 最大顧客数は unlockLevel に応じて増加
             if (spawnTimer >= spawnInterval && customers.Count < maxCustomers)
             {
                 spawnTimer = 0f;
 
-                // Instantiate a new customer and set their exit point.
                 var newCustomer = Instantiate(customerPrefab, spawnPoint.position, spawnPoint.rotation);
                 newCustomer.ExitPoint = despawnPoint.position;
 
-                customers.Enqueue(newCustomer);
+                newCustomer.QueueIndex = nextQueueIndex;
+                nextQueueIndex = (nextQueueIndex + 1) % queuePoints.Length;
 
-                // Assign the customer to the appropriate queue position.
-                AssignQueuePoint(newCustomer, customers.Count - 1);
+                customers.Enqueue(newCustomer);
+                AssignQueuePoint(newCustomer);
             }
         }
 
         /// <summary>
-        /// Assigns a customer to a specific queue point.
+        /// Assigns a customer to a specific queue point based on its QueueIndex and its order in that queue.
         /// </summary>
-        void AssignQueuePoint(CustomerController customer, int index)
+        void AssignQueuePoint(CustomerController customer)
         {
-            Transform queuePoint = queuePoints.GetPoint(index);
-            bool isFirst = index == 0;
-
-            // Update the customer's position and status in the queue.
+            if (queuePoints == null || queuePoints.Length == 0)
+            {
+                Debug.LogWarning("QueuePoints array is not assigned.");
+                return;
+            }
+            int qIndex = customer.QueueIndex; // 0～ (queuePoints.Length - 1)
+            int row = customers.Where(c => c.QueueIndex == qIndex).Count() - 1;
+            Transform queuePoint = queuePoints[qIndex].GetPoint(row);
+            bool isFirst = (row == 0);
             customer.UpdateQueue(queuePoint, isFirst);
         }
 
@@ -117,27 +123,20 @@ namespace CryingSnow.FastFoodRush
         /// </summary>
         void HandleFoodServing()
         {
-            // Do nothing if there are no customers or if the first customer doesn't have an order.
-            if (customers.Count == 0 || !firstCustomer.HasOrder)
+            if (customers.Count == 0 || !customers.Peek().HasOrder)
                 return;
 
             serveTimer += Time.deltaTime;
-
-            // Serve food if the timer exceeds the serve interval.
             if (serveTimer >= serveInterval)
             {
                 serveTimer = 0f;
-
-                // Check if a worker is available, food is in the stack, and the customer has pending orders.
-                if (hasWorker && foodStack.Count > 0 && firstCustomer.OrderCount > 0)
+                if (hasWorker && foodStack.Count > 0 && customers.Peek().OrderCount > 0)
                 {
                     var food = foodStack.RemoveFromStack();
-                    firstCustomer.FillOrder(food);
+                    customers.Peek().FillOrder(food);
                     CollectPayment();
                 }
-
-                // If the order is complete, assign the customer to a seat if available.
-                if (firstCustomer.OrderCount == 0)
+                if (customers.Peek().OrderCount == 0)
                 {
                     var servedCustomer = customers.Dequeue();
                     UpdateQueuePositions();
@@ -145,9 +144,6 @@ namespace CryingSnow.FastFoodRush
             }
         }
 
-        /// <summary>
-        /// Adds payment for the served food to the money pile.
-        /// </summary>
         void CollectPayment()
         {
             for (int i = 0; i < sellPrice; i++)
@@ -157,41 +153,19 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// Checks if there is available seating for a customer.
-        /// </summary>
-        //private bool CheckAvailableSeating(out Transform seat)
-        //{
-        //    // Prioritize semi-full seating if available.
-        //    var semiFullSeating = seatings.Where(seating => seating.gameObject.activeInHierarchy && seating.IsSemiFull).FirstOrDefault();
-        //    if (semiFullSeating != null)
-        //    {
-        //        seat = semiFullSeating.Occupy(firstCustomer);
-        //        return true;
-        //    }
-
-        //    // Otherwise, look for completely empty seating.
-        //    var emptySeatings = seatings.Where(seating => seating.gameObject.activeInHierarchy && seating.IsEmpty).ToList();
-        //    if (emptySeatings.Count > 0)
-        //    {
-        //        int randomIndex = Random.Range(0, emptySeatings.Count);
-        //        seat = emptySeatings[randomIndex].Occupy(firstCustomer);
-        //        return true;
-        //    }
-
-        //    seat = null;
-        //    return false;
-        //}
-
-        /// <summary>
-        /// Updates the queue positions of all customers after a customer is served.
+        /// Updates the queue positions for all customers after a customer is served.
         /// </summary>
         void UpdateQueuePositions()
         {
-            int index = 0;
-            foreach (var customer in customers)
+            foreach (int qIndex in Enumerable.Range(0, queuePoints.Length))
             {
-                AssignQueuePoint(customer, index);
-                index++;
+                var group = customers.Where(c => c.QueueIndex == qIndex).ToList();
+                for (int i = 0; i < group.Count; i++)
+                {
+                    Transform queuePoint = queuePoints[qIndex].GetPoint(i);
+                    bool isFirst = (i == 0);
+                    group[i].UpdateQueue(queuePoint, isFirst);
+                }
             }
         }
     }

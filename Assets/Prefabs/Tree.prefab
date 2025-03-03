@@ -68,11 +68,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aeebd4bed42d96d40a628c96e7760437, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Row: 0
+  Column: 0
   treeHealth: 2
   logCount: 2
-  decreaseInterval: 0.3
+  decreaseInterval: 0.5
   treeModel: {fileID: 6439221091145675747}
-  regrowDelay: 4
+  regrowDelay: 10
   growthDuration: 0.5
 --- !u!1 &6912978779625550378
 GameObject:

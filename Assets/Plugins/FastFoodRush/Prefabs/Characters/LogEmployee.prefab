@@ -529,7 +529,8 @@ MonoBehaviour:
   leftHandTarget: {fileID: 6833413534109660066}
   rightHandTarget: {fileID: 7193315603692477269}
   stack: {fileID: 3453252986456316324}
-  capacity: 3
+  capacity: 5
+  logStack: {fileID: 0}
 --- !u!143 &-1656015386102720917
 CharacterController:
   m_ObjectHideFlags: 0

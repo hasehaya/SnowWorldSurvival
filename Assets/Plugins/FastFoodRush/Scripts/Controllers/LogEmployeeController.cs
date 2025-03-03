@@ -11,6 +11,10 @@ namespace CryingSnow.FastFoodRush
     [RequireComponent(typeof(NavMeshAgent))]
     public class LogEmployeeController :MonoBehaviour
     {
+        // 追加：所属する行・列情報。RestaurantManager で設定されます。
+        public int Row { get; set; }
+        public int Column { get; set; }
+
         private Transform pointA;
         private Transform pointB;
 
@@ -19,17 +23,24 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("右手のIKターゲット")]
         private Transform rightHandTarget;
 
-        // 従業員自身のスタック管理（※WobblingStack など任意のスタック管理クラス）
+        // 従業員自身のスタック管理用コンポーネント
         [SerializeField, Tooltip("従業員のスタック管理用コンポーネント")]
         private WobblingStack stack;
         public WobblingStack Stack => stack;
 
-        // 従業員のスタックの容量
-        [SerializeField, Tooltip("従業員のスタックの容量")]
+        // 基本的な動作速度と容量。アップグレードによって加算されます。
+        [SerializeField, Tooltip("Log従業員の基本移動速度")]
+        private float baseSpeed = 2.5f;
+        [SerializeField, Tooltip("Log従業員の基本スタック容量")]
+        private int baseCapacity = 3;
+
+        // LogEmployee のスタック容量は UpdateStats で更新
+        [SerializeField, Tooltip("Log従業員のスタックの容量 (アップグレードで増加)")]
         private int capacity = 3;
         public int Capacity => capacity;
 
-        // ログを預ける先。LogStackは ObjectStack のインスタンスを指します。
+        // ログを預ける先。LogStack は ObjectStack のインスタンス
+        [SerializeField, Tooltip("ログを預ける LogStack (ObjectStack) の参照")]
         public ObjectStack logStack;
 
         private NavMeshAgent agent;
@@ -48,22 +59,23 @@ namespace CryingSnow.FastFoodRush
 
         void Start()
         {
-            // 巡回地点が設定されている場合、初期目的地を設定
+            // 巡回地点が設定されている場合、初期目的地を A 地点に設定
             if (pointA != null)
             {
                 currentTarget = pointA.position;
                 agent.SetDestination(currentTarget);
             }
+            // RestaurantManager のアップグレードイベントに購読
+            RestaurantManager.Instance.OnUpgrade += UpdateStats;
+            UpdateStats();
         }
 
         void Update()
         {
-            // 巡回フェーズ中のみ移動処理を行う
             if (!isTransferringLogs)
             {
                 animator.SetBool("IsMoving", agent.velocity.sqrMagnitude > 0.1f);
 
-                // 巡回地点に到着しているか確認し、到着していれば次の目的地を設定
                 if (HasArrived())
                 {
                     if (currentTarget == pointA.position && pointB != null)
@@ -74,13 +86,25 @@ namespace CryingSnow.FastFoodRush
                     agent.SetDestination(currentTarget);
                 }
 
-                // 自身のスタックがいっぱいになった場合、ログ預け処理を開始
-                // ※ここでは stack.Height を用いて現在の積み上がり数をチェックしています
                 if (stack.Height >= Capacity && !isTransferringLogs)
                 {
                     StartCoroutine(TransferLogsToLogStack());
                 }
             }
+        }
+
+        /// <summary>
+        /// アップグレードの効果を反映して、移動速度とスタック容量を更新する。
+        /// </summary>
+        void UpdateStats()
+        {
+            // EmployeeSpeed アップグレードレベルに応じた移動速度の加算（例：0.1fずつ加算）
+            float speedLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.EmployeeSpeed);
+            agent.speed = baseSpeed + (speedLevel * 0.1f);
+
+            // EmployeeCapacity アップグレードレベルに応じたスタック容量の加算
+            int capacityLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.EmployeeCapacity);
+            capacity = baseCapacity + 3 * capacityLevel;
         }
 
         private bool HasArrived()
@@ -115,13 +139,15 @@ namespace CryingSnow.FastFoodRush
             }
         }
 
-        // AnimationEvent "OnStep" 用（足音イベントが不要なら空実装）
+        // AnimationEvent "OnStep" 用（足音イベント不要なら空実装）
         public void OnStep()
         {
-            // LogEmployee の場合、足音イベントの処理が不要ならここは空実装で問題ありません
+            // LogEmployee は足音イベント処理が不要ならここは空実装でOK
         }
 
-        // 巡回地点を外部から設定するメソッド
+        /// <summary>
+        /// 外部からパトロール地点を設定するメソッド
+        /// </summary>
         public void SetPatrolPoints(Transform a, Transform b)
         {
             pointA = a;
@@ -134,39 +160,34 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// 従業員のスタックがいっぱいになった際に、指定された LogStack (ObjectStack) へログを預ける処理。
-        /// スタックが空になるか、LogStack が満杯になるまで転送し、転送完了後は巡回フェーズに戻る。
+        /// スタックが満杯になった際、LogStack へログを預ける処理。
+        /// 転送が完了すると巡回フェーズは必ず A 地点から再開する。
         /// </summary>
         private IEnumerator TransferLogsToLogStack()
         {
             isTransferringLogs = true;
 
-            // LogStack の位置へ目的地を変更
             agent.SetDestination(logStack.transform.position);
-            // 到着するまで待機
             yield return new WaitUntil(() => HasArrived());
 
-            // 転送処理：自身のスタックから1個ずつ LogStack へ転送
             while (stack.Height > 0)
             {
-                if (!logStack.IsFull)
+                if (logStack.IsFull)
                 {
-                    // 自身のスタックからログを1つ取り出す
-                    var log = stack.RemoveFromStack();
-                    // ObjectStack の AddToStack は GameObject を引数に取るため、log.gameObject を渡す
-                    logStack.AddToStack(log.gameObject);
-                    // 転送間隔をシミュレーションするための短い待機
-                    yield return new WaitForSeconds(0.03f);
+                    yield return new WaitForSeconds(0.1f);
+                    continue;
                 }
-                else
-                {
-                    // LogStack が満杯の場合は転送を中断
-                    break;
-                }
+
+                var log = stack.RemoveFromStack();
+                logStack.AddToStack(log.gameObject);
+                yield return new WaitForSeconds(0.03f);
             }
 
-            // 転送が完了したら、再び巡回フェーズへ戻る
-            agent.SetDestination(currentTarget);
+            if (pointA != null)
+            {
+                currentTarget = pointA.position;
+                agent.SetDestination(currentTarget);
+            }
             isTransferringLogs = false;
         }
     }
