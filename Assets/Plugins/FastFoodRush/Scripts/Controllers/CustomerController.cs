@@ -15,6 +15,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Max number of orders a customer can place")]
         private int maxOrder = 5;
 
+        [SerializeField, Tooltip("OrderInfoのプレハブ")]
+        private OrderInfo orderInfoPrefab;
+
         [SerializeField, Tooltip("Reference to the customer's stack for carrying items")]
         private WobblingStack stack;
 
@@ -28,12 +31,13 @@ namespace CryingSnow.FastFoodRush
         public bool HasOrder { get; private set; } // Whether the customer has placed an order
         public int OrderCount { get; private set; } // The number of items in the customer's order
 
-        private OrderInfo orderInfo => RestaurantManager.Instance.FoodOrderInfo;
-
         private Animator animator;
         private NavMeshAgent agent;
         private LayerMask entranceLayer;
         private float IK_Weight;
+
+        // 生成した OrderInfo インスタンスを保持する変数
+        private OrderInfo currentOrderInfo;
 
         void Awake()
         {
@@ -93,7 +97,10 @@ namespace CryingSnow.FastFoodRush
             yield return new WaitUntil(() => HasArrived());
             OrderCount = Random.Range(1, maxOrder + 1);
             HasOrder = true;
-            orderInfo.ShowInfo(transform, OrderCount);
+
+            // OrderInfo プレハブを生成し表示
+            currentOrderInfo = Instantiate(orderInfoPrefab, RestaurantManager.Instance.Canvas.transform);
+            currentOrderInfo.ShowInfo(transform, OrderCount);
         }
 
         /// <summary>
@@ -105,11 +112,20 @@ namespace CryingSnow.FastFoodRush
         {
             OrderCount--;
             stack.AddToStack(food, StackType.Food);
-            orderInfo.ShowInfo(transform, OrderCount);
+
+            // 既に生成している OrderInfo インスタンスを更新
+            if (currentOrderInfo != null)
+            {
+                currentOrderInfo.ShowInfo(transform, OrderCount);
+            }
 
             if (OrderCount <= 0)
             {
-                orderInfo.HideInfo();
+                // 注文完了時は OrderInfo を非表示
+                if (currentOrderInfo != null)
+                {
+                    currentOrderInfo.HideInfo();
+                }
                 animator.SetTrigger("Leave");
                 agent.SetDestination(ExitPoint);
                 StartCoroutine(WalkToExit());

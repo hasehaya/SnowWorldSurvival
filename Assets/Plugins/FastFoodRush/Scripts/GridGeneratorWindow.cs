@@ -6,6 +6,7 @@ using UnityEngine;
 
 using CryingSnow.FastFoodRush;
 
+#if UNITY_EDITOR
 public class GridGenerator :MonoBehaviour
 {
     [SerializeField] private string childBaseName = "Child";
@@ -35,9 +36,7 @@ public class GridGenerator :MonoBehaviour
 
         int index = 1;
 
-#if UNITY_EDITOR
         var sourcePrefab = PrefabUtility.GetCorrespondingObjectFromSource(firstChild.gameObject);
-#endif
 
         for (int row = 0; row < rows; row++)
         {
@@ -46,8 +45,6 @@ public class GridGenerator :MonoBehaviour
                 if (row == 0 && col == 0)
                     continue;
                 index++;
-
-#if UNITY_EDITOR
                 GameObject clone;
                 if (sourcePrefab != null)
                 {
@@ -63,9 +60,6 @@ public class GridGenerator :MonoBehaviour
                 {
                     clone = Instantiate(firstChild.gameObject, parent.transform);
                 }
-#else
-                GameObject clone = Instantiate(firstChild.gameObject, parent.transform);
-#endif
 
                 clone.name = $"{childBaseName}_{index}";
                 // —á: X=col, Y=row, Z=row ‚Å”z’u
@@ -96,3 +90,4 @@ public class GridGeneratorEditor :Editor
         }
     }
 }
+#endif

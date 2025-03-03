@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace CryingSnow.FastFoodRush
 {
@@ -25,9 +26,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Point where customers exit after being served.")]
         private Transform despawnPoint;
 
-        // 複数の QueuePoints を使えるように配列に変更
-        [SerializeField, Tooltip("Waypoints defining the customer queues for each working spot.")]
-        private Waypoints[] queuePoints;
+        // 単一の QueuePoints を使用
+        [SerializeField, Tooltip("Waypoints defining the customer queue.")]
+        private Waypoints queuePoints;
 
         [SerializeField, Tooltip("Prefab for customer objects.")]
         private CustomerController customerPrefab;
@@ -38,11 +39,8 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Pile where earned money is stored.")]
         private MoneyPile moneyPile;
 
-        // 顧客管理キュー
+        // 単一の顧客管理キュー
         private Queue<CustomerController> customers = new Queue<CustomerController>();
-
-        // 次に割り当てる Queue (queuePoints 配列のインデックス) をラウンドロビンで更新
-        private int nextQueueIndex = 0;
 
         private float spawnInterval; // 顧客生成間隔
         private float serveInterval; // 食事提供間隔
@@ -50,13 +48,12 @@ namespace CryingSnow.FastFoodRush
         private float spawnTimer;    // 顧客生成用タイマー
         private float serveTimer;    // 食事提供用タイマー
 
-        // 最大顧客数は unlockLevel に応じて増加する
-        // ここでは基本値 10 に対して、unlockLevel 毎に 2 人追加する例です
-        private int maxCustomers => 10 + unlockLevel * 2;
+        // 最大顧客数は unlockLevel に応じて増加する（例: 基本値 10 に unlockLevel 毎に 2 人追加）
+        private int maxCustomers => 2 + unlockLevel;
 
         void Start()
         {
-            // Initializes seatings or other initializations as needed.
+            // 初期化処理（必要に応じて seating などの初期化を行う）
         }
 
         void Update()
@@ -66,7 +63,7 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// Updates stats such as spawn interval, serve interval, and stack capacity.
+        /// Updates stats such as spawn interval, serve interval, and food stack capacity.
         /// </summary>
         protected override void UpdateStats()
         {
@@ -85,36 +82,34 @@ namespace CryingSnow.FastFoodRush
         {
             spawnTimer += Time.deltaTime;
 
-            // 最大顧客数は unlockLevel に応じて増加
             if (spawnTimer >= spawnInterval && customers.Count < maxCustomers)
             {
                 spawnTimer = 0f;
 
+                // 顧客生成
                 var newCustomer = Instantiate(customerPrefab, spawnPoint.position, spawnPoint.rotation);
                 newCustomer.ExitPoint = despawnPoint.position;
-
-                newCustomer.QueueIndex = nextQueueIndex;
-                nextQueueIndex = (nextQueueIndex + 1) % queuePoints.Length;
-
                 customers.Enqueue(newCustomer);
-                AssignQueuePoint(newCustomer);
+
+                // 単一の QueuePoints から待機位置を割り当て
+                AssignQueuePoint(newCustomer, customers.Count - 1);
             }
         }
 
         /// <summary>
-        /// Assigns a customer to a specific queue point based on its QueueIndex and its order in that queue.
+        /// Assigns a customer to a queue point based on their index in the queue.
         /// </summary>
-        void AssignQueuePoint(CustomerController customer)
+        void AssignQueuePoint(CustomerController customer, int index)
         {
-            if (queuePoints == null || queuePoints.Length == 0)
+            if (queuePoints == null)
             {
-                Debug.LogWarning("QueuePoints array is not assigned.");
+                Debug.LogWarning("QueuePoints is not assigned.");
                 return;
             }
-            int qIndex = customer.QueueIndex; // 0～ (queuePoints.Length - 1)
-            int row = customers.Where(c => c.QueueIndex == qIndex).Count() - 1;
-            Transform queuePoint = queuePoints[qIndex].GetPoint(row);
-            bool isFirst = (row == 0);
+
+            // 待機位置は、queuePoints.GetPoint(index) で取得
+            Transform queuePoint = queuePoints.GetPoint(index);
+            bool isFirst = (index == 0);
             customer.UpdateQueue(queuePoint, isFirst);
         }
 
@@ -153,19 +148,15 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// Updates the queue positions for all customers after a customer is served.
+        /// Updates the queue positions for all customers after one is served.
         /// </summary>
         void UpdateQueuePositions()
         {
-            foreach (int qIndex in Enumerable.Range(0, queuePoints.Length))
+            int index = 0;
+            foreach (var customer in customers)
             {
-                var group = customers.Where(c => c.QueueIndex == qIndex).ToList();
-                for (int i = 0; i < group.Count; i++)
-                {
-                    Transform queuePoint = queuePoints[qIndex].GetPoint(i);
-                    bool isFirst = (i == 0);
-                    group[i].UpdateQueue(queuePoint, isFirst);
-                }
+                AssignQueuePoint(customer, index);
+                index++;
             }
         }
     }

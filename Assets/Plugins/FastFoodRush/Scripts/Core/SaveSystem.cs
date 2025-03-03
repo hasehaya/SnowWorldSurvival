@@ -1,5 +1,6 @@
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+
 using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
@@ -15,16 +16,9 @@ namespace CryingSnow.FastFoodRush
         /// <param name="fileName">The name of the file to save the data in.</param>
         public static void SaveData<T>(T data, string fileName)
         {
-            // Determine the file path where the data will be saved
             string filePath = Application.persistentDataPath + "/" + fileName + ".dat";
-
-            // Create a BinaryFormatter to serialize the data
             BinaryFormatter formatter = new BinaryFormatter();
-
-            // Create a file stream for writing the data
             FileStream fileStream = new FileStream(filePath, FileMode.Create);
-
-            // Serialize the data and save it to the file
             formatter.Serialize(fileStream, data);
             fileStream.Close();
         }
@@ -38,31 +32,36 @@ namespace CryingSnow.FastFoodRush
         /// <returns>The loaded data, or the default value if the file doesn't exist.</returns>
         public static T LoadData<T>(string fileName)
         {
-            // Determine the file path from which the data will be loaded
             string filePath = Application.persistentDataPath + "/" + fileName + ".dat";
-
-            // Check if the file exists
             if (File.Exists(filePath))
             {
-                // Create a BinaryFormatter to deserialize the data
                 BinaryFormatter formatter = new BinaryFormatter();
-
-                // Open the file stream for reading
                 FileStream fileStream = new FileStream(filePath, FileMode.Open);
-
-                // Deserialize the data and cast it to the correct type
                 T data = (T)formatter.Deserialize(fileStream);
                 fileStream.Close();
-
                 return data;
             }
             else
             {
-                // Optional:
-                // Debug.LogError("Save file not found in " + filePath);
-
-                // Return default value if file doesn't exist
                 return default(T);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the save data file with the given file name.
+        /// </summary>
+        /// <param name="fileName">The name of the file whose data should be deleted.</param>
+        public static void DeleteData(string fileName)
+        {
+            string filePath = Application.persistentDataPath + "/" + fileName + ".dat";
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+                Debug.Log("Deleted save file: " + filePath);
+            }
+            else
+            {
+                Debug.LogWarning("No save file found to delete at: " + filePath);
             }
         }
     }

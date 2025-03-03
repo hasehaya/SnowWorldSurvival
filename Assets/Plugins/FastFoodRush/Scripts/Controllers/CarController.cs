@@ -1,10 +1,12 @@
 using System.Collections.Generic;
-using UnityEngine;
+
 using DG.Tweening;
+
+using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class CarController : MonoBehaviour
+    public class CarController :MonoBehaviour
     {
         [SerializeField, Range(5f, 10f), Tooltip("Speed at which the car moves.")]
         private float movingSpeed = 5.0f;
@@ -34,7 +36,7 @@ namespace CryingSnow.FastFoodRush
         private int currentWaypointIndex;
 
         // Reference to the order information display from the restaurant manager.
-        private OrderInfo orderInfo => RestaurantManager.Instance.PackageOrderInfo;
+        //private OrderInfo orderInfo => RestaurantManager.Instance.PackageOrderInfo;
 
         /// <summary>
         /// Initializes the car with waypoints, exit point, and queue number.
@@ -94,7 +96,8 @@ namespace CryingSnow.FastFoodRush
         {
             // Check if the transform is already being animated (car is moving);
             // if so, exit early to avoid overlapping animations.
-            if (DOTween.IsTweening(transform)) return;
+            if (DOTween.IsTweening(transform))
+                return;
 
             // Calculate the distance between the car position and the target point.
             float distance = Vector3.Distance(transform.position, targetPoint);
@@ -123,7 +126,7 @@ namespace CryingSnow.FastFoodRush
         {
             OrderCount = Random.Range(1, maxOrder);
             HasOrder = true;
-            orderInfo.ShowInfo(transform, OrderCount);
+            //orderInfo.ShowInfo(transform, OrderCount);
         }
 
         /// <summary>
@@ -143,12 +146,12 @@ namespace CryingSnow.FastFoodRush
             // If all orders are fulfilled, hide the order info display.
             if (OrderCount == 0)
             {
-                orderInfo.HideInfo();
+                //orderInfo.HideInfo();
             }
             // Otherwise, update the order info display to show the remaining count.
             else
             {
-                orderInfo.ShowInfo(transform, OrderCount);
+                //orderInfo.ShowInfo(transform, OrderCount);
             }
         }
 

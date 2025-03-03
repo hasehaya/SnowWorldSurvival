@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Linq;
+
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,7 +8,7 @@ namespace CryingSnow.FastFoodRush
 {
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(NavMeshAgent))]
-    public class EmployeeController : MonoBehaviour
+    public class EmployeeController :MonoBehaviour
     {
         [SerializeField, Tooltip("Base movement speed of the employee.")]
         private float baseSpeed = 2.5f;
@@ -69,20 +70,21 @@ namespace CryingSnow.FastFoodRush
         void HandleActivity()
         {
             // If the employee is already performing an activity, don't start another
-            if (currentActivity != StackType.None) return;
+            if (currentActivity != StackType.None)
+                return;
 
             // Randomly select an activity (cleaning, refilling food, or refilling packages)
             switch (Random.Range(0, 3))
             {
-                case 0:
-                    StartCoroutine(CleanTable()); // Start cleaning table activity
-                    break;
-                case 1:
-                    StartCoroutine(RefillFood()); // Start refilling food activity
-                    break;
-                case 2:
-                    StartCoroutine(RefillPackage()); // Start refilling package activity
-                    break;
+            case 0:
+                StartCoroutine(CleanTable()); // Start cleaning table activity
+                break;
+            case 1:
+                StartCoroutine(RefillFood()); // Start refilling food activity
+                break;
+            case 2:
+                StartCoroutine(RefillPackage()); // Start refilling package activity
+                break;
             }
         }
 

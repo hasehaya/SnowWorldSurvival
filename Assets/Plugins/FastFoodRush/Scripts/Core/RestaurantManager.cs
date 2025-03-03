@@ -42,6 +42,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Offset distance for package items in the stack.")]
         private float logOffset = 0.3f;
 
+        [SerializeField]
+        private Canvas canvas;
+
         [Header("Employee")]
         [SerializeField, Tooltip("The point where employees will spawn.")]
         private Transform employeePoint;
@@ -63,12 +66,6 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Text field displaying the current money.")]
         private TMP_Text moneyDisplay;
 
-        [SerializeField, Tooltip("Order info display for food orders.")]
-        private OrderInfo foodOrderInfo;
-
-        [SerializeField, Tooltip("Order info display for package orders.")]
-        private OrderInfo packageOrderInfo;
-
         [SerializeField, Tooltip("Screen fader for transitions between scenes.")]
         private ScreenFader screenFader;
 
@@ -87,8 +84,8 @@ namespace CryingSnow.FastFoodRush
         private List<Unlockable> unlockables;
 
         #region Reference Properties
-        public OrderInfo FoodOrderInfo => foodOrderInfo;
-        public OrderInfo PackageOrderInfo => packageOrderInfo;
+
+        public Canvas Canvas => canvas;
 
         public List<ObjectPile> TrashPiles { get; private set; } = new List<ObjectPile>();
         public TrashBin TrashBin { get; private set; }
@@ -129,7 +126,6 @@ namespace CryingSnow.FastFoodRush
 
             // Loads saved data for the current restaurant (if any exists).
             data = SaveSystem.LoadData<RestaurantData>(restaurantID);
-
             // If no data is found, initialize with default values (starting money and empty data).
             if (data == null)
                 data = new RestaurantData(restaurantID, startingMoney);
