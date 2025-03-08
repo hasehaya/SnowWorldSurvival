@@ -1,9 +1,10 @@
-using UnityEngine;
 using TMPro;
+
+using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class OrderInfo : MonoBehaviour
+    public class OrderInfo :MonoBehaviour
     {
         [SerializeField, Tooltip("The icon image to be displayed for the order info.")]
         private GameObject iconImage;
@@ -19,13 +20,13 @@ namespace CryingSnow.FastFoodRush
 
         void Start()
         {
-            mainCamera = Camera.main; // Get the main camera reference
-            HideInfo(); // Ensure the order info is hidden at the start
+            mainCamera = Camera.main;
         }
 
         void LateUpdate()
         {
-            if (displayer == null) return; // If no displayer is set, do nothing
+            if (displayer == null)
+                return; // If no displayer is set, do nothing
 
             // Calculate the display position of the order info in screen space
             var displayPosition = displayer.position + displayOffset;

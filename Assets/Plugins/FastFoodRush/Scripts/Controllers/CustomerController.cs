@@ -136,6 +136,7 @@ namespace CryingSnow.FastFoodRush
         {
             StartCoroutine(CheckEntrance());
             yield return new WaitUntil(() => HasArrived());
+            Destroy(currentOrderInfo);
             Destroy(gameObject);
         }
 

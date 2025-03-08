@@ -1,17 +1,24 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+
 using DG.Tweening;
+
+using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class Unlockable : MonoBehaviour
+    public class Unlockable :MonoBehaviour
     {
         [SerializeField, Tooltip("The point at which the object can be bought or unlocked (relative to the object position)")]
         private Vector3 buyingPoint = Vector3.zero;
 
         [SerializeField, Tooltip("The scale effect applied when the object is unlocked")]
         private Vector3 punchScale = new Vector3(0.1f, 0.2f, 0.1f);
+
+        [SerializeField]
+        private Sprite contentIcon;
+
+        public Sprite ContentIcon => contentIcon;  // The icon representing the unlockable object
 
         protected int unlockLevel;  // The current level of the unlock
 
@@ -39,13 +46,13 @@ namespace CryingSnow.FastFoodRush
 
             UpdateStats();  // Update the stats of the object based on the unlock level
 
-            if (!animate) return;  // Skip animation if not required
+            if (!animate)
+                return;  // Skip animation if not required
 
             // Animate the upgradeable meshes if animation is enabled
             foreach (var upgradeableMesh in upgradeableMeshes)
             {
-                upgradeableMesh.transform.DOPunchScale(punchScale, 0.3f)  // Apply punch scale animation
-                    .OnComplete(() => upgradeableMesh.transform.localScale = Vector3.one);  // Reset scale after animation
+                upgradeableMesh.transform.DOPunchScale(punchScale, 0.3f);
             }
         }
 

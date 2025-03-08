@@ -297,6 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyingPoint: {x: -0.39, y: 0, z: -2.83}
   punchScale: {x: 0.1, y: 0.2, z: 0.1}
+  contentIcon: {fileID: 21300000, guid: b25883f52f040804d88610a16a006ae2, type: 3}
   workingSpot: {fileID: 6632145468266872315}
   worker: {fileID: 8822610748424923961}
   baseInterval: 1.5

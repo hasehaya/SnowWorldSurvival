@@ -13,7 +13,7 @@ namespace CryingSnow.FastFoodRush
         public int Row;
         public int Column;
         [SerializeField] private int treeHealth = 3;                // 木の体力
-        [SerializeField] private int logCount = 3;                   // 体力減少時に生成する最大ログ数
+        [SerializeField] private int logCount = 2;                   // 体力減少時に生成する最大ログ数
         [SerializeField] private float decreaseInterval = 0.3f;      // 体力が減る間隔
         [SerializeField] private GameObject treeModel;               // 木の見た目のモデル
         [SerializeField] private float regrowDelay = 4f;             // 再生までの待機時間

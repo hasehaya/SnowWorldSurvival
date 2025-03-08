@@ -48,8 +48,8 @@ namespace CryingSnow.FastFoodRush
         private float spawnTimer;    // 顧客生成用タイマー
         private float serveTimer;    // 食事提供用タイマー
 
-        // 最大顧客数は unlockLevel に応じて増加する（例: 基本値 10 に unlockLevel 毎に 2 人追加）
-        private int maxCustomers => 2 + unlockLevel;
+        // 最大顧客数は unlockLevel に応じて増加する
+        private int maxCustomers => 1 + unlockLevel;
 
         void Start()
         {

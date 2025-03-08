@@ -17,17 +17,25 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("The total time it takes to complete the payment.")]
         private float payingTime = 3f;
 
+        [SerializeField, Tooltip("Delay before starting the payment process after the player enters.")]
+        private float delayBeforePay = 0.6f;
+
         [SerializeField, Tooltip("The UI image used to represent the payment progress.")]
         private Image progressFill;
 
         [SerializeField, Tooltip("The label displaying the remaining price for the unlockable.")]
         private TMP_Text priceLabel;
 
+        [SerializeField]
+        private Image contentIcon;
+
         private long playerMoney => RestaurantManager.Instance.GetMoney();  // The current amount of money the player has
 
         private Unlockable unlockable;  // The unlockable object that can be bought
-        private int unlockPrice;  // The price required to unlock the unlockable
-        private int paidAmount;  // The amount the player has already paid
+        private int unlockPrice;       // The price required to unlock the unlockable
+        private int paidAmount;        // The amount the player has already paid
+
+        private Coroutine payCoroutine;  // Reference to the currently running coroutine
 
         /// <summary>
         /// Initializes the UnlockableBuyer with the provided unlockable and price details.
@@ -40,6 +48,7 @@ namespace CryingSnow.FastFoodRush
             this.unlockable = unlockable;
             this.unlockPrice = unlockPrice;
             this.paidAmount = paidAmount;
+            contentIcon.sprite = unlockable.ContentIcon;
 
             UpdatePayment(0);  // Update the payment progress display
         }
@@ -58,11 +67,40 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// Triggered when the player enters the interactable area, starting the payment process.
+        /// Triggered when the player enters the interactable area.
+        /// Starts a delayed coroutine to begin the payment process.
         /// </summary>
         protected override void OnPlayerEnter()
         {
-            StartCoroutine(Pay());  // Start the payment coroutine
+            // Start a coroutine that delays payment start by delayBeforePay seconds
+            payCoroutine = StartCoroutine(DelayedPay());
+        }
+
+        /// <summary>
+        /// Triggered when the player exits the interactable area.
+        /// Stops the payment coroutine to reset the timer.
+        /// </summary>
+        protected override void OnPlayerExit()
+        {
+            if (payCoroutine != null)
+            {
+                StopCoroutine(payCoroutine);
+                payCoroutine = null;
+            }
+        }
+
+        /// <summary>
+        /// Coroutine that waits for a delay before starting the payment process.
+        /// If the player is still in range after the delay, the payment process begins.
+        /// </summary>
+        IEnumerator DelayedPay()
+        {
+            yield return new WaitForSeconds(delayBeforePay);
+            // Ensure the player is still in range before starting payment
+            if (player != null)
+            {
+                yield return StartCoroutine(Pay());
+            }
         }
 
         /// <summary>
@@ -70,11 +108,11 @@ namespace CryingSnow.FastFoodRush
         /// </summary>
         IEnumerator Pay()
         {
-            // Keep paying while the player is inside the trigger, the unlockable is not fully paid, and the player has money
+            // Continue paying while the player is inside the trigger, the unlockable is not fully paid, and the player has money
             while (player != null && paidAmount < unlockPrice && playerMoney > 0)
             {
                 float paymentRate = unlockPrice * payingInterval / payingTime;  // Calculate the rate of payment per interval
-                paymentRate = Mathf.Min(playerMoney, paymentRate);  // Make sure payment does not exceed the player's money
+                paymentRate = Mathf.Min(playerMoney, paymentRate);  // Ensure payment does not exceed the player's money
                 int payment = Mathf.Max(1, Mathf.RoundToInt(paymentRate));  // Ensure a minimum payment of 1
 
                 UpdatePayment(payment);  // Update the progress
