@@ -62,7 +62,7 @@ namespace CryingSnow.FastFoodRush
             // LogEmployeeControllerの場合
             else if (other.CompareTag("Employee"))
             {
-                LogEmployeeController logEmployee = other.GetComponent<LogEmployeeController>();
+                EmployeeController logEmployee = other.GetComponent<EmployeeController>();
                 if (logEmployee != null)
                 {
                     int remainingCapacity = logEmployee.Capacity - logEmployee.Stack.Height;
@@ -105,7 +105,7 @@ namespace CryingSnow.FastFoodRush
         /// <summary>
         /// LogEmployeeController用：指定された数だけログを生成
         /// </summary>
-        private void SpawnLogsForLogEmployee(int logsToSpawn, LogEmployeeController logEmployee)
+        private void SpawnLogsForLogEmployee(int logsToSpawn, EmployeeController logEmployee)
         {
             for (int i = 0; i < logsToSpawn; i++)
             {
@@ -142,7 +142,7 @@ namespace CryingSnow.FastFoodRush
         }
 
         // LogEmployeeController用のログ生成処理
-        private void SpawnLogForLogEmployee(int index, LogEmployeeController logEmployee)
+        private void SpawnLogForLogEmployee(int index, EmployeeController logEmployee)
         {
             // 条件分岐を先頭で実施：logEmployeeが存在し、Stackの型がNoneまたはLogで、かつ容量に余裕があるかチェック
             if (logEmployee == null ||

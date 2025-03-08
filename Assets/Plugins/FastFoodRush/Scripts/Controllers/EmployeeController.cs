@@ -1,5 +1,6 @@
 using System.Collections;
-using System.Linq;
+
+using DG.Tweening;
 
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,340 +11,194 @@ namespace CryingSnow.FastFoodRush
     [RequireComponent(typeof(NavMeshAgent))]
     public class EmployeeController :MonoBehaviour
     {
-        [SerializeField, Tooltip("Base movement speed of the employee.")]
-        private float baseSpeed = 2.5f;
+        // 追加：所属する行・列情報。RestaurantManager で設定されます。
+        public int Row { get; set; }
+        public int Column { get; set; }
 
-        [SerializeField, Tooltip("Base capacity of the employee's stack.")]
-        private int baseCapacity = 3;
+        private Transform pointA;
+        private Transform pointB;
 
-        [SerializeField, Tooltip("Reference to the WobblingStack component for managing the employee's stack.")]
-        private WobblingStack stack;
-
-        [SerializeField, Tooltip("Target position for the employee's left hand during animations.")]
+        [SerializeField, Tooltip("左手のIKターゲット")]
         private Transform leftHandTarget;
-
-        [SerializeField, Tooltip("Target position for the employee's right hand during animations.")]
+        [SerializeField, Tooltip("右手のIKターゲット")]
         private Transform rightHandTarget;
 
-        private Animator animator; // Reference to the Animator component for character animation
-        private NavMeshAgent agent; // Reference to the NavMeshAgent component for pathfinding
+        // 従業員自身のスタック管理用コンポーネント
+        [SerializeField, Tooltip("従業員のスタック管理用コンポーネント")]
+        private WobblingStack stack;
+        public WobblingStack Stack => stack;
 
-        private float IK_Weight; // Weight used to control the IK (Inverse Kinematics) blending
-        private int capacity; // Current capacity for the employee (increased by upgrades)
-        private StackType currentActivity; // The current activity (e.g., cleaning, refilling, etc.)
+        // 基本的な動作速度と容量。アップグレードによって加算されます。
+        [SerializeField, Tooltip("Log従業員の基本移動速度")]
+        private float baseSpeed = 2.5f;
+        [SerializeField, Tooltip("Log従業員の基本スタック容量")]
+        private int baseCapacity = 3;
+
+        // LogEmployee のスタック容量は UpdateStats で更新
+        [SerializeField, Tooltip("Log従業員のスタックの容量 (アップグレードで増加)")]
+        private int capacity = 3;
+        public int Capacity => capacity;
+
+        [SerializeField]
+        private StackType stackType;
+
+        // ログを預ける先。LogStack は ObjectStack のインスタンス
+        private ObjectStack objectStack;
+
+        private NavMeshAgent agent;
+        private Animator animator;
+        private Vector3 currentTarget;
+        private float IK_Weight;
+
+        // ログ預け中かどうかのフラグ
+        private bool isTransferringLogs = false;
 
         void Awake()
         {
-            // Get references to the Animator and NavMeshAgent components on the employee
-            animator = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
+            animator = GetComponent<Animator>();
+            var stacks = FindObjectsOfType<ObjectStack>();
+            foreach (var stack in stacks)
+            {
+                if (stack.StackType == stackType)
+                {
+                    objectStack = stack;
+                }
+            }
         }
 
         void Start()
         {
-            // Subscribe to the upgrade event to update stats when upgrades are applied
+            // 巡回地点が設定されている場合、初期目的地を A 地点に設定
+            if (pointA != null)
+            {
+                currentTarget = pointA.position;
+                agent.SetDestination(currentTarget);
+            }
+            // RestaurantManager のアップグレードイベントに購読
             RestaurantManager.Instance.OnUpgrade += UpdateStats;
-
-            UpdateStats(); // Initialize stats based on current upgrades
+            UpdateStats();
         }
 
         void Update()
         {
-            // Set the "IsMoving" animator parameter based on the agent's movement speed
-            animator.SetBool("IsMoving", agent.velocity.sqrMagnitude > 0.1f);
+            if (!isTransferringLogs)
+            {
+                animator.SetBool("IsMoving", agent.velocity.sqrMagnitude > 0.1f);
 
-            // Handle the employee's current activity (cleaning, refilling, etc.)
-            HandleActivity();
+                if (HasArrived())
+                {
+                    if (currentTarget == pointA.position && pointB != null)
+                        currentTarget = pointB.position;
+                    else if (currentTarget == pointB.position && pointA != null)
+                        currentTarget = pointA.position;
+
+                    agent.SetDestination(currentTarget);
+                }
+
+                if (stack.Height >= Capacity && !isTransferringLogs)
+                {
+                    StartCoroutine(TransferLogsToLogStack());
+                }
+            }
         }
 
+        /// <summary>
+        /// アップグレードの効果を反映して、移動速度とスタック容量を更新する。
+        /// </summary>
         void UpdateStats()
         {
-            // Update the employee's speed based on the speed upgrade level
+            // EmployeeSpeed アップグレードレベルに応じた移動速度の加算（例：0.1fずつ加算）
             float speedLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.EmployeeSpeed);
             agent.speed = baseSpeed + (speedLevel * 0.1f);
 
-            // Update the employee's capacity based on the capacity upgrade level
+            // EmployeeCapacity アップグレードレベルに応じたスタック容量の加算
             int capacityLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.EmployeeCapacity);
-            capacity = baseCapacity + capacityLevel;
-        }
-
-        void HandleActivity()
-        {
-            // If the employee is already performing an activity, don't start another
-            if (currentActivity != StackType.None)
-                return;
-
-            // Randomly select an activity (cleaning, refilling food, or refilling packages)
-            switch (Random.Range(0, 3))
-            {
-            case 0:
-                StartCoroutine(CleanTable()); // Start cleaning table activity
-                break;
-            case 1:
-                StartCoroutine(RefillFood()); // Start refilling food activity
-                break;
-            case 2:
-                StartCoroutine(RefillPackage()); // Start refilling package activity
-                break;
-            }
-        }
-
-        IEnumerator CleanTable()
-        {
-            currentActivity = StackType.Trash; // Set the current activity to cleaning trash
-
-            // Find valid trash piles that contain trash
-            var validTrashPiles = RestaurantManager.Instance.TrashPiles.Where(x => x.Count > 0).ToList();
-
-            // If there are no trash piles, reset activity and exit
-            if (validTrashPiles.Count == 0)
-            {
-                currentActivity = StackType.None;
-                yield break;
-            }
-
-            // Select a random trash pile to clean
-            var trashPile = validTrashPiles[Random.Range(0, validTrashPiles.Count)];
-
-            // Set the agent's destination to the trash pile
-            agent.SetDestination(trashPile.transform.position);
-
-            // Wait until the employee arrives at the trash pile
-            while (!HasArrived())
-            {
-                // If the trash pile is emptied during movement, reset and exit
-                if (trashPile.Count == 0)
-                {
-                    agent.SetDestination(transform.position); // Return to current position
-                    currentActivity = StackType.None;
-                    yield break;
-                }
-
-                yield return null; // Wait for the next frame
-            }
-
-            // Pick up trash from the trash pile while there's still trash and available capacity
-            while (trashPile.Count > 0 && stack.Height < capacity)
-            {
-                trashPile.RemoveAndStackObject(stack); // Move trash to the stack
-
-                yield return new WaitForSeconds(0.03f); // Wait before picking up more trash
-            }
-
-            yield return new WaitForSeconds(0.5f); // Wait before moving to the trash bin
-
-            // Set destination to the trash bin to dispose of the trash
-            var trashBin = RestaurantManager.Instance.TrashBin;
-            agent.SetDestination(trashBin.transform.position);
-
-            // Wait until the employee arrives at the trash bin
-            yield return new WaitUntil(() => HasArrived());
-
-            // Dispose of the trash in the trash bin
-            while (stack.Count > 0)
-            {
-                trashBin.ThrowToBin(stack); // Throw items from the stack into the bin
-
-                yield return new WaitForSeconds(0.03f); // Wait before disposing more trash
-            }
-
-            yield return new WaitForSeconds(0.5f); // Wait before finishing the activity
-
-            currentActivity = StackType.None; // Reset the current activity
-        }
-
-        IEnumerator RefillFood()
-        {
-            currentActivity = StackType.Food; // Set current activity to refilling food
-
-            // Find valid food stacks that are not full
-            var validFoodStacks = RestaurantManager.Instance.FoodStacks.Where(x => x.gameObject.activeInHierarchy && !x.IsFull).ToList();
-            if (validFoodStacks.Count == 0)
-            {
-                currentActivity = StackType.None;
-                yield break;
-            }
-
-            // Select a random food stack to refill
-            var foodStack = validFoodStacks[Random.Range(0, validFoodStacks.Count)];
-
-            // Find valid food piles that have food
-            var validFoodPiles = RestaurantManager.Instance.FoodPiles.Where(x => x.Count > 0).ToList();
-            if (validFoodPiles.Count == 0)
-            {
-                currentActivity = StackType.None;
-                yield break;
-            }
-
-            // Select a random food pile to gather food from
-            var foodPile = validFoodPiles[Random.Range(0, validFoodPiles.Count)];
-
-            // Set destination to the food pile to collect food
-            agent.SetDestination(foodPile.transform.position);
-
-            // Wait until the employee arrives at the food pile
-            while (!HasArrived())
-            {
-                // If the food pile is emptied during movement, reset and exit
-                if (foodPile.Count == 0)
-                {
-                    agent.SetDestination(transform.position); // Return to current position
-                    currentActivity = StackType.None;
-                    yield break;
-                }
-
-                yield return null; // Wait for the next frame
-            }
-
-            // Pick up food from the pile while there's food and available capacity
-            while (foodPile.Count > 0 && stack.Height < capacity)
-            {
-                foodPile.RemoveAndStackObject(stack); // Add food to the stack
-
-                yield return new WaitForSeconds(0.03f); // Wait before picking up more food
-            }
-
-            yield return new WaitForSeconds(0.5f); // Wait before moving to the food stack
-
-            // Set destination to the food stack to refill it
-            agent.SetDestination(foodStack.transform.position);
-
-            // Wait until the employee arrives at the food stack
-            yield return new WaitUntil(() => HasArrived());
-
-            // Add food from the stack to the food stack
-            while (stack.Count > 0)
-            {
-                if (!foodStack.IsFull)
-                {
-                    var food = stack.RemoveFromStack(); // Remove food from the stack
-                    foodStack.AddToStack(food.gameObject); // Add food to the food stack
-                }
-
-                yield return new WaitForSeconds(0.03f); // Wait before refilling more food
-            }
-
-            yield return new WaitForSeconds(0.5f); // Wait before finishing the activity
-
-            currentActivity = StackType.None; // Reset the current activity
-        }
-
-        IEnumerator RefillPackage()
-        {
-            currentActivity = StackType.Package; // Set the current activity to handling package refill
-
-            // Check if the package stack exists, is active, and is not full
-            var packageStack = RestaurantManager.Instance.PackageStack;
-            if (packageStack == null || !packageStack.gameObject.activeInHierarchy || packageStack.IsFull)
-            {
-                currentActivity = StackType.None; // No activity to process if the package stack is unavailable or full
-                yield break; // Exit the coroutine if the condition isn't met
-            }
-
-            // Check if the package pile exists, is active, and contains items
-            var packagePile = RestaurantManager.Instance.PackagePile;
-            if (packagePile == null || !packagePile.gameObject.activeInHierarchy || packagePile.Count == 0)
-            {
-                currentActivity = StackType.None; // No activity if the package pile is unavailable or empty
-                yield break; // Exit the coroutine if the condition isn't met
-            }
-
-            agent.SetDestination(packagePile.transform.position);
-
-            // Wait until the agent arrives at the package pile or the pile becomes empty
-            while (!HasArrived())
-            {
-                if (packagePile.Count == 0) // If the package pile is empty, stop the task
-                {
-                    agent.SetDestination(transform.position); // Return to the starting position
-                    currentActivity = StackType.None; // Reset the current activity
-                    yield break;
-                }
-
-                yield return null;
-            }
-
-            // While the package pile still contains items and the stack is not full, move items from the pile to the stack
-            while (packagePile.Count > 0 && stack.Height < capacity)
-            {
-                packagePile.RemoveAndStackObject(stack); // Move an item from the package pile to the stack
-
-                yield return new WaitForSeconds(0.03f); // Delay to simulate the item moving
-            }
-
-            yield return new WaitForSeconds(0.5f); // Short delay before moving to the package stack
-
-            agent.SetDestination(packageStack.transform.position);
-
-            yield return new WaitUntil(() => HasArrived()); // Wait until the agent has arrived at the package stack
-
-            // While the stack has items, move them to the package stack if it's not full
-            while (stack.Count > 0)
-            {
-                if (!packageStack.IsFull) // Only add to the package stack if it's not full
-                {
-                    var food = stack.RemoveFromStack(); // Remove an item from the stack
-                    packageStack.AddToStack(food.gameObject); // Add the item to the package stack
-                }
-
-                yield return new WaitForSeconds(0.03f); // Delay to simulate the item moving
-            }
-
-            yield return new WaitForSeconds(0.5f); // Short delay before finishing the activity
-
-            currentActivity = StackType.None; // Reset the activity once the task is complete
+            capacity = baseCapacity + 3 * capacityLevel;
         }
 
         private bool HasArrived()
         {
-            // Check if the agent's path calculation is complete
             if (!agent.pathPending)
             {
-                // Check if the agent has reached the stopping distance
                 if (agent.remainingDistance <= agent.stoppingDistance)
                 {
-                    // Check if the agent no longer has a path to follow or if it has stopped moving
                     if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
-                    {
-                        return true; // The agent has arrived at the destination
-                    }
+                        return true;
                 }
             }
-
-            return false; // The agent has not arrived yet
+            return false;
         }
 
-        public void OnStep()
-        {
-            // Intentionally left blank.
-            // This is an animation event triggered during the stickman run animation when the footstep hits the ground.
-            // It's used by the player to trigger footstep sound effects, but left empty for employees.
-        }
-
-        /// <summary>
-        /// Handles the IK for the employee's hands to adjust their position based on the stack's height.
-        /// </summary>
         void OnAnimatorIK()
         {
-            IK_Weight = Mathf.MoveTowards(IK_Weight, Mathf.Clamp01(stack.Height), Time.deltaTime * 3.5f);
-
+            IK_Weight = Mathf.MoveTowards(IK_Weight, 1f, Time.deltaTime * 3.5f);
             if (leftHandTarget != null)
             {
-                // Set the IK position and rotation for the left hand
                 animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, IK_Weight);
                 animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, IK_Weight);
                 animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTarget.position);
                 animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandTarget.rotation);
             }
-
             if (rightHandTarget != null)
             {
-                // Set the IK position and rotation for the right hand
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, IK_Weight);
                 animator.SetIKRotationWeight(AvatarIKGoal.RightHand, IK_Weight);
                 animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position);
                 animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
             }
+        }
+
+        // AnimationEvent "OnStep" 用（足音イベント不要なら空実装）
+        public void OnStep()
+        {
+            // LogEmployee は足音イベント処理が不要ならここは空実装でOK
+        }
+
+        /// <summary>
+        /// 外部からパトロール地点を設定するメソッド
+        /// </summary>
+        public void SetPatrolPoints(Transform a, Transform b)
+        {
+            pointA = a;
+            pointB = b;
+            if (pointA != null)
+            {
+                currentTarget = pointA.position;
+                agent.SetDestination(currentTarget);
+            }
+        }
+
+        /// <summary>
+        /// スタックが満杯になった際、LogStack へログを預ける処理。
+        /// 転送が完了すると巡回フェーズは必ず A 地点から再開する。
+        /// </summary>
+        private IEnumerator TransferLogsToLogStack()
+        {
+            isTransferringLogs = true;
+
+            agent.SetDestination(objectStack.transform.position);
+            yield return new WaitUntil(() => HasArrived());
+
+            while (stack.Height > 0)
+            {
+                if (objectStack.IsFull)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    continue;
+                }
+
+                var log = stack.RemoveFromStack();
+                objectStack.AddToStack(log.gameObject);
+                yield return new WaitForSeconds(0.03f);
+            }
+
+            if (pointA != null)
+            {
+                currentTarget = pointA.position;
+                agent.SetDestination(currentTarget);
+            }
+            isTransferringLogs = false;
         }
     }
 }

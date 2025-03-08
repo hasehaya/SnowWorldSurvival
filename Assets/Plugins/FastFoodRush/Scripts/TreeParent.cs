@@ -95,7 +95,7 @@ namespace CryingSnow.FastFoodRush
         /// </summary>
         private void UpdateEmployeePatrolPoints()
         {
-            LogEmployeeController[] employees = FindObjectsOfType<LogEmployeeController>();
+            EmployeeController[] employees = FindObjectsOfType<EmployeeController>();
             foreach (var employee in employees)
             {
                 int col = employee.Column; // 1Å`ÇÃíl

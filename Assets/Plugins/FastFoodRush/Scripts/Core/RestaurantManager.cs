@@ -49,15 +49,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("The point where employees will spawn.")]
         private Transform employeePoint;
 
-        [SerializeField, Tooltip("Prefab for the employee.")]
-        private EmployeeController employeePrefab;
-
         [Header("Employee (Log)")]
         [SerializeField, Tooltip("Log用の従業員プレハブ")]
-        private LogEmployeeController logEmployeePrefab;
-
-        [SerializeField]
-        private ObjectStack logStack;
+        private EmployeeController logEmployeePrefab;
 
         [SerializeField, Tooltip("Radius within which employees will spawn.")]
         private float employeeSpawnRadius = 3f;
@@ -186,28 +180,12 @@ namespace CryingSnow.FastFoodRush
             AudioManager.Instance.PlayBGM(backgroundMusic);
         }
 
-        void SpawnEmployee()
-        {
-            // Generate a random position within a circular radius around the employee spawn point.
-            var randomCircle = Random.insideUnitCircle * employeeSpawnRadius;
-            var randomPos = employeePoint.position + new Vector3(randomCircle.x, 0, randomCircle.y);
-
-            // Instantiate a new employee at the calculated random position and the predefined rotation.
-            Instantiate(employeePrefab, randomPos, employeePoint.rotation);
-        }
-
         void SpawnLogEmployees()
         {
             TreeParent treeParent = FindObjectOfType<TreeParent>();
-            if (treeParent == null)
-            {
-                Debug.LogWarning("TreeParent がシーン内に見つかりません。従来の方法で生成します。");
-                SpawnEmployee();
-                return;
-            }
 
             // 現在の LogEmployeeController 数との差分だけ生成
-            int currentCount = FindObjectsOfType<LogEmployeeController>().Length;
+            int currentCount = FindObjectsOfType<EmployeeController>().Length;
             int toSpawn = data.EmployeeAmount - currentCount;
             if (toSpawn <= 0)
                 return;
@@ -239,11 +217,10 @@ namespace CryingSnow.FastFoodRush
                 pointBObj.transform.parent = transform;
 
                 // 各従業員は、所属する列の A 地点に生成
-                LogEmployeeController employee = Instantiate(logEmployeePrefab, pointAObj.transform.position, Quaternion.identity);
+                EmployeeController employee = Instantiate(logEmployeePrefab, pointAObj.transform.position, Quaternion.identity);
                 employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
                 employee.Column = columnIndex + 1;
                 employee.Row = rowIndex;
-                employee.logStack = logStack;
             }
         }
 
