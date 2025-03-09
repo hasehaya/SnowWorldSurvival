@@ -924,7 +924,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6953066754455f4e985a5a98f77312d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stackType: 4
+  stackType: 0
   stackInterval: 0.05
 --- !u!1 &6632145469183575478
 GameObject:
