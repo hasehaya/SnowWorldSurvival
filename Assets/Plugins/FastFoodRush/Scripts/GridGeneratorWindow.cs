@@ -49,7 +49,7 @@ public class GridGenerator :MonoBehaviour
                 if (sourcePrefab != null)
                 {
                     clone = (GameObject)PrefabUtility.InstantiatePrefab(sourcePrefab, parent.transform);
-                    var tree = clone.GetComponent<CryingSnow.FastFoodRush.Tree>();
+                    var tree = clone.GetComponent<CryingSnow.FastFoodRush.MaterialBase>();
                     if (tree != null)
                     {
                         tree.Row = row + 1;

@@ -182,7 +182,7 @@ namespace CryingSnow.FastFoodRush
 
         void SpawnLogEmployees()
         {
-            TreeParent treeParent = FindObjectOfType<TreeParent>();
+            MaterialManager treeParent = FindObjectOfType<MaterialManager>();
 
             // 現在の LogEmployeeController 数との差分だけ生成
             int currentCount = FindObjectsOfType<EmployeeController>().Length;
@@ -200,7 +200,7 @@ namespace CryingSnow.FastFoodRush
                 int rowIndex = (i / numberOfColumns) + 1;
 
                 // 指定列番号は 1～ とするので、columnIndex + 1 を渡す
-                TreeParent.PatrolPoints patrol = treeParent.GetPatrolPointsForColumn(columnIndex + 1);
+                MaterialManager.PatrolPoints patrol = treeParent.GetPatrolPointsForColumn(columnIndex + 1);
                 if (patrol == null)
                 {
                     Debug.LogWarning("Column " + (columnIndex + 1) + " のパトロール地点が取得できません。");
