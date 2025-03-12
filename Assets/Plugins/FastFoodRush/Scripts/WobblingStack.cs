@@ -113,5 +113,10 @@ namespace CryingSnow.FastFoodRush
         }
     }
 
-    public enum StackType { None, Food, Trash, Package, Log }  // Enum to define the type of stack
+    public enum StackType
+    {
+        None = 0,
+        Log = 1,
+        Rock = 2,
+    }  // Enum to define the type of stack
 }

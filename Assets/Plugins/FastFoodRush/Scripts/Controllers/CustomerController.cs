@@ -111,7 +111,7 @@ namespace CryingSnow.FastFoodRush
         public void FillOrder(Transform food)
         {
             OrderCount--;
-            stack.AddToStack(food, StackType.Food);
+            stack.AddToStack(food, stack.StackType);
 
             // 既に生成している OrderInfo インスタンスを更新
             if (currentOrderInfo != null)

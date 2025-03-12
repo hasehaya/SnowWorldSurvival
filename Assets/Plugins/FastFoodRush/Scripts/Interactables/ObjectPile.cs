@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class ObjectPile : Interactable
+    public class ObjectPile :Interactable
     {
         [SerializeField, Tooltip("The type of stack (e.g., food, trash, etc.).")]
         private StackType stackType;
@@ -42,7 +43,8 @@ namespace CryingSnow.FastFoodRush
 
         void Update()
         {
-            if (player == null || objects.Count == 0) return; // Don't update if the player is not set or there are no objects in the pile.
+            if (player == null || objects.Count == 0)
+                return; // Don't update if the player is not set or there are no objects in the pile.
 
             dropTimer += Time.deltaTime;
 
@@ -116,18 +118,18 @@ namespace CryingSnow.FastFoodRush
             // Play specific sounds based on the stack type (food, trash, etc.).
             switch (stackType)
             {
-                case StackType.Food:
-                case StackType.Package:
-                    AudioManager.Instance.PlaySFX(AudioID.Pop); // Play the "Pop" sound for food and package stacks.
-                    break;
+            case StackType.Log:
+            case StackType.Rock:
+                AudioManager.Instance.PlaySFX(AudioID.Pop); // Play the "Pop" sound for food and package stacks.
+                break;
 
-                case StackType.Trash:
-                    AudioManager.Instance.PlaySFX(AudioID.Trash); // Play the "Trash" sound for trash stacks.
-                    break;
+            //case StackType.Trash:
+            //    AudioManager.Instance.PlaySFX(AudioID.Trash);
+            //break;
 
-                case StackType.None:
-                default:
-                    break;
+            case StackType.None:
+            default:
+                break;
             }
         }
 

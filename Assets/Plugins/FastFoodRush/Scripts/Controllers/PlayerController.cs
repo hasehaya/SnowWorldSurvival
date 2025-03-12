@@ -5,7 +5,7 @@ namespace CryingSnow.FastFoodRush
     [RequireComponent(typeof(Animator))]
     [RequireComponent(typeof(CharacterController))]
     [RequireComponent(typeof(AudioSource))]
-    public class PlayerController : MonoBehaviour
+    public class PlayerController :MonoBehaviour
     {
         [SerializeField, Tooltip("Base movement speed of the player")]
         private float baseSpeed = 3.0f;
@@ -88,18 +88,19 @@ namespace CryingSnow.FastFoodRush
         void UpdateStats()
         {
             // Update the movement speed based on the speed upgrade level
-            int speedLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.PlayerSpeed);
-            moveSpeed = baseSpeed + (speedLevel * 0.2f);
+            //int speedLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.PlayerSpeed);
+            moveSpeed = baseSpeed;// + (speedLevel * 0.2f);
 
-            // Update the stack capacity based on the capacity upgrade level
-            int capacityLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.PlayerCapacity);
-            Capacity = baseCapacity + (capacityLevel * 3);
+            //// Update the stack capacity based on the capacity upgrade level
+            //int capacityLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.PlayerCapacity);
+            Capacity = baseCapacity;// + (capacityLevel * 3);
         }
 
         public void OnStep(AnimationEvent animationEvent)
         {
             // Trigger footstep sound based on the animation event
-            if (animationEvent.animatorClipInfo.weight < 0.5f) return; // Ensure the animation is halfway through
+            if (animationEvent.animatorClipInfo.weight < 0.5f)
+                return; // Ensure the animation is halfway through
 
             audioSource.clip = footsteps[Random.Range(0, footsteps.Length)]; // Pick a random footstep sound
             audioSource.Play(); // Play the footstep sound

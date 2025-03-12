@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class DriveThruCounter : Workstation
+    public class DriveThruCounter :Workstation
     {
         [SerializeField, Tooltip("The base time interval (in seconds) between car spawns.")]
         private float baseInterval = 1.5f;
@@ -68,8 +69,8 @@ namespace CryingSnow.FastFoodRush
             packageStack.MaxStack = baseStack + unlockLevel * 5;
 
             // Get the current profit upgrade level and adjust the sell price accordingly
-            int profitLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.Profit);
-            sellPrice = Mathf.RoundToInt(Mathf.Pow(priceIncrementRate, profitLevel) * basePrice);
+            //int profitLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.Profit);
+            sellPrice = basePrice; //Mathf.RoundToInt(Mathf.Pow(priceIncrementRate, profitLevel) * basePrice);
         }
 
         /// <summary>
@@ -99,7 +100,8 @@ namespace CryingSnow.FastFoodRush
         void HandlePackageServing()
         {
             // Exit early if there are no cars or the first car has no order
-            if (cars.Count == 0 || !firstCar.HasOrder) return;
+            if (cars.Count == 0 || !firstCar.HasOrder)
+                return;
 
             serveTimer += Time.deltaTime;  // Increment serve timer
 

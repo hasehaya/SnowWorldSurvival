@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,18 +30,11 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Starting money for the restaurant.")]
         private long startingMoney = 1000;
 
-        [Header("Stack Offset")]
-        [SerializeField, Tooltip("Offset distance for food items in the stack.")]
-        private float foodOffset = 0.35f;
-
-        [SerializeField, Tooltip("Offset distance for trash items in the stack.")]
-        private float trashOffset = 0.18f;
-
-        [SerializeField, Tooltip("Offset distance for package items in the stack.")]
-        private float packageOffset = 0.3f;
-
         [SerializeField, Tooltip("Offset distance for package items in the stack.")]
         private float logOffset = 0.3f;
+
+        [SerializeField, Tooltip("Offset distance for package items in the stack.")]
+        private float rockOffset = 0.3f;
 
         [SerializeField]
         private Canvas canvas;
@@ -51,7 +45,7 @@ namespace CryingSnow.FastFoodRush
 
         [Header("Employee (Log)")]
         [SerializeField, Tooltip("Log用の従業員プレハブ")]
-        private EmployeeController logEmployeePrefab;
+        private EmployeeController employeePrefab;
 
         [SerializeField, Tooltip("Radius within which employees will spawn.")]
         private float employeeSpawnRadius = 3f;
@@ -142,12 +136,10 @@ namespace CryingSnow.FastFoodRush
             // Loop through all ObjectPile instances and add them to the appropriate list (TrashPiles, FoodPiles, or assign PackagePile).
             foreach (var pile in objectPiles)
             {
-                if (pile.StackType == StackType.Trash)
+                if (pile.StackType == StackType.Log)
                     TrashPiles.Add(pile);
-                else if (pile.StackType == StackType.Food)
+                else if (pile.StackType == StackType.Rock)
                     FoodPiles.Add(pile);
-                else if (pile.StackType == StackType.Package)
-                    PackagePile = pile;
             }
 
             // Find the TrashBin object in the scene and assign it to TrashBin.
@@ -159,9 +151,9 @@ namespace CryingSnow.FastFoodRush
             // Loop through all ObjectStack instances and assign them to the corresponding list or object (FoodStacks or PackageStack).
             foreach (var stack in objectStacks)
             {
-                if (stack.StackType == StackType.Food)
+                if (stack.StackType == StackType.Log)
                     FoodStacks.Add(stack);
-                else if (stack.StackType == StackType.Package)
+                else if (stack.StackType == StackType.Rock)
                     PackageStack = stack;
             }
 
@@ -174,53 +166,65 @@ namespace CryingSnow.FastFoodRush
             // Update the UnlockableBuyer UI to reflect the current unlockable state.
             UpdateUnlockableBuyer();
 
-            SpawnLogEmployees();
+            SpawnEmployee();
 
             // Play background music once the scene has loaded.
             AudioManager.Instance.PlayBGM(backgroundMusic);
         }
 
-        void SpawnLogEmployees()
+        void SpawnEmployee()
         {
-            MaterialManager treeParent = FindObjectOfType<MaterialManager>();
-
-            // 現在の LogEmployeeController 数との差分だけ生成
-            int currentCount = FindObjectsOfType<EmployeeController>().Length;
-            int toSpawn = data.EmployeeAmount - currentCount;
-            if (toSpawn <= 0)
-                return;
-
-            // 列数は固定で 4 とする
-            int numberOfColumns = 4;
-
-            // i: 全体のインデックス (既存の数も含む)
-            for (int i = currentCount; i < data.EmployeeAmount; i++)
+            MaterialManager materialManager = FindObjectOfType<MaterialManager>();
+            // Loop through every value of StackType.
+            foreach (StackType stackType in Enum.GetValues(typeof(StackType)))
             {
-                int columnIndex = i % numberOfColumns; // 0～3
-                int rowIndex = (i / numberOfColumns) + 1;
-
-                // 指定列番号は 1～ とするので、columnIndex + 1 を渡す
-                MaterialManager.PatrolPoints patrol = treeParent.GetPatrolPointsForColumn(columnIndex + 1);
-                if (patrol == null)
-                {
-                    Debug.LogWarning("Column " + (columnIndex + 1) + " のパトロール地点が取得できません。");
+                // Optionally, skip the None type.
+                if (stackType == StackType.None)
                     continue;
+
+                // Determine how many employees of this type already exist.
+                int currentCount = FindObjectsOfType<EmployeeController>()
+                                    .Count(e => e.StackType == stackType);
+
+                // Calculate how many employees need to be spawned for this StackType.
+                int employeeAmount = data.FindUpgrade(Upgrade.UpgradeType.EmployeeAmount, stackType).Level;
+                int toSpawn = employeeAmount - currentCount;
+                if (toSpawn <= 0)
+                    continue;
+
+                // For layout, use a fixed number of columns.
+                int numberOfColumns = 4;
+                for (int i = currentCount; i < employeeAmount; i++)
+                {
+                    int columnIndex = i % numberOfColumns; // 0～3
+                    int rowIndex = (i / numberOfColumns) + 1;
+
+                    // Get patrol points based on column.
+                    MaterialManager.PatrolPoints patrol = materialManager.GetPatrolPointsForColumn(columnIndex + 1);
+                    if (patrol == null)
+                    {
+                        Debug.LogWarning("Column " + (columnIndex + 1) + " のパトロール地点が取得できません。");
+                        continue;
+                    }
+
+                    // Create temporary GameObjects to hold the patrol point positions,
+                    // with names including the StackType for clarity.
+                    GameObject pointAObj = new GameObject($"PatrolPointA_Column{columnIndex + 1}_{stackType}");
+                    pointAObj.transform.position = patrol.pointA;
+                    pointAObj.transform.parent = transform;
+
+                    GameObject pointBObj = new GameObject($"PatrolPointB_Column{columnIndex + 1}_{stackType}");
+                    pointBObj.transform.position = patrol.pointB;
+                    pointBObj.transform.parent = transform;
+
+                    // Instantiate the employee at the first patrol point.
+                    EmployeeController employee = Instantiate(employeePrefab, pointAObj.transform.position, Quaternion.identity);
+                    employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
+                    employee.Column = columnIndex + 1;
+                    employee.Row = rowIndex;
+                    // Assign the current StackType to the employee.
+                    employee.StackType = stackType;
                 }
-
-                // 一時的に PatrolPoint オブジェクトを生成
-                GameObject pointAObj = new GameObject("PatrolPointA_Column" + (columnIndex + 1));
-                pointAObj.transform.position = patrol.pointA;
-                pointAObj.transform.parent = transform;
-
-                GameObject pointBObj = new GameObject("PatrolPointB_Column" + (columnIndex + 1));
-                pointBObj.transform.position = patrol.pointB;
-                pointBObj.transform.parent = transform;
-
-                // 各従業員は、所属する列の A 地点に生成
-                EmployeeController employee = Instantiate(logEmployeePrefab, pointAObj.transform.position, Quaternion.identity);
-                employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
-                employee.Column = columnIndex + 1;
-                employee.Row = rowIndex;
             }
         }
 
@@ -243,10 +247,8 @@ namespace CryingSnow.FastFoodRush
         /// <returns>A float value representing the stack offset for the given stack type.</returns>
         public float GetStackOffset(StackType stackType) => stackType switch
         {
-            StackType.Food => foodOffset,
-            StackType.Trash => trashOffset,
-            StackType.Package => packageOffset,
             StackType.Log => logOffset,
+            StackType.Rock => rockOffset,
             StackType.None => 0f,
             _ => 0f
         };
@@ -354,78 +356,36 @@ namespace CryingSnow.FastFoodRush
         /// The upgrade could be related to employee speed, capacity, number of employees, or player stats like speed and capacity.
         /// </summary>
         /// <param name="upgrade">The upgrade to purchase. This could be an employee upgrade or a player upgrade.</param>
-        public void PurchaseUpgrade(Upgrade upgrade)
+        public void PurchaseUpgrade(Upgrade.UpgradeType upgradeType, StackType stackType)
         {
-            int price = GetUpgradePrice(upgrade); // Calculate the price for the selected upgrade
+            int price = GetUpgradePrice(upgradeType, stackType); // Calculate the price for the selected upgrade
             AdjustMoney(-price); // Deduct the price from the player's money
 
-            // Apply the selected upgrade based on its type
-            switch (upgrade)
+            data.UpgradeUpgrade(upgradeType, stackType);
+            if (upgradeType == Upgrade.UpgradeType.EmployeeAmount)
             {
-            case Upgrade.EmployeeSpeed:
-                data.EmployeeSpeed++; // Increase employee speed
-                break;
-
-            case Upgrade.EmployeeCapacity:
-                data.EmployeeCapacity++; // Increase the number of items an employee can carry
-                break;
-
-            case Upgrade.EmployeeAmount:
-                data.EmployeeAmount++; // Increase the number of employees in the restaurant
-                SpawnLogEmployees(); // Spawn a new employee
-                break;
-
-            case Upgrade.PlayerSpeed:
-                data.PlayerSpeed++; // Increase the player's movement speed
-                break;
-
-            case Upgrade.PlayerCapacity:
-                data.PlayerCapacity++; // Increase the player's carrying capacity
-                break;
-
-            case Upgrade.Profit:
-                data.Profit++; // Increase the profit multiplier
-                break;
-
-            default:
-                break;
+                SpawnEmployee();
             }
 
-            AudioManager.Instance.PlaySFX(AudioID.Kaching); // Play a sound effect to indicate the upgrade has been purchased
+            AudioManager.Instance.PlaySFX(AudioID.Kaching);
 
-            SaveSystem.SaveData<RestaurantData>(data, restaurantID); // Save the updated data to persistent storage
+            SaveSystem.SaveData<RestaurantData>(data, restaurantID);
 
-            OnUpgrade?.Invoke(); // Trigger any external actions after the upgrade is purchased
+            OnUpgrade?.Invoke();
         }
 
-        /// <summary>
-        /// Calculates the price for a specific upgrade based on the current level of the upgrade and a growth factor.
-        /// The price increases exponentially as the upgrade level rises, with each upgrade being more expensive than the previous one.
-        /// </summary>
-        /// <param name="upgrade">The upgrade for which to calculate the price.</param>
-        /// <returns>The calculated price for the specified upgrade.</returns>
-        public int GetUpgradePrice(Upgrade upgrade)
+        public int GetUpgradePrice(Upgrade.UpgradeType upgradeType, StackType stackType)
         {
-            int currentLevel = GetUpgradeLevel(upgrade); // Get the current level of the selected upgrade
-            return Mathf.RoundToInt(Mathf.Round(baseUpgradePrice * Mathf.Pow(upgradeGrowthFactor, currentLevel)) / 50f) * 50; // Calculate the price based on the upgrade's growth factor
+            int currentLevel = GetUpgradeLevel(upgradeType, stackType); // Get the current level of the selected upgrade
+            float levelPrice = baseUpgradePrice * Mathf.Pow(upgradeGrowthFactor, currentLevel);
+            float typePrice = levelPrice * MathF.Pow(5, (int)stackType - (int)StackType.Log);
+            return Mathf.RoundToInt(Mathf.Round(typePrice) / 50f) * 50; // Calculate the price based on the upgrade's growth factor
         }
 
-        /// <summary>
-        /// Retrieves the current level of a specified upgrade.
-        /// The level corresponds to the data stored for each upgrade type, such as employee speed, player speed, etc.
-        /// </summary>
-        /// <param name="upgrade">The upgrade for which to retrieve the current level.</param>
-        /// <returns>The current level of the specified upgrade.</returns>
-        public int GetUpgradeLevel(Upgrade upgrade) => upgrade switch
+        public int GetUpgradeLevel(Upgrade.UpgradeType upgradeType, StackType stackType)
         {
-            Upgrade.EmployeeSpeed => data.EmployeeSpeed,
-            Upgrade.EmployeeCapacity => data.EmployeeCapacity,
-            Upgrade.EmployeeAmount => data.EmployeeAmount,
-            Upgrade.PlayerSpeed => data.PlayerSpeed,
-            Upgrade.PlayerCapacity => data.PlayerCapacity,
-            Upgrade.Profit => data.Profit,
-            _ => 0
-        };
+            return data.FindUpgrade(upgradeType, stackType).Level;
+        }
 
         /// <summary>
         /// Loads a different restaurant scene by saving the current state and transitioning to the specified scene.
@@ -469,9 +429,22 @@ namespace CryingSnow.FastFoodRush
 #endif
     }
 
-    public enum Upgrade
+    [System.Serializable]
+    public class Upgrade
     {
-        EmployeeSpeed, EmployeeCapacity, EmployeeAmount,
-        PlayerSpeed, PlayerCapacity, Profit
+        public enum UpgradeType
+        {
+            EmployeeSpeed, EmployeeCapacity, EmployeeAmount,
+        }
+        public UpgradeType upgradeType;
+        public StackType StackType;
+        public int Level;
+
+        public Upgrade(UpgradeType type = UpgradeType.EmployeeSpeed, StackType stackType = StackType.None, int level = 0)
+        {
+            this.upgradeType = type;
+            this.StackType = stackType;
+            this.Level = level;
+        }
     }
 }

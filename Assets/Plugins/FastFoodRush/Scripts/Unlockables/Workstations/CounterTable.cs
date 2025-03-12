@@ -71,8 +71,9 @@ namespace CryingSnow.FastFoodRush
             serveInterval = baseInterval / unlockLevel;
             foodStack.MaxStack = baseStack + 10 * unlockLevel;
 
-            int profitLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.Profit);
-            sellPrice = Mathf.RoundToInt(Mathf.Pow(priceIncrementRate, profitLevel) * basePrice);
+            //int profitLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.Profit);
+            sellPrice = basePrice;
+            //Mathf.RoundToInt(Mathf.Pow(priceIncrementRate, profitLevel) * basePrice);
         }
 
         /// <summary>

@@ -2,17 +2,25 @@ using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class Activator : Interactable
+    public class Activator :Interactable
     {
         [SerializeField, Tooltip("The GameObject to be activated/deactivated.")]
         private GameObject linkedObject;
+
+        [SerializeField]
+        private StackType stackType;
 
         /// <summary>
         /// Called when the player enters the trigger area. It activates the linked object.
         /// </summary>
         protected override void OnPlayerEnter()
         {
-            linkedObject.SetActive(true); // Activates the linked object when the player enters the trigger area.
+            linkedObject.SetActive(true);
+            var upgradeHandlerList = FindObjectsOfType<UpgradeHandler>();
+            foreach (var upgradeHandler in upgradeHandlerList)
+            {
+                upgradeHandler.SetStackType(stackType);
+            }
         }
 
         /// <summary>

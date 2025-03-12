@@ -9,50 +9,40 @@ using Random = UnityEngine.Random;
 namespace CryingSnow.FastFoodRush
 {
     /// <summary>
-    /// あらゆる素材の共通処理を実装する基底クラス
+    /// 汎用的な素材クラス。Log など、あらゆる素材の生成や再生処理をまとめています。
     /// </summary>
-    public abstract class MaterialBase :Interactable
+    public class MaterialBase :Interactable
     {
-        // 配置上の位置情報として Row, Column を保持（パトロール等に利用）
+        // パトロールや配置に利用するための行・列番号
         public int Row;
         public int Column;
 
-        [SerializeField] protected int materialHealth = 2;        // 素材の体力
-        [SerializeField] protected int resourceCount = 1;         // 体力減少時に生成する最大リソース数
-        [SerializeField] protected float decreaseInterval = 0.3f; // 体力が減る間隔
+        [Header("素材パラメータ")]
+        [SerializeField] protected int materialHealth = 2;         // 素材の体力
+        [SerializeField] protected int resourceCount = 1;          // 体力減少時に生成する最大リソース数
+        [SerializeField] protected float decreaseInterval = 0.45f;  // 体力が減る間隔
+
+        [Header("モデル・再生設定")]
+        [SerializeField] protected GameObject materialModel;       // 素材の見た目のモデル
+        [SerializeField] protected float regrowDelay = 12f;           // 再生までの待機時間
+        [SerializeField] protected float growthDuration = 0.5f;      // 成長にかかる時間
+
+        [Header("プール設定")]
+        [SerializeField] protected string poolKey = "Log";         // 生成するリソースのプールキー
 
         protected float timer = 0f;
         protected int initialHealth;
         protected Vector3 initialScale;
-        protected bool isDepleted = false; // 素材が使い果たされているか
+        protected bool isDepleted = false; // 素材が使い果たされたかどうか
 
-        protected virtual void Start()
+        void Start()
         {
             initialHealth = materialHealth;
-            GameObject model = GetMaterialModel();
-            if (model != null)
-                initialScale = model.transform.localScale;
+            if (materialModel != null)
+            {
+                initialScale = materialModel.transform.localScale;
+            }
         }
-
-        /// <summary>
-        /// 派生クラスは、自身の見た目のモデルを返すよう実装する
-        /// </summary>
-        protected abstract GameObject GetMaterialModel();
-
-        /// <summary>
-        /// 派生クラスは、リソース生成に使用するプールのキーを返すよう実装する
-        /// </summary>
-        protected abstract string GetPoolKey();
-
-        /// <summary>
-        /// 再生処理に必要な待機時間（例：木なら regrowDelay）を返す
-        /// </summary>
-        protected abstract float GetRegrowDelay();
-
-        /// <summary>
-        /// 再成長にかかる時間を返す
-        /// </summary>
-        protected abstract float GetGrowthDuration();
 
         private void OnTriggerStay(Collider other)
         {
@@ -71,7 +61,6 @@ namespace CryingSnow.FastFoodRush
                     timer = 0f;
                     return;
                 }
-
                 int remainingCapacity = player.Capacity - player.Stack.Height;
                 if (remainingCapacity > 0)
                 {
@@ -110,7 +99,10 @@ namespace CryingSnow.FastFoodRush
                 timer = 0f;
         }
 
-        protected virtual void SpawnResourceForPlayer(int count)
+        /// <summary>
+        /// Player 用にリソースを生成します。
+        /// </summary>
+        void SpawnResourceForPlayer(int count)
         {
             for (int i = 0; i < count; i++)
             {
@@ -118,7 +110,10 @@ namespace CryingSnow.FastFoodRush
             }
         }
 
-        protected virtual void SpawnResourceForEmployee(int count, EmployeeController employee)
+        /// <summary>
+        /// Employee 用にリソースを生成します。
+        /// </summary>
+        void SpawnResourceForEmployee(int count, EmployeeController employee)
         {
             for (int i = 0; i < count; i++)
             {
@@ -127,15 +122,10 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// 素材からリソース（例：ログなど）を生成する共通処理
+        /// 共通のリソース生成処理。PoolManager の poolKey を利用してリソースを生成し、ジャンプ演出後に Stack へ追加します。
         /// </summary>
-        /// <param name="index">生成時のオフセット用インデックス</param>
-        /// <param name="employee">
-        /// 対象が Employee の場合はその参照。null の場合は Player 用として処理する。
-        /// </param>
-        protected virtual void SpawnResource(int index, EmployeeController employee)
+        void SpawnResource(int index, EmployeeController employee)
         {
-            // 生成条件のチェック（Player/Employee ごとに Stack の状態と容量を確認）
             if (employee == null)
             {
                 if (player == null ||
@@ -154,7 +144,6 @@ namespace CryingSnow.FastFoodRush
                 }
             }
 
-            string poolKey = GetPoolKey();
             var resource = PoolManager.Instance.SpawnObject(poolKey);
             Vector3 startPos = transform.position + Vector3.up * index;
             resource.transform.position = startPos;
@@ -179,24 +168,23 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// 素材の再生処理。一定時間待機後、体力をリセットし、再び成長する。
+        /// 素材の再生処理。一定時間待機後、体力をリセットし再び成長させます。
         /// </summary>
-        protected virtual IEnumerator RegrowMaterial()
+        IEnumerator RegrowMaterial()
         {
-            GameObject model = GetMaterialModel();
-            if (model != null)
-                model.SetActive(false);
+            if (materialModel != null)
+                materialModel.SetActive(false);
 
-            yield return new WaitForSeconds(GetRegrowDelay());
+            yield return new WaitForSeconds(regrowDelay);
 
             materialHealth = initialHealth;
             timer = 0f;
 
-            if (model != null)
+            if (materialModel != null)
             {
-                model.transform.localScale = Vector3.zero;
-                model.SetActive(true);
-                model.transform.DOScale(initialScale, GetGrowthDuration());
+                materialModel.transform.localScale = Vector3.zero;
+                materialModel.SetActive(true);
+                materialModel.transform.DOScale(initialScale, growthDuration);
             }
             isDepleted = false;
         }
