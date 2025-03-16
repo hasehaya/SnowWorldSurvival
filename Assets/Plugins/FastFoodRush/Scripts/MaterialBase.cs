@@ -20,15 +20,15 @@ namespace CryingSnow.FastFoodRush
         [Header("素材パラメータ")]
         [SerializeField] protected int materialHealth = 2;         // 素材の体力
         [SerializeField] protected int resourceCount = 1;          // 体力減少時に生成する最大リソース数
-        [SerializeField] protected float decreaseInterval = 0.45f;  // 体力が減る間隔
+        [SerializeField] protected float decreaseInterval = 0.45f; // 体力が減る間隔
 
         [Header("モデル・再生設定")]
         [SerializeField] protected GameObject materialModel;       // 素材の見た目のモデル
-        [SerializeField] protected float regrowDelay = 12f;           // 再生までの待機時間
-        [SerializeField] protected float growthDuration = 0.5f;      // 成長にかかる時間
+        [SerializeField] protected float regrowDelay = 12f;        // 再生までの待機時間
+        [SerializeField] protected float growthDuration = 0.5f;    // 成長にかかる時間
 
         [Header("プール設定")]
-        [SerializeField] protected string poolKey = "Log";         // 生成するリソースのプールキー
+        [SerializeField] protected StackType stackType = StackType.Log;
 
         protected float timer = 0f;
         protected int initialHealth;
@@ -66,6 +66,20 @@ namespace CryingSnow.FastFoodRush
                 {
                     int spawnCount = Mathf.Min(resourceCount, remainingCapacity);
                     materialHealth--;
+
+                    // ★ HP 減少時に横揺れ演出を追加
+                    if (materialModel != null)
+                    {
+                        materialModel.transform.DOShakePosition(
+                            duration: 0.2f,
+                            strength: new Vector3(0.2f, 0f, 0f),
+                            vibrato: 10,
+                            randomness: 90,
+                            snapping: false,
+                            fadeOut: true
+                        );
+                    }
+
                     SpawnResourceForPlayer(spawnCount);
                 }
             }
@@ -80,23 +94,58 @@ namespace CryingSnow.FastFoodRush
                     {
                         int spawnCount = Mathf.Min(resourceCount, remainingCapacity);
                         materialHealth--;
+
+                        // ★ HP 減少時に横揺れ演出を追加
+                        if (materialModel != null)
+                        {
+                            materialModel.transform.DOShakePosition(
+                                duration: 0.2f,
+                                strength: new Vector3(0.2f, 0f, 0f),
+                                vibrato: 10,
+                                randomness: 90,
+                                snapping: false,
+                                fadeOut: true
+                            );
+                        }
+
                         SpawnResourceForEmployee(spawnCount, employee);
                     }
                 }
             }
 
-            if (materialHealth <= 0)
+            // HP が 0 以下になったタイミングで振動完了後に RegrowMaterial
+            if (materialHealth <= 0 && materialModel != null)
             {
+                // Deplete フラグをセット
                 isDepleted = true;
-                StartCoroutine(RegrowMaterial());
+
+                // まず横揺れアニメーションを改めて付与して、終了を待つ
+                //   （すでに振動させたければ、同じ値でも OK。揺れを変更したければ違う値でもよい）
+                materialModel.transform.DOShakePosition(
+                    duration: 0.2f,
+                    strength: new Vector3(0.2f, 0f, 0f),
+                    vibrato: 10,
+                    randomness: 90,
+                    snapping: false,
+                    fadeOut: true
+                )
+                .OnComplete(() =>
+                {
+                    // 振動完了後に再生コルーチンを起動
+                    StartCoroutine(RegrowMaterial());
+                });
             }
+
             timer = 0f;
         }
+
 
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("Player") || other.CompareTag("Employee"))
+            {
                 timer = 0f;
+            }
         }
 
         /// <summary>
@@ -122,29 +171,34 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// 共通のリソース生成処理。PoolManager の poolKey を利用してリソースを生成し、ジャンプ演出後に Stack へ追加します。
+        /// 共通のリソース生成処理。poolKey (StackType) を文字列にして PoolManager へ渡し、ジャンプ演出後に Stack へ追加します。
         /// </summary>
         void SpawnResource(int index, EmployeeController employee)
         {
+            // ※プレイヤーまたは従業員の StackType が None か poolKey と一致しているかを確認
             if (employee == null)
             {
                 if (player == null ||
-                    !(player.Stack.StackType == StackType.None || player.Stack.StackType == StackType.Log) ||
+                    !(player.Stack.StackType == StackType.None || player.Stack.StackType == stackType) ||
                     player.Stack.Height >= player.Capacity)
                 {
                     return;
                 }
+
+                VibrationManager.PatternVibration();
+                AudioManager.Instance.PlaySFX(AudioID.Pop);
             }
             else
             {
-                if (!(employee.Stack.StackType == StackType.None || employee.Stack.StackType == StackType.Log) ||
+                if (!(employee.Stack.StackType == StackType.None || employee.Stack.StackType == stackType) ||
                     employee.Stack.Height >= employee.Capacity)
                 {
                     return;
                 }
             }
 
-            var resource = PoolManager.Instance.SpawnObject(poolKey);
+            // PoolManager から生成する際に、poolKey を文字列へ変換
+            var resource = PoolManager.Instance.SpawnObject(stackType.ToString());
             Vector3 startPos = transform.position + Vector3.up * index;
             resource.transform.position = startPos;
 
@@ -158,11 +212,11 @@ namespace CryingSnow.FastFoodRush
                 {
                     if (employee == null)
                     {
-                        player.Stack.AddToStack(resource.transform, StackType.Log);
+                        player.Stack.AddToStack(resource.transform, stackType);
                     }
                     else
                     {
-                        employee.Stack.AddToStack(resource.transform, StackType.Log);
+                        employee.Stack.AddToStack(resource.transform, stackType);
                     }
                 });
         }

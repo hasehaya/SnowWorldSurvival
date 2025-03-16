@@ -71,6 +71,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("List of unlockables that can be bought.")]
         private List<Unlockable> unlockables;
 
+        [SerializeField]
+        private CameraController cameraController;
+
         #region Reference Properties
 
         public Canvas Canvas => canvas;
@@ -174,12 +177,21 @@ namespace CryingSnow.FastFoodRush
 
         void SpawnEmployee()
         {
-            MaterialManager materialManager = FindObjectOfType<MaterialManager>();
+            var materialManagerList = FindObjectsOfType<MaterialManager>();
             // Loop through every value of StackType.
             foreach (StackType stackType in Enum.GetValues(typeof(StackType)))
             {
+                MaterialManager materialManager = null;
+                foreach (var manager in materialManagerList)
+                {
+                    if (manager.StackType == stackType)
+                    {
+                        materialManager = manager;
+                        break;
+                    }
+                }
                 // Optionally, skip the None type.
-                if (stackType == StackType.None)
+                if (stackType == StackType.None || materialManager == null)
                     continue;
 
                 // Determine how many employees of this type already exist.
@@ -275,6 +287,8 @@ namespace CryingSnow.FastFoodRush
 
             // Update the unlockable buyer UI
             UpdateUnlockableBuyer();
+
+            cameraController.FocusOnPointAndReturn(unlockables[unlockCount].GetBuyingPoint());
 
             // Save the progress of the restaurant data
             SaveSystem.SaveData<RestaurantData>(data, restaurantID);

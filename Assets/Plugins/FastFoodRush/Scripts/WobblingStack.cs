@@ -96,6 +96,8 @@ namespace CryingSnow.FastFoodRush
 
             // Get the last item in the stack
             var lastChild = stack.LastOrDefault();
+            if (lastChild == null)
+                return null;
             lastChild.rotation = Quaternion.identity;  // Reset its rotation
 
             // Remove the last item from the stack and decrease the height

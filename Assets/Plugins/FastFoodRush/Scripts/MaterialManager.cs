@@ -12,6 +12,7 @@ namespace CryingSnow.FastFoodRush
         [SerializeField] private Transform materialGrid;
         private List<GameObject> materialObjects = new List<GameObject>();
         [SerializeField] StackType stackType;
+        public StackType StackType => stackType;
         private bool isInitialized = false; // ‰Šú‰»Ï‚İ‚©‚Ìƒtƒ‰ƒO
 
         protected override void Awake()
@@ -106,7 +107,7 @@ namespace CryingSnow.FastFoodRush
             {
                 if (employee.StackType != stackType)
                 {
-                    return;
+                    continue;
                 }
                 int col = employee.Column;
                 PatrolPoints patrol = GetPatrolPointsForColumn(col);

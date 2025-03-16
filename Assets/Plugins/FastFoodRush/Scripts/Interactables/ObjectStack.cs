@@ -1,10 +1,12 @@
 using System.Collections.Generic;
-using UnityEngine;
+
 using DG.Tweening;
+
+using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class ObjectStack : Interactable
+    public class ObjectStack :Interactable
     {
         [SerializeField, Tooltip("The type of stack (e.g., food, package, etc.)")]
         private StackType stackType;
@@ -38,19 +40,25 @@ namespace CryingSnow.FastFoodRush
                 stackTimer = 0f; // Reset the stack timer
 
                 // Check if the player and their stack are valid
-                if (player == null) return;
-                if (player.Stack.StackType != stackType) return; // Ensure player is using the correct stack type
-                if (player.Stack.Count == 0) return; // Ensure there are objects in the player's stack
+                if (player == null)
+                    return;
+                if (player.Stack.StackType != stackType)
+                    return; // Ensure player is using the correct stack type
+                if (player.Stack.Count == 0)
+                    return; // Ensure there are objects in the player's stack
 
                 // If the stack is full, don't add more objects
-                if (objects.Count >= MaxStack) return;
+                if (objects.Count >= MaxStack)
+                    return;
 
                 // Get an object from the player's stack and add it to the object stack
                 var objToStack = player.Stack.RemoveFromStack();
-                if (objToStack == null) return;
+                if (objToStack == null)
+                    return;
 
                 // Add the object to the stack and play a sound effect
                 AddToStack(objToStack.gameObject);
+                VibrationManager.PatternVibration();
                 AudioManager.Instance.PlaySFX(AudioID.Pop); // Play object stacking sound
             }
         }

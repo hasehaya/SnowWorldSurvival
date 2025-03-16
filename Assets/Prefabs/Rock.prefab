@@ -76,7 +76,7 @@ MonoBehaviour:
   materialModel: {fileID: 6439221091145675747}
   regrowDelay: 12
   growthDuration: 0.5
-  poolKey: Rock
+  stackType: 2
 --- !u!1 &6439221091145675747
 GameObject:
   m_ObjectHideFlags: 0

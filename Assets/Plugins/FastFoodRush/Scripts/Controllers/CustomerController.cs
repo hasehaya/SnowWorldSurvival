@@ -185,9 +185,13 @@ namespace CryingSnow.FastFoodRush
                 while (stack.Count > 0)
                 {
                     Transform log = stack.RemoveFromStack();
-                    if (log != null)
+                    if (log)
                     {
                         PoolManager.Instance.ReturnObject(log.gameObject);
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
