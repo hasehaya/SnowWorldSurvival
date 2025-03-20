@@ -18,7 +18,7 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("The tray GameObject that is shown when the stack is not empty.")]
         private GameObject tray;
 
-        public StackType StackType { get; private set; }  // The current type of the stack (Food, Trash, or Package)
+        public MaterialType MaterialType { get; private set; }  // The current type of the stack (Food, Trash, or Package)
         public int Count => stack.Count;  // The current number of items in the stack
         public int Height => height;  // The height of the stack (number of items stacked)
 
@@ -26,7 +26,7 @@ namespace CryingSnow.FastFoodRush
         private int height;  // The current height of the stack (number of stacked items)
 
         // The offset between stacked items
-        private float stackOffset => RestaurantManager.Instance.GetStackOffset(StackType);
+        private float stackOffset => GameManager.Instance.GetStackOffset(MaterialType);
 
         Vector2 movement;  // Used to store player input for wobble movement
 
@@ -66,13 +66,13 @@ namespace CryingSnow.FastFoodRush
         /// Adds an item to the stack.
         /// </summary>
         /// <param name="child">The transform of the item to be added to the stack.</param>
-        /// <param name="stackType">The type of the stack (Food, Trash, or Package).</param>
-        public void AddToStack(Transform child, StackType stackType)
+        /// <param name="materialType">The type of the stack (Food, Trash, or Package).</param>
+        public void AddToStack(Transform child, MaterialType materialType)
         {
             // If this is the first item, set the stack type and show the tray
             if (stack.Count == 0)
             {
-                StackType = stackType;
+                MaterialType = materialType;
                 tray.SetActive(true);
             }
 
@@ -107,7 +107,7 @@ namespace CryingSnow.FastFoodRush
             // If the stack is empty after removal, hide the tray
             if (stack.Count == 0)
             {
-                StackType = StackType.None;
+                MaterialType = MaterialType.None;
                 tray.SetActive(false);
             }
 
@@ -115,7 +115,7 @@ namespace CryingSnow.FastFoodRush
         }
     }
 
-    public enum StackType
+    public enum MaterialType
     {
         None = 0,
         Log = 1,

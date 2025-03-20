@@ -10,7 +10,7 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Type of upgrade handled by this component.")]
         private Upgrade.UpgradeType upgradeType;
 
-        private StackType stackType;
+        private MaterialType materialType;
 
         [SerializeField, Tooltip("Button used to purchase the upgrade.")]
         private Button upgradeButton;
@@ -27,10 +27,10 @@ namespace CryingSnow.FastFoodRush
         {
             // Initializes the upgrade button and subscribes to relevant events.
             upgradeButton.onClick.AddListener(() =>
-                RestaurantManager.Instance.PurchaseUpgrade(upgradeType, stackType)
+                GameManager.Instance.PurchaseUpgrade(upgradeType, materialType)
             );
 
-            RestaurantManager.Instance.OnUpgrade += UpdateHandler;
+            GameManager.Instance.OnUpgrade += UpdateHandler;
         }
 
         void OnEnable()
@@ -41,13 +41,13 @@ namespace CryingSnow.FastFoodRush
 
         void UpdateHandler()
         {
-            SetStackType(stackType);
+            SetMaterialType(materialType);
         }
 
-        public void SetStackType(StackType stackType)
+        public void SetMaterialType(MaterialType materialType)
         {
-            this.stackType = stackType;
-            int level = RestaurantManager.Instance.GetUpgradeLevel(upgradeType, this.stackType);
+            this.materialType = materialType;
+            int level = GameManager.Instance.GetUpgradeLevel(upgradeType, this.materialType);
 
             for (int i = 0; i < indicators.Length; i++)
             {
@@ -56,10 +56,10 @@ namespace CryingSnow.FastFoodRush
 
             if (level < 5)
             {
-                int price = RestaurantManager.Instance.GetUpgradePrice(upgradeType, this.stackType);
-                priceLabel.text = RestaurantManager.Instance.GetFormattedMoney(price);
+                int price = GameManager.Instance.GetUpgradePrice(upgradeType, this.materialType);
+                priceLabel.text = GameManager.Instance.GetFormattedMoney(price);
 
-                bool hasEnoughMoney = RestaurantManager.Instance.GetMoney() >= price;
+                bool hasEnoughMoney = GameManager.Instance.GetMoney() >= price;
                 upgradeButton.interactable = hasEnoughMoney;
             }
             else

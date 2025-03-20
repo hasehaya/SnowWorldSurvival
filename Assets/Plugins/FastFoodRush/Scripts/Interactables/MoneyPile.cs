@@ -53,7 +53,7 @@ namespace CryingSnow.FastFoodRush
         {
             isCollectingMoney = true; // Set the flag indicating that money is being collected.
 
-            RestaurantManager.Instance.AdjustMoney(hiddenMoney); // Adjust the player's money by the amount of hidden money.
+            GameManager.Instance.AdjustMoney(hiddenMoney); // Adjust the player's money by the amount of hidden money.
             hiddenMoney = 0; // Reset hidden money once it's been collected.
 
             // Collect money objects until the pile is empty or the player exits.
@@ -69,7 +69,7 @@ namespace CryingSnow.FastFoodRush
 
                     var removedMoney = objects.Pop(); // Remove the top money object from the pile.
                     PoolManager.Instance.ReturnObject(removedMoney); // Return the object to the pool.
-                    RestaurantManager.Instance.AdjustMoney(1); // Increase the player's money by 1 for each collected object.
+                    GameManager.Instance.AdjustMoney(1); // Increase the player's money by 1 for each collected object.
                 }
 
                 // If the collection rate is greater than 1, yield until the next frame, otherwise, wait briefly.

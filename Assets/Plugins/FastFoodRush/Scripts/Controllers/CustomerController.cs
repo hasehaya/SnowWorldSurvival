@@ -99,7 +99,7 @@ namespace CryingSnow.FastFoodRush
             HasOrder = true;
 
             // OrderInfo プレハブを生成し表示
-            currentOrderInfo = Instantiate(orderInfoPrefab, RestaurantManager.Instance.Canvas.transform);
+            currentOrderInfo = Instantiate(orderInfoPrefab, GameManager.Instance.Canvas.transform);
             currentOrderInfo.ShowInfo(transform, OrderCount);
         }
 
@@ -111,7 +111,7 @@ namespace CryingSnow.FastFoodRush
         public void FillOrder(Transform food)
         {
             OrderCount--;
-            stack.AddToStack(food, stack.StackType);
+            stack.AddToStack(food, stack.MaterialType);
 
             // 既に生成している OrderInfo インスタンスを更新
             if (currentOrderInfo != null)

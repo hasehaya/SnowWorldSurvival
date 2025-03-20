@@ -54,7 +54,7 @@ namespace CryingSnow.FastFoodRush
 
         void Start()
         {
-            RestaurantManager.Instance.OnUpgrade += UpdateStats; // Subscribe to the upgrade event
+            GameManager.Instance.OnUpgrade += UpdateStats; // Subscribe to the upgrade event
             UpdateStats(); // Update player stats based on upgrades
         }
 

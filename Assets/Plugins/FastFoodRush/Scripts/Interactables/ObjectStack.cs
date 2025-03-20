@@ -9,12 +9,12 @@ namespace CryingSnow.FastFoodRush
     public class ObjectStack :Interactable
     {
         [SerializeField, Tooltip("The type of stack (e.g., food, package, etc.)")]
-        private StackType stackType;
+        private MaterialType materialType;
 
         [SerializeField, Tooltip("Time interval between each stack operation")]
         private float stackInterval = 0.05f;
 
-        public StackType StackType => stackType; // Read-only properties for stack information
+        public MaterialType MaterialType => materialType; // Read-only properties for stack information
         public int MaxStack { get; set; } // The maximum number of objects the stack can hold
         public int Count => objects.Count; // The current number of objects in the stack
         public bool IsFull => Count >= MaxStack; // Check if the stack is full
@@ -26,7 +26,7 @@ namespace CryingSnow.FastFoodRush
         void Start()
         {
             // Get the stack offset based on the stack type from the RestaurantManager
-            stackOffset = RestaurantManager.Instance.GetStackOffset(stackType);
+            stackOffset = GameManager.Instance.GetStackOffset(materialType);
         }
 
         void Update()
@@ -42,7 +42,7 @@ namespace CryingSnow.FastFoodRush
                 // Check if the player and their stack are valid
                 if (player == null)
                     return;
-                if (player.Stack.StackType != stackType)
+                if (player.Stack.MaterialType != materialType)
                     return; // Ensure player is using the correct stack type
                 if (player.Stack.Count == 0)
                     return; // Ensure there are objects in the player's stack

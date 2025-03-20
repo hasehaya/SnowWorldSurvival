@@ -7,12 +7,12 @@ namespace CryingSnow.FastFoodRush
     /// <summary>
     /// 素材（MaterialBase）を管理するクラス
     /// </summary>
-    public class MaterialManager :Unlockable
+    public class MaterialParent :Unlockable
     {
         [SerializeField] private Transform materialGrid;
         private List<GameObject> materialObjects = new List<GameObject>();
-        [SerializeField] StackType stackType;
-        public StackType StackType => stackType;
+        [SerializeField] MaterialType materialType;
+        public MaterialType MaterialType => materialType;
         private bool isInitialized = false; // 初期化済みかのフラグ
 
         protected override void Awake()
@@ -32,7 +32,7 @@ namespace CryingSnow.FastFoodRush
             isInitialized = true;
 
             // materialGrid 配下のすべての MaterialBase コンポーネントを取得
-            var materialList = materialGrid.GetComponentsInChildren<MaterialBase>();
+            var materialList = materialGrid.GetComponentsInChildren<MaterialProducer>();
             materialObjects.Clear();
             foreach (var material in materialList)
             {
@@ -70,13 +70,13 @@ namespace CryingSnow.FastFoodRush
             if (!isInitialized)
                 InitializeMaterialObjects();
 
-            List<MaterialBase> materialsInColumn = new List<MaterialBase>();
+            List<MaterialProducer> materialsInColumn = new List<MaterialProducer>();
             foreach (var obj in materialObjects)
             {
                 if (!obj.activeInHierarchy)
                     continue;
 
-                MaterialBase material = obj.GetComponent<MaterialBase>();
+                MaterialProducer material = obj.GetComponent<MaterialProducer>();
                 if (material == null)
                     continue;
 
@@ -105,7 +105,7 @@ namespace CryingSnow.FastFoodRush
             EmployeeController[] employees = FindObjectsOfType<EmployeeController>();
             foreach (var employee in employees)
             {
-                if (employee.StackType != stackType)
+                if (employee.MaterialType != materialType)
                 {
                     continue;
                 }

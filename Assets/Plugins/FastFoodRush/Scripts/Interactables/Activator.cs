@@ -8,7 +8,7 @@ namespace CryingSnow.FastFoodRush
         private GameObject linkedObject;
 
         [SerializeField]
-        private StackType stackType;
+        private MaterialType materialType;
 
         /// <summary>
         /// Called when the player enters the trigger area. It activates the linked object.
@@ -19,7 +19,7 @@ namespace CryingSnow.FastFoodRush
             var upgradeHandlerList = FindObjectsOfType<UpgradeHandler>();
             foreach (var upgradeHandler in upgradeHandlerList)
             {
-                upgradeHandler.SetStackType(stackType);
+                upgradeHandler.SetMaterialType(materialType);
             }
         }
 

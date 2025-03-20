@@ -29,7 +29,7 @@ namespace CryingSnow.FastFoodRush
         [SerializeField]
         private Image contentIcon;
 
-        private long playerMoney => RestaurantManager.Instance.GetMoney();  // The current amount of money the player has
+        private long playerMoney => GameManager.Instance.GetMoney();  // The current amount of money the player has
 
         private Unlockable unlockable;  // The unlockable object that can be bought
         private int unlockPrice;       // The price required to unlock the unlockable
@@ -60,10 +60,10 @@ namespace CryingSnow.FastFoodRush
         void UpdatePayment(int amount)
         {
             paidAmount += amount;
-            RestaurantManager.Instance.PaidAmount = paidAmount;
+            GameManager.Instance.PaidAmount = paidAmount;
 
             progressFill.fillAmount = (float)paidAmount / unlockPrice;  // Update the progress bar
-            priceLabel.text = RestaurantManager.Instance.GetFormattedMoney(unlockPrice - paidAmount);  // Update the price label
+            priceLabel.text = GameManager.Instance.GetFormattedMoney(unlockPrice - paidAmount);  // Update the price label
         }
 
         /// <summary>
@@ -116,13 +116,13 @@ namespace CryingSnow.FastFoodRush
                 int payment = Mathf.Max(1, Mathf.RoundToInt(paymentRate));  // Ensure a minimum payment of 1
 
                 UpdatePayment(payment);  // Update the progress
-                RestaurantManager.Instance.AdjustMoney(-payment);  // Deduct the payment from the player's money
+                GameManager.Instance.AdjustMoney(-payment);  // Deduct the payment from the player's money
 
                 PlayMoneyAnimation();  // Play the money animation
 
                 // If the total amount paid is equal to or greater than the unlock price, complete the purchase
                 if (paidAmount >= unlockPrice)
-                    RestaurantManager.Instance.BuyUnlockable();
+                    GameManager.Instance.BuyUnlockable();
 
                 yield return new WaitForSeconds(payingInterval);  // Wait for the next payment interval
             }

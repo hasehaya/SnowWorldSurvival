@@ -34,7 +34,7 @@ namespace CryingSnow.FastFoodRush
                 mapButtons[i].onClick.AddListener(() =>
                 {
                     gameObject.SetActive(false); // Hide the map UI
-                    RestaurantManager.Instance.LoadRestaurant(index); // Load the corresponding restaurant scene
+                    GameManager.Instance.LoadRestaurant(index); // Load the corresponding restaurant scene
                 });
             }
         }
@@ -59,7 +59,7 @@ namespace CryingSnow.FastFoodRush
             if (index == 1) return true; // The first restaurant is always unlocked
 
             // Load the previous restaurant's data to check if the current restaurant is unlocked
-            var previousRestaurantData = SaveSystem.LoadData<RestaurantData>($"Restaurant0{index - 1}");
+            var previousRestaurantData = SaveSystem.LoadData<SaveData>($"Restaurant0{index - 1}");
 
             if (previousRestaurantData == null) return false; // If no data is found, the restaurant is locked
 

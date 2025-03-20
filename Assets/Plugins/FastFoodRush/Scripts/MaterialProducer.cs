@@ -11,7 +11,7 @@ namespace CryingSnow.FastFoodRush
     /// <summary>
     /// 汎用的な素材クラス。Log など、あらゆる素材の生成や再生処理をまとめています。
     /// </summary>
-    public class MaterialBase :Interactable
+    public class MaterialProducer :Interactable
     {
         // パトロールや配置に利用するための行・列番号
         public int Row;
@@ -28,7 +28,7 @@ namespace CryingSnow.FastFoodRush
         [SerializeField] protected float growthDuration = 0.5f;    // 成長にかかる時間
 
         [Header("プール設定")]
-        [SerializeField] protected StackType stackType = StackType.Log;
+        [SerializeField] protected MaterialType materialType = MaterialType.Log;
 
         protected float timer = 0f;
         protected int initialHealth;
@@ -171,15 +171,15 @@ namespace CryingSnow.FastFoodRush
         }
 
         /// <summary>
-        /// 共通のリソース生成処理。poolKey (StackType) を文字列にして PoolManager へ渡し、ジャンプ演出後に Stack へ追加します。
+        /// 共通のリソース生成処理。poolKey (MaterialType) を文字列にして PoolManager へ渡し、ジャンプ演出後に Stack へ追加します。
         /// </summary>
         void SpawnResource(int index, EmployeeController employee)
         {
-            // ※プレイヤーまたは従業員の StackType が None か poolKey と一致しているかを確認
+            // ※プレイヤーまたは従業員の MaterialType が None か poolKey と一致しているかを確認
             if (employee == null)
             {
                 if (player == null ||
-                    !(player.Stack.StackType == StackType.None || player.Stack.StackType == stackType) ||
+                    !(player.Stack.MaterialType == MaterialType.None || player.Stack.MaterialType == materialType) ||
                     player.Stack.Height >= player.Capacity)
                 {
                     return;
@@ -190,7 +190,7 @@ namespace CryingSnow.FastFoodRush
             }
             else
             {
-                if (!(employee.Stack.StackType == StackType.None || employee.Stack.StackType == stackType) ||
+                if (!(employee.Stack.MaterialType == MaterialType.None || employee.Stack.MaterialType == materialType) ||
                     employee.Stack.Height >= employee.Capacity)
                 {
                     return;
@@ -198,7 +198,7 @@ namespace CryingSnow.FastFoodRush
             }
 
             // PoolManager から生成する際に、poolKey を文字列へ変換
-            var resource = PoolManager.Instance.SpawnObject(stackType.ToString());
+            var resource = PoolManager.Instance.SpawnObject(materialType.ToString());
             Vector3 startPos = transform.position + Vector3.up * index;
             resource.transform.position = startPos;
 
@@ -212,11 +212,11 @@ namespace CryingSnow.FastFoodRush
                 {
                     if (employee == null)
                     {
-                        player.Stack.AddToStack(resource.transform, stackType);
+                        player.Stack.AddToStack(resource.transform, materialType);
                     }
                     else
                     {
-                        employee.Stack.AddToStack(resource.transform, stackType);
+                        employee.Stack.AddToStack(resource.transform, materialType);
                     }
                 });
         }

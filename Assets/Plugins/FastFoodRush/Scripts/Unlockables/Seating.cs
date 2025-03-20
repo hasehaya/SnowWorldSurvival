@@ -48,7 +48,7 @@ namespace CryingSnow.FastFoodRush
         void Start()
         {
             // Get the food stack offset from the restaurant manager
-            foodStackOffset = RestaurantManager.Instance.GetStackOffset(StackType.Food);
+            foodStackOffset = RestaurantManager.Instance.GetStackOffset(MaterialType.Food);
         }
 
         /// <summary>

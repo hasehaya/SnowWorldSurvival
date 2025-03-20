@@ -7,7 +7,7 @@ namespace CryingSnow.FastFoodRush
     public class ObjectPile :Interactable
     {
         [SerializeField, Tooltip("The type of stack (e.g., food, trash, etc.).")]
-        private StackType stackType;
+        private MaterialType materialType;
 
         [SerializeField, Tooltip("Number of objects in each row.")]
         private int length = 2;
@@ -21,7 +21,7 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Time interval between dropping objects.")]
         private float dropInterval = 0.03f;
 
-        public StackType StackType => stackType; // Get the stack type of the pile.
+        public MaterialType MaterialType => materialType; // Get the stack type of the pile.
         public int Count => objects.Count; // Get the number of objects in the pile.
         public Vector3 PeakPoint => transform.position + new Vector3(0, spacing.y * Count, 0); // The point at the top of the pile.
 
@@ -38,7 +38,7 @@ namespace CryingSnow.FastFoodRush
 
         protected virtual void Start()
         {
-            spacing.y = RestaurantManager.Instance.GetStackOffset(stackType); // Set vertical spacing based on the stack type.
+            spacing.y = GameManager.Instance.GetStackOffset(materialType); // Set vertical spacing based on the stack type.
         }
 
         void Update()
@@ -61,12 +61,12 @@ namespace CryingSnow.FastFoodRush
         protected virtual void Drop()
         {
             // Check if the player's stack allows adding this object.
-            if (player.Stack.StackType == StackType.None || player.Stack.StackType == stackType)
+            if (player.Stack.MaterialType == MaterialType.None || player.Stack.MaterialType == materialType)
             {
                 if (player.Stack.Height < player.Capacity)
                 {
                     var removedObj = objects.Pop(); // Remove the top object from the pile.
-                    player.Stack.AddToStack(removedObj.transform, stackType); // Add the object to the player's stack.
+                    player.Stack.AddToStack(removedObj.transform, materialType); // Add the object to the player's stack.
 
                     PlayObjectSound(); // Play a sound based on the object type.
                 }
@@ -88,7 +88,7 @@ namespace CryingSnow.FastFoodRush
         public void RemoveAndStackObject(WobblingStack stack)
         {
             var removedObj = objects.Pop(); // Remove the top object from the pile.
-            stack.AddToStack(removedObj.transform, stackType); // Add it to the given stack.
+            stack.AddToStack(removedObj.transform, materialType); // Add it to the given stack.
         }
 
         /// <summary>
@@ -116,18 +116,18 @@ namespace CryingSnow.FastFoodRush
         private void PlayObjectSound()
         {
             // Play specific sounds based on the stack type (food, trash, etc.).
-            switch (stackType)
+            switch (materialType)
             {
-            case StackType.Log:
-            case StackType.Rock:
+            case MaterialType.Log:
+            case MaterialType.Rock:
                 AudioManager.Instance.PlaySFX(AudioID.Pop); // Play the "Pop" sound for food and package stacks.
                 break;
 
-            //case StackType.Trash:
+            //case MaterialType.Trash:
             //    AudioManager.Instance.PlaySFX(AudioID.Trash);
             //break;
 
-            case StackType.None:
+            case MaterialType.None:
             default:
                 break;
             }

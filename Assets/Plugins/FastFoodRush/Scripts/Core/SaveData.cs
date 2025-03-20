@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace CryingSnow.FastFoodRush
 {
     [System.Serializable]
-    public class RestaurantData
+    public class SaveData
     {
         public string RestaurantID { get; set; }
 
@@ -19,11 +19,11 @@ namespace CryingSnow.FastFoodRush
         public int PaidAmount { get; set; } // The amount of money paid towards the most recent unlockable.
         public bool IsUnlocked { get; set; } // Whether the restaurant is unlocked. This is determined by whether the previous restaurant has been unlocked.
 
-        public void UpgradeUpgrade(Upgrade.UpgradeType upgradeType, StackType stackType)
+        public void UpgradeUpgrade(Upgrade.UpgradeType upgradeType, MaterialType materialType)
         {
             foreach (var upgrade in UpgradeList)
             {
-                if (upgrade.upgradeType == upgradeType && upgrade.StackType == stackType)
+                if (upgrade.upgradeType == upgradeType && upgrade.MaterialType == materialType)
                 {
                     upgrade.Level++;
                     break;
@@ -31,11 +31,11 @@ namespace CryingSnow.FastFoodRush
             }
         }
 
-        public Upgrade FindUpgrade(Upgrade.UpgradeType upgradeType, StackType stackType)
+        public Upgrade FindUpgrade(Upgrade.UpgradeType upgradeType, MaterialType materialType)
         {
             foreach (var upgrade in UpgradeList)
             {
-                if (upgrade.upgradeType == upgradeType && upgrade.StackType == stackType)
+                if (upgrade.upgradeType == upgradeType && upgrade.MaterialType == materialType)
                 {
                     return upgrade;
                 }
@@ -48,15 +48,15 @@ namespace CryingSnow.FastFoodRush
             UpgradeList = new List<Upgrade>();
             foreach (Upgrade.UpgradeType upgradeType in Enum.GetValues(typeof(Upgrade.UpgradeType)))
             {
-                foreach (StackType stackType in Enum.GetValues(typeof(StackType)))
+                foreach (MaterialType materialType in Enum.GetValues(typeof(MaterialType)))
                 {
-                    var upgrade = new Upgrade(upgradeType, stackType, 0);
+                    var upgrade = new Upgrade(upgradeType, materialType, 0);
                     UpgradeList.Add(upgrade);
                 }
             }
         }
 
-        public RestaurantData(string restaurantID, long money)
+        public SaveData(string restaurantID, long money)
         {
             RestaurantID = restaurantID;
             Money = money;

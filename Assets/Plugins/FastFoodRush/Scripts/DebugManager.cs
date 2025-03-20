@@ -58,6 +58,6 @@ public class DebugManager :MonoBehaviour
 
     public void AddMoney()
     {
-        RestaurantManager.Instance.AdjustMoney(1000);
+        GameManager.Instance.AdjustMoney(1000);
     }
 }

@@ -39,7 +39,7 @@ namespace CryingSnow.FastFoodRush
         private int capacity = 3;
         public int Capacity => capacity;
 
-        public StackType StackType;
+        public MaterialType MaterialType;
 
         // ログを預ける先。LogStack は ObjectStack のインスタンス
         private ObjectStack objectStack;
@@ -63,7 +63,7 @@ namespace CryingSnow.FastFoodRush
             var stacks = FindObjectsOfType<ObjectStack>();
             foreach (var stack in stacks)
             {
-                if (stack.StackType == StackType)
+                if (stack.MaterialType == MaterialType)
                 {
                     objectStack = stack;
                 }
@@ -76,7 +76,7 @@ namespace CryingSnow.FastFoodRush
                 agent.SetDestination(currentTarget);
             }
             // RestaurantManager のアップグレードイベントに購読
-            RestaurantManager.Instance.OnUpgrade += UpdateStats;
+            GameManager.Instance.OnUpgrade += UpdateStats;
             UpdateStats();
         }
 
@@ -109,11 +109,11 @@ namespace CryingSnow.FastFoodRush
         void UpdateStats()
         {
             // EmployeeSpeed アップグレードレベルに応じた移動速度の加算（例：0.1fずつ加算）
-            float speedLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeSpeed, StackType);
+            float speedLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeSpeed, MaterialType);
             agent.speed = baseSpeed + (speedLevel * 0.1f);
 
             // EmployeeCapacity アップグレードレベルに応じたスタック容量の加算
-            int capacityLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeCapacity, StackType);
+            int capacityLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeCapacity, MaterialType);
             capacity = baseCapacity + 3 * capacityLevel;
         }
 
