@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5821875567589431566, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
+      propertyPath: customerPrefab
+      value: 
+      objectReference: {fileID: 3778248002557422005, guid: e8c522480879c094c8e40c97774f2130, type: 3}
     - target: {fileID: 5821875567589431567, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
       propertyPath: m_Name
       value: CounterTable_Rock
@@ -54,6 +58,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6632145469018620693, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
       propertyPath: stackType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632145469018620693, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
+      propertyPath: materialType
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []

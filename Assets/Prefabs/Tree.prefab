@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5503397796959661111}
   - component: {fileID: 7809724473082195127}
-  - component: {fileID: 8178454892603586621}
+  - component: {fileID: 770069131597892830}
   m_Layer: 0
   m_Name: Tree
   m_TagString: Untagged
@@ -56,7 +56,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.46, y: 4.81, z: 2.46}
   m_Center: {x: 0, y: 2.77, z: 0}
---- !u!114 &8178454892603586621
+--- !u!114 &770069131597892830
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -65,7 +65,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1051438955717574089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeebd4bed42d96d40a628c96e7760437, type: 3}
+  m_Script: {fileID: 11500000, guid: b32f299f09d7fa24da5746f17b90c503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Row: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
   materialModel: {fileID: 6439221091145675747}
   regrowDelay: 12
   growthDuration: 0.5
-  poolKey: Log
+  materialType: 1
 --- !u!1 &6912978779625550378
 GameObject:
   m_ObjectHideFlags: 0

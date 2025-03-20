@@ -15,9 +15,6 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("The factor that determines the amount of tilt for each item in the stack.")]
         private float bendFactor = 0.1f;
 
-        [SerializeField, Tooltip("The tray GameObject that is shown when the stack is not empty.")]
-        private GameObject tray;
-
         public MaterialType MaterialType { get; private set; }  // The current type of the stack (Food, Trash, or Package)
         public int Count => stack.Count;  // The current number of items in the stack
         public int Height => height;  // The height of the stack (number of items stacked)
@@ -73,7 +70,6 @@ namespace CryingSnow.FastFoodRush
             if (stack.Count == 0)
             {
                 MaterialType = materialType;
-                tray.SetActive(true);
             }
 
             height++;  // Increase the stack height
@@ -108,7 +104,6 @@ namespace CryingSnow.FastFoodRush
             if (stack.Count == 0)
             {
                 MaterialType = MaterialType.None;
-                tray.SetActive(false);
             }
 
             return lastChild;  // Return the removed item

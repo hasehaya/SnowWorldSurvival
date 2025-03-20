@@ -40,15 +40,8 @@ namespace CryingSnow.FastFoodRush
         private Canvas canvas;
 
         [Header("Employee")]
-        [SerializeField, Tooltip("The point where employees will spawn.")]
-        private Transform employeePoint;
-
-        [Header("Employee (Log)")]
-        [SerializeField, Tooltip("Log用の従業員プレハブ")]
+        [SerializeField, Tooltip("従業員プレハブ")]
         private EmployeeController employeePrefab;
-
-        [SerializeField, Tooltip("Radius within which employees will spawn.")]
-        private float employeeSpawnRadius = 3f;
 
         [Header("User Interface")]
         [SerializeField, Tooltip("Text field displaying the current money.")]
@@ -397,17 +390,6 @@ namespace CryingSnow.FastFoodRush
         {
             DOTween.KillAll();
         }
-
-#if UNITY_EDITOR
-        void OnDrawGizmos()
-        {
-            if (employeePoint == null)
-                return;
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(employeePoint.position, employeeSpawnRadius);
-        }
-#endif
     }
 
     [System.Serializable]

@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5821875567589431566, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
+      propertyPath: customerPrefab
+      value: 
+      objectReference: {fileID: 3778248002557422005, guid: 15e0e0defb9622a4fb6d708f6ec2d74a, type: 3}
     - target: {fileID: 5821875567589431567, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
       propertyPath: m_Name
       value: CounterTable_Log
@@ -55,6 +59,10 @@ PrefabInstance:
     - target: {fileID: 6632145469018620693, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
       propertyPath: stackType
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6632145469018620693, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
+      propertyPath: materialType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
