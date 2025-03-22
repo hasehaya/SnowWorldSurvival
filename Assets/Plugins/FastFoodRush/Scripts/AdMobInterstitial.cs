@@ -4,6 +4,18 @@ using UnityEngine;
 
 public class AdMobInterstitial :MonoBehaviour
 {
+    private static AdMobInterstitial instance;
+    public static AdMobInterstitial Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<AdMobInterstitial>();
+            }
+            return instance;
+        }
+    }
     //やること
     //1.インタースティシャル広告IDの入力
     //2.インタースティシャル起動設定　ShowAdMobInterstitial()を使う
