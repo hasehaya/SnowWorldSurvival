@@ -22,11 +22,13 @@ namespace CryingSnow.FastFoodRush
 
         protected int unlockLevel;  // The current level of the unlock
 
-        private List<UpgradeableMesh> upgradeableMeshes;  // List of upgradeable meshes to apply upgrades to
+        private List<UpgradeableMesh> upgradeableMeshes = new List<UpgradeableMesh>();  // List of upgradeable meshes to apply upgrades to
 
         protected virtual void Awake()
         {
-            upgradeableMeshes = GetComponentsInChildren<UpgradeableMesh>(true).ToList();  // Find all upgradeable meshes in child objects
+            upgradeableMeshes = GetComponentsInChildren<UpgradeableMesh>(true)
+                .Where(x => x != null)  // null ‚ðœŠO
+                .ToList();
             gameObject.SetActive(false);  // Set the object to inactive initially
         }
 
@@ -40,9 +42,16 @@ namespace CryingSnow.FastFoodRush
 
             // Apply upgrade to meshes if the unlock level is greater than 1
             if (unlockLevel > 1)
-                upgradeableMeshes.ForEach(x => x.ApplyUpgrade(unlockLevel));  // Apply upgrade to all meshes
+            {
+                if (upgradeableMeshes.Count > 0)
+                {
+                    upgradeableMeshes.ForEach(x => x.ApplyUpgrade(unlockLevel));
+                }
+            }
             else
-                gameObject.SetActive(true);  // Activate the object if it's the first unlock
+            {
+                gameObject.SetActive(true);
+            }
 
             UpdateStats();  // Update the stats of the object based on the unlock level
 

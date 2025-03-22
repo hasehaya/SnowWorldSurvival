@@ -28,13 +28,7 @@ namespace CryingSnow.FastFoodRush
         private float unlockGrowthFactor = 1.1f;
 
         [SerializeField, Tooltip("Starting money for the restaurant.")]
-        private long startingMoney = 1000;
-
-        [SerializeField, Tooltip("Offset distance for package items in the stack.")]
-        private float logOffset = 0.3f;
-
-        [SerializeField, Tooltip("Offset distance for package items in the stack.")]
-        private float rockOffset = 0.3f;
+        private long startingMoney = 300;
 
         [SerializeField]
         private Canvas canvas;
@@ -159,6 +153,12 @@ namespace CryingSnow.FastFoodRush
                 unlockables[i].Unlock(false);
             }
 
+            // ゲーム開始時に、次のアンロック対象に注目（まだ残りがある場合）
+            if (unlockCount < unlockables.Count)
+            {
+                cameraController.FocusOnPointAndReturn(unlockables[unlockCount].GetBuyingPoint());
+            }
+
             // Update the UnlockableBuyer UI to reflect the current unlockable state.
             UpdateUnlockableBuyer();
 
@@ -239,8 +239,10 @@ namespace CryingSnow.FastFoodRush
 
         public float GetStackOffset(MaterialType materialType) => materialType switch
         {
-            MaterialType.Log => logOffset,
-            MaterialType.Rock => rockOffset,
+            MaterialType.Log => 0.3f,
+            MaterialType.Rock => 0.3f,
+            MaterialType.Snow => 0.3f,
+            MaterialType.Tomato => 0.3f,
             MaterialType.None => 0f,
             _ => 0f
         };
@@ -357,7 +359,7 @@ namespace CryingSnow.FastFoodRush
         {
             int currentLevel = GetUpgradeLevel(upgradeType, materialType); // Get the current level of the selected upgrade
             float levelPrice = baseUpgradePrice * Mathf.Pow(upgradeGrowthFactor, currentLevel);
-            float typePrice = levelPrice * MathF.Pow(5, (int)materialType - (int)MaterialType.Log);
+            float typePrice = levelPrice * MathF.Pow(2, (int)materialType - (int)MaterialType.Log);
             return Mathf.RoundToInt(Mathf.Round(typePrice) / 50f) * 50; // Calculate the price based on the upgrade's growth factor
         }
 

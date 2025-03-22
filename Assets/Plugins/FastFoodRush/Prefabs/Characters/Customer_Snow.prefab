@@ -10,12 +10,12 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3871300154854026602, guid: ad881d344ba851a438cead023f1e896e, type: 3}
       propertyPath: m_Name
-      value: Customer_Log
+      value: Customer_Snow
       objectReference: {fileID: 0}
     - target: {fileID: 3871300154854026605, guid: ad881d344ba851a438cead023f1e896e, type: 3}
       propertyPath: orderInfoPrefab
       value: 
-      objectReference: {fileID: 5388122170557379412, guid: fc939e8d6a4f4a2498cc5619063e052d, type: 3}
+      objectReference: {fileID: 5388122170557379412, guid: 14254c7cb83a1e14c8b8bc7005399ec0, type: 3}
     - target: {fileID: 4535773907303364560, guid: ad881d344ba851a438cead023f1e896e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

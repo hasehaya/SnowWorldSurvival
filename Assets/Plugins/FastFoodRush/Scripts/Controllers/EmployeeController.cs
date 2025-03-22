@@ -96,7 +96,7 @@ namespace CryingSnow.FastFoodRush
                     agent.SetDestination(currentTarget);
                 }
 
-                if (stack.Height >= Capacity && !isTransferringLogs)
+                if (stack.Count >= Capacity && !isTransferringLogs)
                 {
                     StartCoroutine(TransferLogsToLogStack());
                 }
@@ -180,7 +180,7 @@ namespace CryingSnow.FastFoodRush
             agent.SetDestination(objectStack.transform.position);
             yield return new WaitUntil(() => HasArrived());
 
-            while (stack.Height > 0)
+            while (stack.Count > 0)
             {
                 if (objectStack.IsFull)
                 {

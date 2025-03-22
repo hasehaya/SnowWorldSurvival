@@ -155,7 +155,7 @@ namespace CryingSnow.FastFoodRush
 
         void OnAnimatorIK()
         {
-            IK_Weight = Mathf.MoveTowards(IK_Weight, Mathf.Clamp01(stack.Height), Time.deltaTime * 3.5f);
+            IK_Weight = Mathf.MoveTowards(IK_Weight, Mathf.Clamp01(stack.Count), Time.deltaTime * 3.5f);
 
             if (leftHandTarget != null)
             {

@@ -16,13 +16,10 @@ namespace CryingSnow.FastFoodRush
         private float bendFactor = 0.1f;
 
         public MaterialType MaterialType { get; private set; }  // The current type of the stack (Food, Trash, or Package)
-        public int Count => stack.Count;  // The current number of items in the stack
-        public int Height => height;  // The height of the stack (number of items stacked)
+        public int Count => stack.Count;
 
-        private List<Transform> stack = new List<Transform>();  // The list holding the stacked objects
-        private int height;  // The current height of the stack (number of stacked items)
+        private List<Transform> stack = new List<Transform>();
 
-        // The offset between stacked items
         private float stackOffset => GameManager.Instance.GetStackOffset(MaterialType);
 
         Vector2 movement;  // Used to store player input for wobble movement
@@ -72,8 +69,7 @@ namespace CryingSnow.FastFoodRush
                 MaterialType = materialType;
             }
 
-            height++;  // Increase the stack height
-            Vector3 peakPoint = transform.position + Vector3.up * height * stackOffset;  // Calculate the peak point for the item to jump to
+            Vector3 peakPoint = transform.position + Vector3.up * Count * stackOffset;  // Calculate the peak point for the item to jump to
 
             // Animate the item to jump to the peak position
             child.DOJump(peakPoint, 5f, 1, 0.3f)
@@ -86,10 +82,6 @@ namespace CryingSnow.FastFoodRush
         /// <returns>The transform of the item that was removed.</returns>
         public Transform RemoveFromStack()
         {
-            // If the stack is empty, return null
-            if (height == 0)
-                return null;
-
             // Get the last item in the stack
             var lastChild = stack.LastOrDefault();
             if (lastChild == null)
@@ -98,7 +90,6 @@ namespace CryingSnow.FastFoodRush
 
             // Remove the last item from the stack and decrease the height
             stack.Remove(lastChild);
-            height--;
 
             // If the stack is empty after removal, hide the tray
             if (stack.Count == 0)
@@ -115,5 +106,7 @@ namespace CryingSnow.FastFoodRush
         None = 0,
         Log = 1,
         Rock = 2,
+        Snow = 3,
+        Tomato = 4,
     }  // Enum to define the type of stack
 }

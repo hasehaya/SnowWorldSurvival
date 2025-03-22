@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-
 using CryingSnow.FastFoodRush;
 
 using UnityEngine;
@@ -59,5 +56,9 @@ public class DebugManager :MonoBehaviour
     public void AddMoney()
     {
         GameManager.Instance.AdjustMoney(1000);
+    }
+    public void AddMoney20000()
+    {
+        GameManager.Instance.AdjustMoney(20000);
     }
 }

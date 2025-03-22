@@ -14,75 +14,104 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Time interval between each stack operation")]
         private float stackInterval = 0.05f;
 
-        public MaterialType MaterialType => materialType; // Read-only properties for stack information
-        public int MaxStack { get; set; } // The maximum number of objects the stack can hold
-        public int Count => objects.Count; // The current number of objects in the stack
-        public bool IsFull => Count >= MaxStack; // Check if the stack is full
+        // ★ 追加：矢印オブジェクトをインスペクターで設定できるようSerializeFieldを追加
+        [SerializeField, Tooltip("Arrow object displayed when stack is ready to receive items")]
+        private GameObject arrowObj;
 
-        private Stack<GameObject> objects = new Stack<GameObject>(); // The stack of objects
-        private float stackOffset; // The vertical offset between stacked objects
-        private float stackTimer; // Timer to track stack operation intervals
+        public MaterialType MaterialType => materialType;
+        public int MaxStack { get; set; }
+        public int Count => objects.Count;
+        public bool IsFull => Count >= MaxStack;
+
+        private Stack<GameObject> objects = new Stack<GameObject>();
+        private float stackOffset;
+        private float stackTimer;
+
+        // ★ 追加：IsShow管理用フラグ
+        private bool isShow;
 
         void Start()
         {
-            // Get the stack offset based on the stack type from the RestaurantManager
             stackOffset = GameManager.Instance.GetStackOffset(materialType);
+
+            // 必要に応じて初期表示をオフにしておく場合はこちら
+            if (arrowObj != null)
+                arrowObj.SetActive(false);
         }
 
         void Update()
         {
-            // Increment the stackTimer with the time passed since last frame
             stackTimer += Time.deltaTime;
 
-            // If the interval time has passed, attempt to stack objects
             if (stackTimer >= stackInterval)
             {
-                stackTimer = 0f; // Reset the stack timer
+                stackTimer = 0f;
 
-                // Check if the player and their stack are valid
                 if (player == null)
                     return;
                 if (player.Stack.MaterialType != materialType)
-                    return; // Ensure player is using the correct stack type
+                    return;
                 if (player.Stack.Count == 0)
-                    return; // Ensure there are objects in the player's stack
+                    return;
 
-                // If the stack is full, don't add more objects
                 if (objects.Count >= MaxStack)
                     return;
 
-                // Get an object from the player's stack and add it to the object stack
                 var objToStack = player.Stack.RemoveFromStack();
                 if (objToStack == null)
                     return;
 
-                // Add the object to the stack and play a sound effect
                 AddToStack(objToStack.gameObject);
                 VibrationManager.PatternVibration();
-                AudioManager.Instance.PlaySFX(AudioID.Pop); // Play object stacking sound
+                AudioManager.Instance.PlaySFX(AudioID.Pop);
             }
         }
 
-        // Adds a game object to the stack with a jump animation
+        // ★ 新規：Arrowを表示して上下動させる
+        public void ShowArrow()
+        {
+            isShow = true;
+            if (arrowObj == null)
+                return;
+
+            arrowObj.SetActive(true);
+            // 繰り返しアニメーションをリセットするために一度Kill
+            DOTween.Kill(arrowObj.transform);
+
+            // 原点位置を確保
+            Vector3 startPos = arrowObj.transform.position;
+
+            // 矢印を上下に動かし続ける
+            arrowObj.transform
+                .DOMoveY(startPos.y + 0.3f, 0.5f)
+                .SetLoops(-1, LoopType.Yoyo)
+                .SetEase(Ease.Linear);
+        }
+
+        // オブジェクトをスタックに加える
         public void AddToStack(GameObject obj)
         {
-            objects.Push(obj); // Push the object onto the stack
+            // ★ AddToStack呼び出し時にArrowを非表示
+            isShow = false;
+            if (arrowObj != null)
+            {
+                DOTween.Kill(arrowObj.transform);  // 上下動アニメーションを停止
+                arrowObj.SetActive(false);
+            }
 
-            // Calculate the target position for the new stack object based on the count
+            objects.Push(obj);
+
             var heightOffset = new Vector3(0f, (Count - 1) * stackOffset, 0f);
             Vector3 targetPos = transform.position + heightOffset;
 
-            // Animate the object to the stack position with a jump
             obj.transform.DOJump(targetPos, 5f, 1, 0.3f);
         }
 
-        // Removes an object from the stack and returns its transform
+        // スタックからオブジェクトを外してTransformを返す
         public Transform RemoveFromStack()
         {
-            // Pop the top object from the stack and kill any ongoing animations
             Transform removed = objects.Pop().transform;
             DOTween.Kill(removed);
-
             return removed;
         }
     }

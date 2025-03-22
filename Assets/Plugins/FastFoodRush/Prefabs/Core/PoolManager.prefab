@@ -24,12 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4631145560853393800}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4631145560853393801
 MonoBehaviour:
@@ -46,9 +47,11 @@ MonoBehaviour:
   pools:
   - prefab: {fileID: 419992728981809921, guid: 4b5895230327dbe4296a5570e07dc3c0, type: 3}
     size: 1200
-  - prefab: {fileID: 3422527401986349637, guid: 409fd8736c2f7a44985eb5aa392c2c97, type: 3}
-    size: 200
-  - prefab: {fileID: 1328341206021509577, guid: ecf9ac4264a6a934687737ded803e4a9, type: 3}
-    size: 100
-  - prefab: {fileID: 4762738753070356771, guid: f2b62a40e2dd37a418a03ad0eb0338c8, type: 3}
-    size: 100
+  - prefab: {fileID: 3422527401986349637, guid: ccb6786c588da9b43b7046aba69012a3, type: 3}
+    size: 1000
+  - prefab: {fileID: 3422527401986349637, guid: 096cb5d640e0fa0469070466015a25d9, type: 3}
+    size: 1000
+  - prefab: {fileID: 3422527401986349637, guid: 383bd1d62638b924485ff1c4e3e86aaf, type: 3}
+    size: 1000
+  - prefab: {fileID: 3422527401986349637, guid: 18a8e41528615db4583a3bea71b6e38d, type: 3}
+    size: 1000

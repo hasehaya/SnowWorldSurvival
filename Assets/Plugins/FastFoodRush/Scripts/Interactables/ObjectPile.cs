@@ -63,7 +63,7 @@ namespace CryingSnow.FastFoodRush
             // Check if the player's stack allows adding this object.
             if (player.Stack.MaterialType == MaterialType.None || player.Stack.MaterialType == materialType)
             {
-                if (player.Stack.Height < player.Capacity)
+                if (player.Stack.Count < player.Capacity)
                 {
                     var removedObj = objects.Pop(); // Remove the top object from the pile.
                     player.Stack.AddToStack(removedObj.transform, materialType); // Add the object to the player's stack.

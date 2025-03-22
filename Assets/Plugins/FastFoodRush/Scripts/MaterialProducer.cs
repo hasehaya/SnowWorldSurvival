@@ -61,7 +61,7 @@ namespace CryingSnow.FastFoodRush
                     timer = 0f;
                     return;
                 }
-                int remainingCapacity = player.Capacity - player.Stack.Height;
+                int remainingCapacity = player.Capacity - player.Stack.Count;
                 if (remainingCapacity > 0)
                 {
                     int spawnCount = Mathf.Min(resourceCount, remainingCapacity);
@@ -89,7 +89,7 @@ namespace CryingSnow.FastFoodRush
                 EmployeeController employee = other.GetComponent<EmployeeController>();
                 if (employee != null)
                 {
-                    int remainingCapacity = employee.Capacity - employee.Stack.Height;
+                    int remainingCapacity = employee.Capacity - employee.Stack.Count;
                     if (remainingCapacity > 0)
                     {
                         int spawnCount = Mathf.Min(resourceCount, remainingCapacity);
@@ -180,7 +180,7 @@ namespace CryingSnow.FastFoodRush
             {
                 if (player == null ||
                     !(player.Stack.MaterialType == MaterialType.None || player.Stack.MaterialType == materialType) ||
-                    player.Stack.Height >= player.Capacity)
+                    player.Stack.Count >= player.Capacity)
                 {
                     return;
                 }
@@ -191,7 +191,7 @@ namespace CryingSnow.FastFoodRush
             else
             {
                 if (!(employee.Stack.MaterialType == MaterialType.None || employee.Stack.MaterialType == materialType) ||
-                    employee.Stack.Height >= employee.Capacity)
+                    employee.Stack.Count >= employee.Capacity)
                 {
                     return;
                 }

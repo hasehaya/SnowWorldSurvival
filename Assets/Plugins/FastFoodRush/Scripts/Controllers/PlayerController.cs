@@ -7,111 +7,136 @@ namespace CryingSnow.FastFoodRush
     [RequireComponent(typeof(AudioSource))]
     public class PlayerController :MonoBehaviour
     {
-        [SerializeField, Tooltip("Base movement speed of the player")]
-        private float baseSpeed = 3.0f;
+        [SerializeField] private float baseSpeed = 3.0f;
+        [SerializeField] private float rotateSpeed = 360f;
+        [SerializeField] private int baseCapacity = 5;
+        [SerializeField] private AudioClip[] footsteps;
+        [SerializeField] private WobblingStack stack;
+        [SerializeField] private Transform leftHandTarget;
+        [SerializeField] private Transform rightHandTarget;
 
-        [SerializeField, Tooltip("Speed at which the player rotates")]
-        private float rotateSpeed = 360f;
+        // 起動時は非表示にする
+        [SerializeField] private GameObject maxTextObj;
 
-        [SerializeField, Tooltip("Base capacity for the player's stack")]
-        private int baseCapacity = 5;
+        public WobblingStack Stack => stack;
+        public int Capacity { get; private set; }
 
-        [SerializeField, Tooltip("Array of footstep sound clips")]
-        private AudioClip[] footsteps;
+        private Animator animator;
+        private CharacterController controller;
+        private AudioSource audioSource;
 
-        [SerializeField, Tooltip("Reference to the player's stack (for holding items)")]
-        private WobblingStack stack;
+        private float moveSpeed;
+        private Vector3 movement;
+        private Vector3 velocity;
+        private bool isGrounded;
+        private float IK_Weight;
 
-        [SerializeField, Tooltip("Target for the left hand position in IK")]
-        private Transform leftHandTarget;
-
-        [SerializeField, Tooltip("Target for the right hand position in IK")]
-        private Transform rightHandTarget;
-
-
-        public WobblingStack Stack => stack; // Property to access the stack
-        public int Capacity { get; private set; } // The current capacity of the player's stack
-
-        private Animator animator; // Reference to the player's Animator
-        private CharacterController controller; // Reference to the CharacterController for movement
-        private AudioSource audioSource; // Reference to the AudioSource for playing sound effects
-
-        private float moveSpeed; // Current movement speed based on upgrades
-        private Vector3 movement; // Player's movement direction
-        private Vector3 velocity; // Player's velocity (for gravity)
-        private bool isGrounded; // Flag to check if the player is grounded
-
-        private float IK_Weight; // Weight of the IK for hand positioning
-
-        const float gravityValue = -9.81f; // Gravity constant
+        private bool previousIsMax;
+        private const float gravityValue = -9.81f;
 
         void Awake()
         {
-            animator = GetComponent<Animator>(); // Initialize the Animator
-            controller = GetComponent<CharacterController>(); // Initialize the CharacterController
-            audioSource = GetComponent<AudioSource>(); // Initialize the AudioSource
+            animator = GetComponent<Animator>();
+            controller = GetComponent<CharacterController>();
+            audioSource = GetComponent<AudioSource>();
+
+            // スタート時に非表示
+            if (maxTextObj != null)
+            {
+                maxTextObj.SetActive(false);
+            }
         }
 
         void Start()
         {
-            GameManager.Instance.OnUpgrade += UpdateStats; // Subscribe to the upgrade event
-            UpdateStats(); // Update player stats based on upgrades
+            GameManager.Instance.OnUpgrade += UpdateStats;
+            UpdateStats();
         }
 
         void Update()
         {
-            isGrounded = controller.isGrounded; // Check if the player is grounded
+            // スタックが満タンかどうか
+            bool isMax = (Stack.Count >= Capacity);
 
-            if (isGrounded && velocity.y < 0)
+            // 状態が切り替わった時にだけ UI を切り替え
+            if (isMax != previousIsMax)
             {
-                velocity.y = 0f; // Reset vertical velocity when grounded
+                if (maxTextObj != null)
+                {
+                    maxTextObj.SetActive(isMax);
+                }
+
+                if (isMax)
+                {
+                    var objectStackList = FindObjectsOfType<ObjectStack>();
+                    for (int i = 0; i < objectStackList.Length; i++)
+                    {
+                        if (objectStackList[i].MaterialType == stack.MaterialType)
+                        {
+                            objectStackList[i].ShowArrow();
+                        }
+                    }
+                }
+                else
+                {
+                    // 満タンが解除された場合に必要があればここで矢印などを消す処理
+                }
             }
+
+            // isMax 中は毎フレーム LookAt でカメラを向かせる
+            // 後ろ向きになってしまう場合は LookAt 後に180度回転させる
+            if (isMax && maxTextObj != null && maxTextObj.activeSelf)
+            {
+                if (Camera.main != null)
+                {
+                    maxTextObj.transform.LookAt(Camera.main.transform);
+                    // 180度反転
+                    maxTextObj.transform.Rotate(0f, 180f, 0f);
+                }
+            }
+
+            previousIsMax = isMax;
+
+            // 以下、移動やアニメーションの処理
+            isGrounded = controller.isGrounded;
+            if (isGrounded && velocity.y < 0)
+                velocity.y = 0f;
 
             movement.x = SimpleInput.GetAxis("Horizontal");
             movement.z = SimpleInput.GetAxis("Vertical");
-            movement = (Quaternion.Euler(0, 45, 0) * movement).normalized; // Normalize and rotate movement for diagonal input
-
-            controller.Move(movement * Time.deltaTime * moveSpeed); // Move the character
+            movement = (Quaternion.Euler(0, 45, 0) * movement).normalized;
+            controller.Move(movement * Time.deltaTime * moveSpeed);
 
             if (movement != Vector3.zero)
             {
-                var lookRotation = Quaternion.LookRotation(movement); // Calculate the desired rotation based on movement
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotateSpeed); // Rotate towards the direction
+                var lookRotation = Quaternion.LookRotation(movement);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, lookRotation, Time.deltaTime * rotateSpeed);
             }
 
             velocity.y += gravityValue * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime); // Apply gravity
+            controller.Move(velocity * Time.deltaTime);
 
             animator.SetBool("IsMoving", movement != Vector3.zero);
         }
 
         void UpdateStats()
         {
-            // Update the movement speed based on the speed upgrade level
-            //int speedLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.PlayerSpeed);
-            moveSpeed = baseSpeed;// + (speedLevel * 0.2f);
-
-            //// Update the stack capacity based on the capacity upgrade level
-            //int capacityLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.PlayerCapacity);
-            Capacity = baseCapacity;// + (capacityLevel * 3);
+            moveSpeed = baseSpeed;
+            Capacity = baseCapacity;
         }
 
         public void OnStep(AnimationEvent animationEvent)
         {
-            // Trigger footstep sound based on the animation event
             if (animationEvent.animatorClipInfo.weight < 0.5f)
-                return; // Ensure the animation is halfway through
-
-            audioSource.clip = footsteps[Random.Range(0, footsteps.Length)]; // Pick a random footstep sound
-            audioSource.Play(); // Play the footstep sound
+                return;
+            audioSource.clip = footsteps[Random.Range(0, footsteps.Length)];
+            audioSource.Play();
         }
 
         void OnAnimatorIK()
         {
-            // Gradually adjust IK weight based on the stack height
-            IK_Weight = Mathf.MoveTowards(IK_Weight, Mathf.Clamp01(stack.Height), Time.deltaTime * 3.5f);
+            IK_Weight = Mathf.MoveTowards(IK_Weight, Mathf.Clamp01(stack.Count), Time.deltaTime * 3.5f);
 
-            // Set the IK position and rotation for the left hand
             if (leftHandTarget != null)
             {
                 animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, IK_Weight);
@@ -120,7 +145,6 @@ namespace CryingSnow.FastFoodRush
                 animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandTarget.rotation);
             }
 
-            // Set the IK position and rotation for the right hand
             if (rightHandTarget != null)
             {
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, IK_Weight);
