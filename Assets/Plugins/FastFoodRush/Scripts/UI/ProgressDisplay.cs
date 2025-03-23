@@ -22,13 +22,13 @@ namespace CryingSnow.FastFoodRush
         void Start()
         {
             // Subscribes to the RestaurantManager's OnUnlock event when enabled.
-            GameManager.Instance.OnUnlock += UpdateProgress;
+            UnlockManager.Instance.OnUnlock += UpdateProgress;
         }
 
         void OnDisable()
         {
             // Unsubscribes from the RestaurantManager's OnUnlock event when disabled.
-            GameManager.Instance.OnUnlock -= UpdateProgress;
+            UnlockManager.Instance.OnUnlock -= UpdateProgress;
         }
 
         /// <summary>

@@ -35,19 +35,24 @@ namespace CryingSnow.FastFoodRush
         private int unlockPrice;       // The price required to unlock the unlockable
         private int paidAmount;        // The amount the player has already paid
 
+        // Added field to store the MaterialType this buyer is associated with.
+        private MaterialType buyerMaterial;
+
         private Coroutine payCoroutine;  // Reference to the currently running coroutine
 
         /// <summary>
-        /// Initializes the UnlockableBuyer with the provided unlockable and price details.
+        /// Initializes the UnlockableBuyer with the provided unlockable, price details, and associated MaterialType.
         /// </summary>
         /// <param name="unlockable">The unlockable object to be bought</param>
         /// <param name="unlockPrice">The price of the unlockable</param>
         /// <param name="paidAmount">The amount already paid towards the unlockable</param>
-        public void Initialize(Unlockable unlockable, int unlockPrice, int paidAmount)
+        /// <param name="buyerMaterial">The MaterialType that this buyer belongs to</param>
+        public void Initialize(Unlockable unlockable, int unlockPrice, int paidAmount, MaterialType buyerMaterial)
         {
             this.unlockable = unlockable;
             this.unlockPrice = unlockPrice;
             this.paidAmount = paidAmount;
+            this.buyerMaterial = buyerMaterial;
             contentIcon.sprite = unlockable.ContentIcon;
 
             UpdatePayment(0);  // Update the payment progress display
@@ -60,8 +65,6 @@ namespace CryingSnow.FastFoodRush
         void UpdatePayment(int amount)
         {
             paidAmount += amount;
-            GameManager.Instance.PaidAmount = paidAmount;
-
             progressFill.fillAmount = (float)paidAmount / unlockPrice;  // Update the progress bar
             priceLabel.text = GameManager.Instance.GetFormattedMoney(unlockPrice - paidAmount);  // Update the price label
         }
@@ -122,7 +125,10 @@ namespace CryingSnow.FastFoodRush
 
                 // If the total amount paid is equal to or greater than the unlock price, complete the purchase
                 if (paidAmount >= unlockPrice)
-                    GameManager.Instance.BuyUnlockable();
+                {
+                    // Call BuyUnlockable with the associated MaterialType.
+                    UnlockManager.Instance.BuyUnlockable(buyerMaterial);
+                }
 
                 yield return new WaitForSeconds(payingInterval);  // Wait for the next payment interval
             }

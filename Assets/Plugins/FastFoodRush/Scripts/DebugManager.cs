@@ -9,25 +9,20 @@ public class DebugManager :MonoBehaviour
     [SerializeField, Tooltip("Escape キーで表示する UI GameObject")]
     private GameObject debugUI;
 
+    [SerializeField]
+    private GameObject ad;
+
     private string saveFileName;
     // ゲーム速度を変更するステップ値。例えば 0.5f ずつ変化させる
     float gameSpeedDegree = 0.5f;
 
-    void Start()
+    public void ToggleDebugUI()
     {
-        // 必要に応じて初期状態で非表示にする場合は以下のように設定
-        //if (debugUI != null)
-        //    debugUI.SetActive(false);
-    }
-
-    void Update()
-    {
-        // Escape キーが押されたら debugUI をアクティブにする
-        //if (SimpleInput.GetKeyDown(KeyCode.Escape))
-        //{
-        //    if (debugUI != null)
-        //        debugUI.SetActive(true);
-        //}
+        // debugUI が null でない場合、activeSelf を反転させる
+        if (debugUI != null)
+        {
+            debugUI.SetActive(!debugUI.activeSelf);
+        }
     }
 
     public void ClearData()
@@ -61,5 +56,10 @@ public class DebugManager :MonoBehaviour
     public void AddMoney20000()
     {
         GameManager.Instance.AdjustMoney(20000);
+    }
+
+    public void ToggleAd()
+    {
+        ad.SetActive(!ad.activeSelf);
     }
 }
