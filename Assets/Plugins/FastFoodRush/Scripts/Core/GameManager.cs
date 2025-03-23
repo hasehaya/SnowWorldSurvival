@@ -249,6 +249,10 @@ namespace CryingSnow.FastFoodRush
 
         public void BuyUnlockable()
         {
+            if (unlockCount % 2 == 1)
+            {
+                AdMobRewardInterstitial.Instance.ShowAdMobReward();
+            }
             // Unlock the next unlockable item
             unlockables[unlockCount].Unlock();
 

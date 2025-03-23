@@ -32,9 +32,9 @@ public class AdMobBanner :MonoBehaviour
     private void RequestBanner()
     {
 #if UNITY_ANDROID
-        string adUnitId = "ca-app-pub-3940256099942544/6300978111";
+        string adUnitId = "ca-app-pub-2788807416533951/6867512863";
 #elif UNITY_IPHONE
-        string adUnitId = "ca-app-pub-3940256099942544/2934735716";
+        string adUnitId = "ca-app-pub-2788807416533951/9079244246";
 #else
         string adUnitId = "unexpected_platform";
 #endif
@@ -46,7 +46,8 @@ public class AdMobBanner :MonoBehaviour
         }
 
         AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);
-        bannerView = new BannerView(adUnitId, adaptiveSize, AdPosition.Top);
+        var bannerPosY = Screen.safeArea.yMax - Screen.height;
+        bannerView = new BannerView(adUnitId, adaptiveSize, 0, (int)bannerPosY);
 
         // コールバック設定
         bannerView.OnBannerAdLoaded += OnBannerAdLoaded;

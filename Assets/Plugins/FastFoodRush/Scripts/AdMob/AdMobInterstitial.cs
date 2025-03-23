@@ -114,6 +114,7 @@ public class AdMobInterstitial :MonoBehaviour
         {
             //インタースティシャル 読み込み失敗
             Debug.LogError("Failed to load interstitial ad :" + error);//error:エラー内容 
+            Invoke("LoadRewardedAd", 3f);
             return;//この時点でこの関数の実行は終了
         }
 

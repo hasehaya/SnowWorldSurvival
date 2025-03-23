@@ -57,6 +57,7 @@ public class DebugManager :MonoBehaviour
     {
         GameManager.Instance.AdjustMoney(1000);
     }
+
     public void AddMoney20000()
     {
         GameManager.Instance.AdjustMoney(20000);

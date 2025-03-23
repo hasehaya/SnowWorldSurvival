@@ -1,9 +1,10 @@
-using UnityEngine;
 using TMPro;
+
+using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class ProgressDisplay : MonoBehaviour
+    public class ProgressDisplay :MonoBehaviour
     {
         [SerializeField, Tooltip("Gradient used to visually represent progress from start to completion.")]
         private Gradient progressGradient;
@@ -18,7 +19,7 @@ namespace CryingSnow.FastFoodRush
             progressText = GetComponentInChildren<TMP_Text>();
         }
 
-        void OnEnable()
+        void Start()
         {
             // Subscribes to the RestaurantManager's OnUnlock event when enabled.
             GameManager.Instance.OnUnlock += UpdateProgress;

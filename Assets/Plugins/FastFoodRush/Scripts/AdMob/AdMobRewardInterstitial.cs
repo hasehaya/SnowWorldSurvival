@@ -2,16 +2,16 @@ using GoogleMobileAds.Api;
 
 using UnityEngine;
 
-public class AdMobReward :MonoBehaviour
+public class AdMobRewardInterstitial :MonoBehaviour
 {
-    private static AdMobReward instance;
-    public static AdMobReward Instance
+    private static AdMobRewardInterstitial instance;
+    public static AdMobRewardInterstitial Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<AdMobReward>();
+                instance = FindObjectOfType<AdMobRewardInterstitial>();
             }
             return instance;
         }
@@ -21,7 +21,7 @@ public class AdMobReward :MonoBehaviour
     //2.GetReward関数に報酬内容を入力
     //3.リワード起動設定　ShowAdMobReward()を使う
 
-    private RewardedAd rewardedAd;//RewardedAd型の変数 rewardedAdを宣言 この中にリワード広告の情報が入る
+    private RewardedInterstitialAd rewardedInterstitialAd;//RewardedAd型の変数 rewardedAdを宣言 この中にリワード広告の情報が入る
 
     private string adUnitId;
 
@@ -33,9 +33,9 @@ public class AdMobReward :MonoBehaviour
         // https://marumaro7.hatenablog.com/entry/platformsyoriwakeru
 
 #if UNITY_ANDROID
-        adUnitId = "ca-app-pub-3940256099942544/5224354917";//ここにAndroidのリワード広告IDを入力
+        adUnitId = "ca-app-pub-2788807416533951/7735739968";
 #elif UNITY_IPHONE
-        adUnitId = "ca-app-pub-3940256099942544/1712485313";//ここにiOSのリワード広告IDを入力
+        adUnitId = "ca-app-pub-2788807416533951/9675174452";//ここにiOSのリワード広告IDを入力
 #else
         adUnitId = "unexpected_platform";
 #endif
@@ -51,10 +51,10 @@ public class AdMobReward :MonoBehaviour
     public void ShowAdMobReward()
     {
         //変数rewardedAdの中身が存在しており、広告の読み込みが完了していたら広告表示
-        if (rewardedAd != null && rewardedAd.CanShowAd() == true)
+        if (rewardedInterstitialAd != null && rewardedInterstitialAd.CanShowAd() == true)
         {
             //リワード広告 表示を実施　報酬の受け取りの関数GetRewardを引数に設定
-            rewardedAd.Show(GetReward);
+            rewardedInterstitialAd.Show(GetReward);
         }
         else
         {
@@ -78,11 +78,11 @@ public class AdMobReward :MonoBehaviour
     {
         //広告の再読み込みのための処理
         //rewardedAdの中身が入っていた場合処理
-        if (rewardedAd != null)
+        if (rewardedInterstitialAd != null)
         {
             //リワード広告は使い捨てなので一旦破棄
-            rewardedAd.Destroy();
-            rewardedAd = null;
+            rewardedInterstitialAd.Destroy();
+            rewardedInterstitialAd = null;
         }
 
         //リクエストを生成
@@ -112,18 +112,19 @@ public class AdMobReward :MonoBehaviour
         //==================================================================
 
         //広告をロード  その後、関数OnRewardedAdLoadedを呼び出す
-        RewardedAd.Load(adUnitId, request, OnRewardedAdLoaded);
+        RewardedInterstitialAd.Load(adUnitId, request, OnRewardedAdLoaded);
     }
 
 
     // 広告のロードを実施した後に呼び出される関数
-    private void OnRewardedAdLoaded(RewardedAd ad, LoadAdError error)
+    private void OnRewardedAdLoaded(RewardedInterstitialAd ad, LoadAdError error)
     {
         //変数errorに情報が入っている　または、変数adに情報がはいっていなかったら実行
         if (error != null || ad == null)
         {
             //リワード 読み込み失敗
             Debug.LogError("Failed to load reward ad : " + error);//error:エラー内容 
+            Invoke("LoadRewardedAd", 3f);
             return;//この時点でこの関数の実行は終了
         }
 
@@ -132,15 +133,15 @@ public class AdMobReward :MonoBehaviour
 
         //RewardedAd.Load(~略~)関数を実行することにより、RewardedAd型の変数adにRewardedAdのインスタンスを生成する。
         //生成したRewardedAd型のインスタンスを変数rewardedAdへ割り当て
-        rewardedAd = ad;
+        rewardedInterstitialAd = ad;
 
         //広告の 表示・表示終了・表示失敗 の内容を登録
-        RegisterEventHandlers(rewardedAd);
+        RegisterEventHandlers(rewardedInterstitialAd);
     }
 
 
     //広告の 表示・表示終了・表示失敗 の内容
-    private void RegisterEventHandlers(RewardedAd ad)
+    private void RegisterEventHandlers(RewardedInterstitialAd ad)
     {
         //リワード広告が表示された時に起動する内容
         ad.OnAdFullScreenContentOpened += () =>
