@@ -25,16 +25,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 748902982689236196}
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.27742422, y: 0.3318575, z: -0.650412, w: 0.62439615}
+  m_LocalPosition: {x: 0, y: 0, z: 0.272}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6223285325308658372}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 4.89, y: 51.09, z: -90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2.05}
+  m_AnchoredPosition: {x: 0.202, y: 2.05}
   m_SizeDelta: {x: 1.5, y: 0.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5685598676122274787
@@ -479,8 +479,7 @@ MonoBehaviour:
   workingSpot: {fileID: 6632145468266872315}
   worker: {fileID: 8822610748424923961}
   baseInterval: 1.5
-  basePrice: 5
-  priceIncrementRate: 2
+  sellPrice: 5
   baseStack: 30
   spawnPoint: {fileID: 6632145467533585945}
   despawnPoint: {fileID: 6632145469512974667}

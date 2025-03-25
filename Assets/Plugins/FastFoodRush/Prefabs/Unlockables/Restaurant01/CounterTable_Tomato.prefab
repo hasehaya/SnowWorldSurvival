@@ -9,6 +9,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5821875567589431566, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
+      propertyPath: sellPrice
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821875567589431566, guid: 4a4a4cd1671dcb24a8b38b4bb6a34987, type: 3}
       propertyPath: customerPrefab
       value: 
       objectReference: {fileID: 3778248002557422005, guid: 9e7959c794f1e6e43843e80be8b897b5, type: 3}
