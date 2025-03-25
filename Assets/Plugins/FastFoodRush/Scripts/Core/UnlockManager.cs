@@ -126,7 +126,10 @@ namespace CryingSnow.FastFoodRush
                 return;
             }
 
-            if (currentCount % 3 == 2)
+            // 全体のUnlockCountを計算
+            int overallUnlockCount = data.UnlockCounts.Values.Sum();
+            // 全体のUnlockCountが3で割った余りが2の場合、広告を表示する
+            if (overallUnlockCount % 3 == 2)
             {
                 AdMobRewardInterstitial.Instance.ShowAdMobReward();
             }
