@@ -1,7 +1,5 @@
 using System.Collections;
 
-using DG.Tweening;
-
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -110,7 +108,7 @@ namespace CryingSnow.FastFoodRush
         {
             // EmployeeSpeed アップグレードレベルに応じた移動速度の加算（例：0.1fずつ加算）
             float speedLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeSpeed, MaterialType);
-            agent.speed = baseSpeed + (speedLevel * 0.1f);
+            agent.speed = baseSpeed + (speedLevel * 0.5f);
 
             // EmployeeCapacity アップグレードレベルに応じたスタック容量の加算
             int capacityLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeCapacity, MaterialType);
