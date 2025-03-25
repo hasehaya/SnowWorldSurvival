@@ -27,13 +27,13 @@ namespace CryingSnow.FastFoodRush
         public WobblingStack Stack => stack;
 
         // 基本的な動作速度と容量。アップグレードによって加算されます。
-        [SerializeField, Tooltip("Log従業員の基本移動速度")]
-        private float baseSpeed = 2.5f;
-        [SerializeField, Tooltip("Log従業員の基本スタック容量")]
+        [SerializeField, Tooltip("従業員の基本移動速度")]
+        private float baseSpeed = 1.0f;
+        [SerializeField, Tooltip("従業員の基本スタック容量")]
         private int baseCapacity = 3;
 
         // LogEmployee のスタック容量は UpdateStats で更新
-        [SerializeField, Tooltip("Log従業員のスタックの容量 (アップグレードで増加)")]
+        [SerializeField, Tooltip("スタックの容量 (アップグレードで増加)")]
         private int capacity = 3;
         public int Capacity => capacity;
 
@@ -108,7 +108,7 @@ namespace CryingSnow.FastFoodRush
         {
             // EmployeeSpeed アップグレードレベルに応じた移動速度の加算（例：0.1fずつ加算）
             float speedLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeSpeed, MaterialType);
-            agent.speed = baseSpeed + (speedLevel * 0.5f);
+            agent.speed = baseSpeed + (speedLevel * 0.4f);
 
             // EmployeeCapacity アップグレードレベルに応じたスタック容量の加算
             int capacityLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeCapacity, MaterialType);

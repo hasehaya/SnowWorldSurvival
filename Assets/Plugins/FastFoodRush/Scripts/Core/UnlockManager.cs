@@ -32,10 +32,6 @@ namespace CryingSnow.FastFoodRush
                 if (instance == null)
                 {
                     instance = FindObjectOfType<UnlockManager>();
-                    if (instance == null)
-                    {
-                        Debug.LogError("UnlockManager instance not found in scene!");
-                    }
                 }
                 return instance;
             }

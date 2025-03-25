@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+
 using UnityEngine;
 
 namespace CryingSnow.FastFoodRush
 {
-    public class PoolManager : MonoBehaviour
+    public class PoolManager :MonoBehaviour
     {
         public static PoolManager Instance { get; private set; }
 
@@ -27,10 +28,6 @@ namespace CryingSnow.FastFoodRush
         private void Awake()
         {
             Instance = this;
-        }
-
-        private void Start()
-        {
             InitializePools();
         }
 

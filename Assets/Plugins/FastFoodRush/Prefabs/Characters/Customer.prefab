@@ -389,7 +389,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 1.5
+  m_Speed: 1
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 1200
@@ -828,7 +828,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rateRange: {x: 0.8, y: 0.4}
   bendFactor: 0.1
-  tray: {fileID: 7245861146273888891}
 --- !u!1 &6756682139433827819
 GameObject:
   m_ObjectHideFlags: 0
