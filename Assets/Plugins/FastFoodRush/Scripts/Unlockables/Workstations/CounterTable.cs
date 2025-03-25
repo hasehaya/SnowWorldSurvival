@@ -10,10 +10,7 @@ namespace CryingSnow.FastFoodRush
         private float baseInterval = 1.5f;
 
         [SerializeField, Tooltip("Base price of food served at the counter.")]
-        private int basePrice = 5;
-
-        [SerializeField, Tooltip("Rate of price increase per profit upgrade.")]
-        private float priceIncrementRate = 1.25f;
+        private int sellPrice = 5;
 
         [SerializeField, Tooltip("Base stack capacity of the food stack.")]
         private int baseStack = 30;
@@ -42,12 +39,11 @@ namespace CryingSnow.FastFoodRush
 
         private float spawnInterval; // ŒÚ‹q¶¬ŠÔŠu
         private float serveInterval; // HŽ–’ñ‹ŸŠÔŠu
-        private int sellPrice;       // Œ»Ý‚ÌHŽ–‰¿Ši
         private float spawnTimer;    // ŒÚ‹q¶¬—pƒ^ƒCƒ}[
         private float serveTimer;    // HŽ–’ñ‹Ÿ—pƒ^ƒCƒ}[
 
         // Å‘åŒÚ‹q”‚Í unlockLevel ‚É‰ž‚¶‚Ä‘‰Á‚·‚é
-        private int maxCustomers => 1 + unlockLevel;
+        private int maxCustomers => unlockLevel;
 
         void Start()
         {
@@ -68,10 +64,6 @@ namespace CryingSnow.FastFoodRush
             spawnInterval = (baseInterval * 3) - unlockLevel;
             serveInterval = baseInterval / unlockLevel;
             foodStack.MaxStack = baseStack + 10 * unlockLevel;
-
-            //int profitLevel = RestaurantManager.Instance.GetUpgradeLevel(Upgrade.Profit);
-            sellPrice = Mathf.RoundToInt(Mathf.Pow(priceIncrementRate, (int)foodStack.MaterialType) * basePrice);
-            //Mathf.RoundToInt(Mathf.Pow(priceIncrementRate, profitLevel) * basePrice);
         }
 
         /// <summary>
