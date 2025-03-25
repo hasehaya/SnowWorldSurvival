@@ -70,10 +70,9 @@ namespace CryingSnow.FastFoodRush
             }
 
             Vector3 peakPoint = transform.position + Vector3.up * Count * stackOffset;  // Calculate the peak point for the item to jump to
+            child.DOJump(peakPoint, 5f, 1, 0.3f);
 
-            // Animate the item to jump to the peak position
-            child.DOJump(peakPoint, 5f, 1, 0.3f)
-                .OnComplete(() => stack.Add(child));  // Add the item to the stack once the animation is complete
+            stack.Add(child);
         }
 
         /// <summary>

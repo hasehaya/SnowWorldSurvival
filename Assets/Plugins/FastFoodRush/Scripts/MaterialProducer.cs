@@ -206,19 +206,14 @@ namespace CryingSnow.FastFoodRush
             float randomDistance = Random.Range(0.5f, 1f);
             Vector3 targetPos = startPos + randomXZ * randomDistance + Vector3.up * 5;
 
-            Sequence seq = DOTween.Sequence()
-                .Append(resource.transform.DOJump(targetPos, 2f, 1, 0.5f))
-                .OnComplete(() =>
-                {
-                    if (employee == null)
-                    {
-                        player.Stack.AddToStack(resource.transform, materialType);
-                    }
-                    else
-                    {
-                        employee.Stack.AddToStack(resource.transform, materialType);
-                    }
-                });
+            if (employee == null)
+            {
+                player.Stack.AddToStack(resource.transform, materialType);
+            }
+            else
+            {
+                employee.Stack.AddToStack(resource.transform, materialType);
+            }
         }
 
         /// <summary>
