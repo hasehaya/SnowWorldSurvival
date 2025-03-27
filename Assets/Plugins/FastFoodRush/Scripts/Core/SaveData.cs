@@ -13,8 +13,6 @@ namespace CryingSnow.FastFoodRush
         public int PlayerCapacity { get; set; }
         public int Profit { get; set; }
 
-        public float ElapsedTime { get; set; }
-
         // Dictionaries to track the number of unlockables purchased and the paid amount for each material.
         public Dictionary<MaterialType, int> UnlockCounts { get; set; }
         public Dictionary<MaterialType, int> PaidAmounts { get; set; }
@@ -29,7 +27,6 @@ namespace CryingSnow.FastFoodRush
             PlayerSpeed = 1;
             PlayerCapacity = 1;
             Profit = 0;
-            ElapsedTime = 0;
             InitUpgrades();
             InitUnlockData();
         }

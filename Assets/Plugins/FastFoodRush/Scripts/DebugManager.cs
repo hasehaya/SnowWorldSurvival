@@ -1,7 +1,5 @@
 using CryingSnow.FastFoodRush;
 
-using TMPro;
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,19 +12,9 @@ public class DebugManager :MonoBehaviour
     [SerializeField]
     private GameObject ad;
 
-    [SerializeField, Tooltip("経過時間を表示するText")]
-    private TMP_Text elapsedTimeText;
-
     private string saveFileName;
     // ゲーム速度を変更するステップ値。例えば 0.5f ずつ変化させる
     float gameSpeedDegree = 0.5f;
-
-    private void Update()
-    {
-        float elapsed = GameManager.Instance != null ? GameManager.Instance.ElapsedTime : 0f;
-        System.TimeSpan timeSpan = System.TimeSpan.FromSeconds(elapsed);
-        elapsedTimeText.text = $"{timeSpan:hh\\:mm\\:ss}";
-    }
 
     public void ToggleDebugUI()
     {
