@@ -47,6 +47,8 @@ namespace CryingSnow.FastFoodRush
 
         #region Reference Properties
 
+        public float ElapsedTime => data?.ElapsedTime ?? 0f;
+
         public Canvas Canvas => canvas;
 
         public List<ObjectPile> TrashPiles { get; private set; } = new List<ObjectPile>();
@@ -184,7 +186,13 @@ namespace CryingSnow.FastFoodRush
             }
         }
 
-        void Update() { }
+        void Update()
+        {
+            if (data != null)
+            {
+                data.ElapsedTime += Time.unscaledDeltaTime;
+            }
+        }
 
         public float GetStackOffset(MaterialType materialType) => materialType switch
         {
