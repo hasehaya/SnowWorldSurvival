@@ -10,15 +10,39 @@ namespace CryingSnow.FastFoodRush
     public class MaterialUnlockables
     {
         public MaterialType material;
-        public List<Unlockable> unlockables;
-
-        [Header("Pricing Settings")]
-        [Tooltip("The base price for unlocking items in this group.")]
         public int baseUnlockPrice = 75;
-
-        [Tooltip("The growth factor applied to unlock prices in this group.")]
-        [Range(1.01f, 1.99f)]
         public float unlockGrowthFactor = 1.1f;
+
+        [HideInInspector]
+        public List<Unlockable> unlockables;
+        public Unlockable materialParent;
+        public Unlockable counterTable1;
+        public Unlockable counterTable2;
+        public Unlockable counterTable3;
+        public Unlockable officeHR;
+
+        public void GenerateUnlockablesList()
+        {
+            unlockables = new List<Unlockable>
+            {
+                materialParent,
+                counterTable1,
+                counterTable2,
+                materialParent,
+                counterTable1,
+                officeHR,
+                counterTable2,
+                materialParent,
+                counterTable3,
+                materialParent,
+                counterTable1,
+                materialParent,
+                counterTable3,
+                materialParent,
+                counterTable2,
+                counterTable3
+            };
+        }
     }
 
     public class UnlockManager :MonoBehaviour
@@ -69,7 +93,11 @@ namespace CryingSnow.FastFoodRush
                 return;
             }
             instance = this;
-            // DontDestroyOnLoad(this.gameObject); // Uncomment if needed.
+
+            foreach (var group in materialUnlockables)
+            {
+                group.GenerateUnlockablesList();
+            }
         }
 
         /// <summary>

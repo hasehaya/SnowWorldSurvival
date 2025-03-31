@@ -2,6 +2,13 @@ using GoogleMobileAds.Api;
 
 using UnityEngine;
 
+public enum RewardType
+{
+    None,
+    Money,
+    Speed,
+}
+
 public class AdMobReward :MonoBehaviour
 {
     private static AdMobReward instance;
@@ -21,9 +28,11 @@ public class AdMobReward :MonoBehaviour
     //2.GetReward関数に報酬内容を入力
     //3.リワード起動設定　ShowAdMobReward()を使う
 
+
     private RewardedAd rewardedAd;//RewardedAd型の変数 rewardedAdを宣言 この中にリワード広告の情報が入る
 
     private string adUnitId;
+    private RewardType rewardType;
 
     private void Start()
     {
@@ -48,12 +57,12 @@ public class AdMobReward :MonoBehaviour
 
     //リワード広告を表示する関数
     //ボタンに割付けして使用
-    public void ShowAdMobReward()
+    public void ShowAdMobReward(RewardType rewardType)
     {
         //変数rewardedAdの中身が存在しており、広告の読み込みが完了していたら広告表示
         if (rewardedAd != null && rewardedAd.CanShowAd() == true)
         {
-            //リワード広告 表示を実施　報酬の受け取りの関数GetRewardを引数に設定
+            this.rewardType = rewardType;
             rewardedAd.Show(GetReward);
         }
         else
@@ -66,10 +75,19 @@ public class AdMobReward :MonoBehaviour
     //報酬受け取り処理
     private void GetReward(Reward reward)
     {
-        //報酬受け取り
         Debug.Log("GetReward");
-
-        //ここに報酬の処理を書く
+        switch (rewardType)
+        {
+        case RewardType.Money:
+            //お金を増やす処理
+            break;
+        case RewardType.Speed:
+            //スピードを上げる処理
+            break;
+        case RewardType.None:
+        default:
+            break;
+        }
     }
 
 

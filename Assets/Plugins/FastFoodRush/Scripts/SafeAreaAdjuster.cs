@@ -12,11 +12,6 @@ public class SafeAreaAdjuster :MonoBehaviour
         ApplySafeArea(Screen.safeArea);
     }
 
-    private void OnEnable()
-    {
-        ApplySafeArea(Screen.safeArea);
-    }
-
     private void Update()
     {
         // safeArea‚ª•Ï‚í‚Á‚½‚Æ‚«‚Ì‚İXV

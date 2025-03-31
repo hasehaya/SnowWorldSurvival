@@ -9,13 +9,20 @@ namespace CryingSnow.FastFoodRush
     /// </summary>
     public class AdObject :Interactable
     {
-        [SerializeField, Tooltip("ポップアップ表示までの待機時間（秒）")]
-        private float timeToPopup = 3f;
-
         [SerializeField, Tooltip("表示する広告ポップアップの GameObject")]
         private GameObject adPopup;
 
+        [SerializeField]
+        private RewardType rewardType = RewardType.None;
+
+        private float timeToPopup = 1.5f;
         private Coroutine adCoroutine;
+
+        private void Start()
+        {
+            CloseAdPopup();
+            Debug.Assert(rewardType != RewardType.None);
+        }
 
         /// <summary>
         /// プレイヤーがエリアに入ったとき、一定時間後にポップアップ表示を開始する
@@ -63,6 +70,19 @@ namespace CryingSnow.FastFoodRush
             {
                 Debug.LogWarning("Ad Popup がアタッチされていません。");
             }
+        }
+
+        public void CloseAdPopup()
+        {
+            if (adPopup != null)
+            {
+                adPopup.SetActive(false);
+            }
+        }
+
+        public void ShowAd()
+        {
+            AdMobReward.Instance.ShowAdMobReward(rewardType);
         }
     }
 }

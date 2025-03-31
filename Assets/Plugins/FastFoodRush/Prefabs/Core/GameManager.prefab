@@ -2552,7 +2552,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
@@ -8752,7 +8752,7 @@ GameObject:
   - component: {fileID: 7729046860535983763}
   - component: {fileID: 9131759546673685070}
   m_Layer: 0
-  m_Name: RestaurantManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8773,7 +8773,6 @@ Transform:
   m_Children:
   - {fileID: 7729046859016581992}
   - {fileID: 7729046858973787656}
-  - {fileID: 7729046860671016937}
   - {fileID: 6169282341735335671}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8796,7 +8795,6 @@ MonoBehaviour:
   moneyDisplay: {fileID: 7729046859608459910}
   screenFader: {fileID: 7729046859549210515}
   backgroundMusic: {fileID: 8300000, guid: 9225883b1d90caf429276c8acb933e7b, type: 3}
-  cameraController: {fileID: 0}
 --- !u!1 &7729046860557835250
 GameObject:
   m_ObjectHideFlags: 0
@@ -8864,37 +8862,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1 &7729046860671016942
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7729046860671016937}
-  m_Layer: 0
-  m_Name: EmployeePoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7729046860671016937
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7729046860671016942}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 9, y: 0, z: 22}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7729046860535983763}
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &7729046860682963594
 GameObject:
   m_ObjectHideFlags: 0

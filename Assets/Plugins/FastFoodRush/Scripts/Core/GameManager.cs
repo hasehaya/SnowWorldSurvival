@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 using DG.Tweening;
@@ -41,25 +40,9 @@ namespace CryingSnow.FastFoodRush
         [SerializeField, Tooltip("Background music to play in the restaurant.")]
         private AudioClip backgroundMusic;
 
-        [Header("Other References")]
-        [SerializeField]
-        private CameraController cameraController;
-
-        #region Reference Properties
-
         public float ElapsedTime => data?.ElapsedTime ?? 0f;
 
         public Canvas Canvas => canvas;
-
-        public List<ObjectPile> TrashPiles { get; private set; } = new List<ObjectPile>();
-        public TrashBin TrashBin { get; private set; }
-
-        public List<ObjectPile> FoodPiles { get; private set; } = new List<ObjectPile>();
-        public List<ObjectStack> FoodStacks { get; private set; } = new List<ObjectStack>();
-
-        public ObjectPile PackagePile { get; private set; }
-        public ObjectStack PackageStack { get; private set; }
-        #endregion
 
         public event Action OnUpgrade;
 
@@ -90,29 +73,6 @@ namespace CryingSnow.FastFoodRush
 
             // シーン開始時のフェードアウト処理
             screenFader.FadeOut();
-
-            // シーン内の ObjectPile を検索して分類
-            var objectPiles = FindObjectsOfType<ObjectPile>(true);
-            foreach (var pile in objectPiles)
-            {
-                if (pile.MaterialType == MaterialType.Log)
-                    TrashPiles.Add(pile);
-                else if (pile.MaterialType == MaterialType.Rock)
-                    FoodPiles.Add(pile);
-            }
-
-            // TrashBin の検索
-            TrashBin = FindObjectOfType<TrashBin>(true);
-
-            // シーン内の ObjectStack を検索して分類
-            var objectStacks = FindObjectsOfType<ObjectStack>(true);
-            foreach (var stack in objectStacks)
-            {
-                if (stack.MaterialType == MaterialType.Log)
-                    FoodStacks.Add(stack);
-                else if (stack.MaterialType == MaterialType.Rock)
-                    PackageStack = stack;
-            }
 
             // UnlockManager の初期化（セーブデータとレストランIDを渡す）
             UnlockManager.Instance.InitializeUnlockManager(data, restaurantID);
