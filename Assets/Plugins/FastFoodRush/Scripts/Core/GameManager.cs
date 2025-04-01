@@ -112,7 +112,7 @@ public class GameManager :MonoBehaviour
                 continue;
 
             // レイアウト用に固定の列数を指定
-            int numberOfColumns = 4;
+            int numberOfColumns = 5;
             for (int i = currentCount; i < employeeAmount; i++)
             {
                 int columnIndex = i % numberOfColumns;

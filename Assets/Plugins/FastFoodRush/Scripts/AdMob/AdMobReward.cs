@@ -7,6 +7,7 @@ public enum RewardType
     None,
     Money,
     Speed,
+    Amount,
 }
 
 public class AdMobReward :MonoBehaviour
@@ -78,15 +79,15 @@ public class AdMobReward :MonoBehaviour
         Debug.Log("GetReward");
         switch (rewardType)
         {
-        case RewardType.Money:
-            //お金を増やす処理
-            break;
-        case RewardType.Speed:
-            //スピードを上げる処理
-            break;
-        case RewardType.None:
-        default:
-            break;
+            case RewardType.Money:
+                //お金を増やす処理
+                break;
+            case RewardType.Speed:
+                //スピードを上げる処理
+                break;
+            case RewardType.None:
+            default:
+                break;
         }
     }
 

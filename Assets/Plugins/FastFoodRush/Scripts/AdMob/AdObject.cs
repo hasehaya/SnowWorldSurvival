@@ -1,18 +1,33 @@
+using System;
 using System.Collections;
 
 using UnityEngine;
 
+public enum RewardEffect
+{
+    None,
+    Once,
+    TreeMinutes,
+}
 
 /// <summary>
 /// プレイヤーが一定時間エリア内にいると広告視聴のポップアップを表示するクラス
 /// </summary>
 public class AdObject :Interactable
 {
+    public Action<AdObject> OnShowAd;
+
     [SerializeField, Tooltip("表示する広告ポップアップの GameObject")]
     private GameObject adPopup;
 
     [SerializeField]
     private RewardType rewardType = RewardType.None;
+    public RewardType RewardType => rewardType;
+
+    [SerializeField]
+    private RewardEffect rewardEffect = RewardEffect.None;
+    public RewardEffect RewardEffect => rewardEffect;
+
 
     private float timeToPopup = 1.5f;
     private Coroutine adCoroutine;
@@ -21,6 +36,7 @@ public class AdObject :Interactable
     {
         CloseAdPopup();
         Debug.Assert(rewardType != RewardType.None);
+        Debug.Assert(rewardEffect != RewardEffect.None);
     }
 
     /// <summary>
@@ -81,6 +97,8 @@ public class AdObject :Interactable
 
     public void ShowAd()
     {
+        OnShowAd?.Invoke(this);
+
         AdMobReward.Instance.ShowAdMobReward(rewardType);
     }
 }
