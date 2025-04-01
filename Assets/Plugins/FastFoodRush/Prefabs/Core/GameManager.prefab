@@ -2128,7 +2128,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 6670159763872033666}
         m_TargetAssemblyTypeName: DebugManager, Assembly-CSharp-firstpass
-        m_MethodName: ToggleAd
+        m_MethodName: RemoveAd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
