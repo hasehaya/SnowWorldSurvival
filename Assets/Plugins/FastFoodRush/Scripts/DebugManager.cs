@@ -1,5 +1,3 @@
-using CryingSnow.FastFoodRush;
-
 using TMPro;
 
 using UnityEngine;

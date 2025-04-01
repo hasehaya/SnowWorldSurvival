@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 
-using CryingSnow.FastFoodRush;
-
 using UnityEngine;
 
 public class AdObjectManager :MonoBehaviour

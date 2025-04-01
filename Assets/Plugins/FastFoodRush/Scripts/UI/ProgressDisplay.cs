@@ -2,49 +2,47 @@ using TMPro;
 
 using UnityEngine;
 
-namespace CryingSnow.FastFoodRush
+
+public class ProgressDisplay :MonoBehaviour
 {
-    public class ProgressDisplay :MonoBehaviour
+    [SerializeField, Tooltip("Gradient used to visually represent progress from start to completion.")]
+    private Gradient progressGradient;
+
+    private SlicedFilledImage progressFill;
+    private TMP_Text progressText;
+
+    void Awake()
     {
-        [SerializeField, Tooltip("Gradient used to visually represent progress from start to completion.")]
-        private Gradient progressGradient;
+        // Initializes references to child components for progress display.
+        progressFill = GetComponentInChildren<SlicedFilledImage>();
+        progressText = GetComponentInChildren<TMP_Text>();
+    }
 
-        private SlicedFilledImage progressFill;
-        private TMP_Text progressText;
+    void Start()
+    {
+        // Subscribes to the RestaurantManager's OnUnlock event when enabled.
+        UnlockManager.Instance.OnUnlock += UpdateProgress;
+    }
 
-        void Awake()
-        {
-            // Initializes references to child components for progress display.
-            progressFill = GetComponentInChildren<SlicedFilledImage>();
-            progressText = GetComponentInChildren<TMP_Text>();
-        }
+    void OnDisable()
+    {
+        // Unsubscribes from the RestaurantManager's OnUnlock event when disabled.
+        UnlockManager.Instance.OnUnlock -= UpdateProgress;
+    }
 
-        void Start()
-        {
-            // Subscribes to the RestaurantManager's OnUnlock event when enabled.
-            UnlockManager.Instance.OnUnlock += UpdateProgress;
-        }
+    /// <summary>
+    /// Updates the visual representation of the progress bar and text.
+    /// </summary>
+    /// <param name="progress">A float value representing the current progress (0 to 1).</param>
+    void UpdateProgress(float progress)
+    {
+        // Update fill color based on gradient evaluation
+        progressFill.color = progressGradient.Evaluate(progress);
 
-        void OnDisable()
-        {
-            // Unsubscribes from the RestaurantManager's OnUnlock event when disabled.
-            UnlockManager.Instance.OnUnlock -= UpdateProgress;
-        }
+        // Update fill amount of the progress bar
+        progressFill.fillAmount = progress;
 
-        /// <summary>
-        /// Updates the visual representation of the progress bar and text.
-        /// </summary>
-        /// <param name="progress">A float value representing the current progress (0 to 1).</param>
-        void UpdateProgress(float progress)
-        {
-            // Update fill color based on gradient evaluation
-            progressFill.color = progressGradient.Evaluate(progress);
-
-            // Update fill amount of the progress bar
-            progressFill.fillAmount = progress;
-
-            // Update progress text with percentage format
-            progressText.text = $"PROGRESS {progress * 100:0.##}%";
-        }
+        // Update progress text with percentage format
+        progressText.text = $"PROGRESS {progress * 100:0.##}%";
     }
 }

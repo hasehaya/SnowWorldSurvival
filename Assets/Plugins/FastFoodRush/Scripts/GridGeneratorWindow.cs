@@ -4,8 +4,6 @@ using UnityEditor;
 #endif
 using UnityEngine;
 
-using CryingSnow.FastFoodRush;
-
 #if UNITY_EDITOR
 public class GridGenerator :MonoBehaviour
 {
@@ -49,7 +47,7 @@ public class GridGenerator :MonoBehaviour
                 if (sourcePrefab != null)
                 {
                     clone = (GameObject)PrefabUtility.InstantiatePrefab(sourcePrefab, parent.transform);
-                    var tree = clone.GetComponent<CryingSnow.FastFoodRush.MaterialProducer>();
+                    var tree = clone.GetComponent<MaterialProducer>();
                     if (tree != null)
                     {
                         tree.Row = row + 1;
