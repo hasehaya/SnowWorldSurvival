@@ -51,8 +51,8 @@ public class MaterialParent :Unlockable
             obj.SetActive(false);
         }
 
-        // unlockLevel に応じた素材数をアクティブ化（例：1列につき4個）
-        int materialCount = 4 * unlockLevel;
+        // unlockLevel に応じた素材数をアクティブ化（例：1列につき5個）
+        int materialCount = 5 * unlockLevel;
         for (int i = 0; i < materialCount && i < materialObjects.Count; i++)
         {
             materialObjects[i].SetActive(true);
