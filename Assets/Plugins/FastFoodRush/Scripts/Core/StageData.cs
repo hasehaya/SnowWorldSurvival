@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 
 [Serializable]
-public class SaveData
+public class StageData
 {
-    public string RestaurantID { get; set; }
+    public string StageID { get; set; }
     public long Money { get; set; }
     public List<Upgrade> UpgradeList { get; set; }
     public int PlayerSpeed { get; set; }
@@ -14,6 +14,8 @@ public class SaveData
 
     public float ElapsedTime { get; set; }
 
+    public bool IsAdRemoved { get; set; }
+
     // Dictionaries to track the number of unlockables purchased and the paid amount for each material.
     public Dictionary<MaterialType, int> UnlockCounts { get; set; }
     public Dictionary<MaterialType, int> PaidAmounts { get; set; }
@@ -21,9 +23,9 @@ public class SaveData
     // For each material (except None), tracks whether that group's unlockables have been opened.
     public Dictionary<MaterialType, bool> MaterialUnlocked { get; set; }
 
-    public SaveData(string restaurantID, long money)
+    public StageData(string StageID, long money)
     {
-        RestaurantID = restaurantID;
+        this.StageID = StageID;
         Money = money;
         PlayerSpeed = 1;
         PlayerCapacity = 1;

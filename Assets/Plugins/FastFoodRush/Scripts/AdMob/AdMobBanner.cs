@@ -12,6 +12,11 @@ public class AdMobBanner :MonoBehaviour
 
     private void Start()
     {
+        // 広告削除済みならリクエストしない
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
+        }
         RequestBanner();
     }
 
@@ -43,6 +48,11 @@ public class AdMobBanner :MonoBehaviour
         if (bannerView != null)
         {
             bannerView.Destroy();
+        }
+
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
         }
 
         AdSize adaptiveSize = AdSize.GetCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(AdSize.FullWidth);

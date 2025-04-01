@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[ExecuteAlways]
 public class SafeAreaAdjuster :MonoBehaviour
 {
     private RectTransform panel;

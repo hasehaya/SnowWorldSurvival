@@ -27,6 +27,11 @@ public class AdMobRewardInterstitial :MonoBehaviour
 
     private void Start()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
+        }
+
         //AndroidとiOSで広告IDが違うのでプラットフォームで処理を分けます。
         // 参考
         //【Unity】AndroidとiOSで処理を分ける方法
@@ -44,6 +49,15 @@ public class AdMobRewardInterstitial :MonoBehaviour
         Debug.Log("Rewarded ad load start");
 
         LoadRewardedAd();//リワード広告読み込み
+    }
+
+    public void DestroyAd()
+    {
+        if (rewardedInterstitialAd != null)
+        {
+            rewardedInterstitialAd.Destroy();
+            rewardedInterstitialAd = null;
+        }
     }
 
     //リワード広告を表示する関数
@@ -72,10 +86,14 @@ public class AdMobRewardInterstitial :MonoBehaviour
         //ここに報酬の処理を書く
     }
 
-
     //リワード広告を読み込む関数 再読み込みにも使用
     public void LoadRewardedAd()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
+        }
+
         //広告の再読み込みのための処理
         //rewardedAdの中身が入っていた場合処理
         if (rewardedInterstitialAd != null)

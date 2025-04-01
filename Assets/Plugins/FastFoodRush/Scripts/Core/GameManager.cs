@@ -39,14 +39,16 @@ public class GameManager :MonoBehaviour
     [SerializeField, Tooltip("Background music to play in the restaurant.")]
     private AudioClip backgroundMusic;
 
-    public float ElapsedTime => data?.ElapsedTime ?? 0f;
+    public float ElapsedTime => stageData?.ElapsedTime ?? 0f;
 
     public Canvas Canvas => canvas;
 
     public event Action OnUpgrade;
 
-    private SaveData data;
-    private string restaurantID;
+    private StageData stageData;
+    private string stageID;
+    private GlobalData globalData;
+    private string globalDataID = "GlobalData";
 
     void Awake()
     {
@@ -54,12 +56,16 @@ public class GameManager :MonoBehaviour
         Instance = this;
 
         // 現在のシーン名をレストランIDとして利用
-        restaurantID = SceneManager.GetActiveScene().name;
+        stageID = SceneManager.GetActiveScene().name;
 
         // セーブデータのロード（存在しない場合は初期状態で作成）
-        data = SaveSystem.LoadData<SaveData>(restaurantID);
-        if (data == null)
-            data = new SaveData(restaurantID, startingMoney);
+        stageData = SaveSystem.LoadData<StageData>(stageID);
+        if (stageData == null)
+            stageData = new StageData(stageID, startingMoney);
+
+        globalData = SaveSystem.LoadData<GlobalData>(globalDataID);
+        if (globalData == null)
+            globalData = new GlobalData();
 
         // UI表示のための初期通貨設定
         AdjustMoney(0);
@@ -74,7 +80,7 @@ public class GameManager :MonoBehaviour
         screenFader.FadeOut();
 
         // UnlockManager の初期化（セーブデータとレストランIDを渡す）
-        UnlockManager.Instance.InitializeUnlockManager(data, restaurantID);
+        UnlockManager.Instance.InitializeUnlockManager(stageData, stageID);
 
         // 従業員のスポーン処理
         SpawnEmployee();
@@ -106,7 +112,7 @@ public class GameManager :MonoBehaviour
             int currentCount = FindObjectsOfType<EmployeeController>()
                                 .Count(e => e.MaterialType == materialType);
             // セーブデータから従業員数のアップグレードレベルを取得
-            int employeeAmount = data.FindUpgrade(Upgrade.UpgradeType.EmployeeAmount, materialType).Level;
+            int employeeAmount = stageData.FindUpgrade(Upgrade.UpgradeType.EmployeeAmount, materialType).Level;
             int toSpawn = employeeAmount - currentCount;
             if (toSpawn <= 0)
                 continue;
@@ -147,9 +153,9 @@ public class GameManager :MonoBehaviour
 
     void Update()
     {
-        if (data != null)
+        if (stageData != null)
         {
-            data.ElapsedTime += Time.unscaledDeltaTime;
+            stageData.ElapsedTime += Time.unscaledDeltaTime;
         }
     }
 
@@ -165,11 +171,11 @@ public class GameManager :MonoBehaviour
 
     public void AdjustMoney(int change)
     {
-        data.Money += change;
-        moneyDisplay.text = GetFormattedMoney(data.Money);
+        stageData.Money += change;
+        moneyDisplay.text = GetFormattedMoney(stageData.Money);
     }
 
-    public long GetMoney() => data.Money;
+    public long GetMoney() => stageData.Money;
 
     public string GetFormattedMoney(long money)
     {
@@ -190,14 +196,14 @@ public class GameManager :MonoBehaviour
         int price = GetUpgradePrice(upgradeType, materialType);
         AdjustMoney(-price);
 
-        data.UpgradeUpgrade(upgradeType, materialType);
+        stageData.UpgradeUpgrade(upgradeType, materialType);
         if (upgradeType == Upgrade.UpgradeType.EmployeeAmount)
         {
             SpawnEmployee();
         }
 
         AudioManager.Instance.PlaySFX(AudioID.Kaching);
-        SaveSystem.SaveData<SaveData>(data, restaurantID);
+        SaveSystem.SaveData<StageData>(stageData, stageID);
         OnUpgrade?.Invoke();
     }
 
@@ -211,7 +217,7 @@ public class GameManager :MonoBehaviour
 
     public int GetUpgradeLevel(Upgrade.UpgradeType upgradeType, MaterialType materialType)
     {
-        return data.FindUpgrade(upgradeType, materialType).Level;
+        return stageData.FindUpgrade(upgradeType, materialType).Level;
     }
 
     public void LoadRestaurant(int index)
@@ -222,15 +228,62 @@ public class GameManager :MonoBehaviour
 
         screenFader.FadeIn(() =>
         {
-            SaveSystem.SaveData<SaveData>(data, restaurantID);
+            SaveSystem.SaveData<StageData>(stageData, stageID);
             SceneManager.LoadScene(index);
         });
     }
 
+    public void PurchaseRemoveAd()
+    {
+        globalData.IsAdRemoved = true;
+        SaveSystem.SaveData(globalData, globalDataID);
+
+        AdMobBanner banner = FindObjectOfType<AdMobBanner>();
+        if (banner != null)
+        {
+            banner.BannerDestroy();
+        }
+
+        AdMobInterstitial inter = FindObjectOfType<AdMobInterstitial>();
+        if (inter != null)
+        {
+            inter.DestroyAd();
+        }
+
+        AdMobReward reward = FindObjectOfType<AdMobReward>();
+        if (reward != null)
+        {
+            reward.DestroyAd();
+        }
+
+        AdMobRewardInterstitial rewardInter = FindObjectOfType<AdMobRewardInterstitial>();
+        if (rewardInter != null)
+        {
+            rewardInter.DestroyAd();
+        }
+
+        AdMobOpen adMobOpen = FindObjectOfType<AdMobOpen>();
+        if (adMobOpen != null)
+        {
+            adMobOpen.DestroyAd();
+        }
+    }
+
+    public bool IsAdRemoved() => globalData.IsAdRemoved;
+
     void OnApplicationPause(bool pauseStatus)
     {
         if (pauseStatus)
-            SaveSystem.SaveData<SaveData>(data, restaurantID);
+        {
+            SaveSystem.SaveData<StageData>(stageData, stageID);
+            SaveSystem.SaveData(globalData, globalDataID);
+        }
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveSystem.SaveData<StageData>(stageData, stageID);
+        SaveSystem.SaveData(globalData, globalDataID);
     }
 
     void OnDisable()

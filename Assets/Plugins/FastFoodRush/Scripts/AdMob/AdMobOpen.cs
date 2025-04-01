@@ -41,6 +41,12 @@ public class AdMobOpen :MonoBehaviour
 
     private void Start()
     {
+        // 広告削除済みならリクエストしない
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
+        }
+
         // 広告SDKを初期化
         MobileAds.Initialize(initStatus =>
         {
@@ -71,6 +77,15 @@ public class AdMobOpen :MonoBehaviour
         }
     }
 
+    public void DestroyAd()
+    {
+        if (appOpenAd != null)
+        {
+            appOpenAd.Destroy();
+            appOpenAd = null;
+        }
+    }
+
     /// <summary>
     /// オープン広告の読み込み
     /// </summary>
@@ -89,6 +104,11 @@ public class AdMobOpen :MonoBehaviour
             UnregisterEventHandlers(appOpenAd);
             appOpenAd.Destroy();
             appOpenAd = null;
+        }
+
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
         }
 
         Debug.Log("Loading the app open ad...");

@@ -35,8 +35,10 @@ public class DebugManager :MonoBehaviour
     public void ClearData()
     {
         saveFileName = SceneManager.GetActiveScene().name;
+
         // セーブデータを削除
         SaveSystem.DeleteData(saveFileName);
+        SaveSystem.DeleteData("GlobalData");
         // 現在のシーンをリロード
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
@@ -65,8 +67,8 @@ public class DebugManager :MonoBehaviour
         GameManager.Instance.AdjustMoney(20000);
     }
 
-    public void ToggleAd()
+    public void RemoveAd()
     {
-
+        GameManager.Instance.PurchaseRemoveAd();
     }
 }

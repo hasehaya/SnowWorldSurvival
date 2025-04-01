@@ -80,7 +80,7 @@ public class UnlockManager :MonoBehaviour
     public event Action<float> OnUnlock;
 
     // SaveData とレストランID の保持
-    private SaveData data;
+    private StageData data;
     private string restaurantID;
 
     // Awake でシングルトンを設定
@@ -102,7 +102,7 @@ public class UnlockManager :MonoBehaviour
     /// <summary>
     /// UnlockManager の初期化。GameManager から SaveData とレストランID を渡します。
     /// </summary>
-    public void InitializeUnlockManager(SaveData saveData, string restaurantID)
+    public void InitializeUnlockManager(StageData saveData, string restaurantID)
     {
         this.data = saveData;
         this.restaurantID = restaurantID;
@@ -177,7 +177,7 @@ public class UnlockManager :MonoBehaviour
             data.UnlockCounts[material] = 1;
         data.PaidAmounts[material] = 0;
 
-        SaveSystem.SaveData<SaveData>(data, restaurantID);
+        SaveSystem.SaveData<StageData>(data, restaurantID);
 
         // 前のグループの進捗が50%以上の場合、次のグループを順次解放
         TryUnlockNextGroups();

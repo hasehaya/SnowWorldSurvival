@@ -27,6 +27,12 @@ public class AdMobInterstitial :MonoBehaviour
 
     private void Start()
     {
+        // 広告削除済みならリクエストしない
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
+        }
+
         //AndroidとiOSで広告IDが違うのでプラットフォームで処理を分けます。
         // 参考
         //【Unity】AndroidとiOSで処理を分ける方法
@@ -43,6 +49,15 @@ public class AdMobInterstitial :MonoBehaviour
         //インタースティシャル 読み込み開始
         Debug.Log("Interstitial ad load start");
         LoadInterstitialAd();
+    }
+
+    public void DestroyAd()
+    {
+        if (interstitialAd != null)
+        {
+            interstitialAd.Destroy();
+            interstitialAd = null;
+        }
     }
 
     //インタースティシャル広告を表示する関数
@@ -73,6 +88,11 @@ public class AdMobInterstitial :MonoBehaviour
             //インタースティシャル広告は使い捨てなので一旦破棄
             interstitialAd.Destroy();
             interstitialAd = null;
+        }
+
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
         }
 
         //リクエストを生成

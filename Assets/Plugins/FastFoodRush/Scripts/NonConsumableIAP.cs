@@ -51,23 +51,62 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
         }
     }
 
-    public void RestorePurchases()
+    /// <summary>
+    /// iOS用の復元処理（ユーザー操作で呼び出してください）
+    /// </summary>
+    public void RestorePurchasesForIOS()
     {
+#if UNITY_IOS
         if (!IsInitialized())
         {
             Debug.Log("IAPが初期化されていません。");
             return;
         }
-
-#if UNITY_IOS
         Debug.Log("iOS用レシート復元処理を開始します。");
         var apple = extensionProvider.GetExtension<IAppleExtensions>();
-        apple.RestoreTransactions(result => {
+        apple.RestoreTransactions(result =>
+        {
             Debug.Log("レシート復元の結果: " + result);
+            if(result)
+            {
+                CheckForPurchase();
+            }
         });
-#elif UNITY_ANDROID
-        Debug.Log("Androidではレシート復元は不要です。");
+#else
+        Debug.Log("この機能はiOSのみ有効です。");
 #endif
+    }
+
+    /// <summary>
+    /// Androidの場合、初期化完了時に自動的に購入状態をチェックします。
+    /// </summary>
+    private void AutoRestoreForAndroid()
+    {
+#if UNITY_ANDROID
+        if (!IsInitialized())
+        {
+            Debug.Log("IAPが初期化されていません。");
+            return;
+        }
+        Debug.Log("Android用自動購入状態確認を開始します。");
+        CheckForPurchase();
+#endif
+    }
+
+    /// <summary>
+    /// 購入済みかどうかを各商品からチェックして、既購入なら機能解放処理を実行
+    /// </summary>
+    private void CheckForPurchase()
+    {
+        foreach (var product in storeController.products.all)
+        {
+            if (product.definition.id == nonConsumableProductId && product.hasReceipt)
+            {
+                Debug.Log("既に購入済みの商品が見つかりました: " + product.definition.id);
+                GameManager.Instance.PurchaseRemoveAd();
+                break;
+            }
+        }
     }
 
     // IDetailedStoreListener の実装
@@ -77,6 +116,11 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
         Debug.Log("IAPの初期化に成功しました。");
         storeController = controller;
         extensionProvider = extensions;
+
+        // Androidの場合は初期化完了時に自動的に購入状態をチェック
+#if UNITY_ANDROID
+        AutoRestoreForAndroid();
+#endif
     }
 
     public void OnInitializeFailed(InitializationFailureReason error)
@@ -94,7 +138,7 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
         if (string.Equals(args.purchasedProduct.definition.id, nonConsumableProductId, StringComparison.Ordinal))
         {
             Debug.Log("非消費型商品の購入に成功しました: " + args.purchasedProduct.definition.id);
-            // ユーザーの機能解放などの処理を行う
+            GameManager.Instance.PurchaseRemoveAd();
             return PurchaseProcessingResult.Complete;
         }
         else

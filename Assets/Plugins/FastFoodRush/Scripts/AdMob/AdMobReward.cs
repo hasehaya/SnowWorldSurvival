@@ -37,6 +37,12 @@ public class AdMobReward :MonoBehaviour
 
     private void Start()
     {
+        // 広告削除済みならリクエストしない
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
+        }
+
         //AndroidとiOSで広告IDが違うのでプラットフォームで処理を分けます。
         // 参考
         //【Unity】AndroidとiOSで処理を分ける方法
@@ -54,6 +60,15 @@ public class AdMobReward :MonoBehaviour
         Debug.Log("Rewarded ad load start");
 
         LoadRewardedAd();//リワード広告読み込み
+    }
+
+    public void DestroyAd()
+    {
+        if (rewardedAd != null)
+        {
+            rewardedAd.Destroy();
+            rewardedAd = null;
+        }
     }
 
     //リワード広告を表示する関数
@@ -102,6 +117,11 @@ public class AdMobReward :MonoBehaviour
             //リワード広告は使い捨てなので一旦破棄
             rewardedAd.Destroy();
             rewardedAd = null;
+        }
+
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            return;
         }
 
         //リクエストを生成
