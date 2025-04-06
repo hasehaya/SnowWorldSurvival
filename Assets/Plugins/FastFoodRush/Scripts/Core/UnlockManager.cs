@@ -4,46 +4,6 @@ using System.Linq;
 
 using UnityEngine;
 
-
-[Serializable]
-public class MaterialUnlockables
-{
-    public MaterialType material;
-    public int baseUnlockPrice = 75;
-    public float unlockGrowthFactor = 1.1f;
-
-    [HideInInspector]
-    public List<Unlockable> unlockables;
-    public Unlockable materialParent;
-    public Unlockable counterTable1;
-    public Unlockable counterTable2;
-    public Unlockable counterTable3;
-    public Unlockable officeHR;
-
-    public void GenerateUnlockablesList()
-    {
-        unlockables = new List<Unlockable>
-            {
-                materialParent,
-                counterTable1,
-                counterTable2,
-                materialParent,
-                counterTable1,
-                officeHR,
-                counterTable2,
-                materialParent,
-                counterTable3,
-                materialParent,
-                counterTable1,
-                materialParent,
-                counterTable3,
-                materialParent,
-                counterTable2,
-                counterTable3
-            };
-    }
-}
-
 public class UnlockManager :MonoBehaviour
 {
     // シングルトンインスタンス
@@ -68,7 +28,7 @@ public class UnlockManager :MonoBehaviour
     private Dictionary<MaterialType, UnlockableBuyer> activeBuyerInstances = new Dictionary<MaterialType, UnlockableBuyer>();
 
     [SerializeField, Tooltip("List of unlockable groups by MaterialType (None is excluded).")]
-    private List<MaterialUnlockables> materialUnlockables;
+    private List<MaterialObjectParent> materialUnlockables;
 
     [SerializeField, Tooltip("Particle effect to play when unlocking something.")]
     private ParticleSystem unlockParticle;
@@ -92,11 +52,6 @@ public class UnlockManager :MonoBehaviour
             return;
         }
         instance = this;
-
-        foreach (var group in materialUnlockables)
-        {
-            group.GenerateUnlockablesList();
-        }
     }
 
     /// <summary>
@@ -110,12 +65,12 @@ public class UnlockManager :MonoBehaviour
         // 各グループについて、既に解放済みなら購入済みの Unlockable を反映
         foreach (var group in materialUnlockables)
         {
-            if (!data.MaterialUnlocked.ContainsKey(group.material))
+            if (!data.MaterialUnlocked.ContainsKey(group.materialType))
                 continue;
 
-            if (data.MaterialUnlocked[group.material])
+            if (data.MaterialUnlocked[group.materialType])
             {
-                int count = data.UnlockCounts.ContainsKey(group.material) ? data.UnlockCounts[group.material] : 0;
+                int count = data.UnlockCounts.ContainsKey(group.materialType) ? data.UnlockCounts[group.materialType] : 0;
                 for (int i = 0; i < count && i < group.unlockables.Count; i++)
                 {
                     group.unlockables[i].Unlock(false);
@@ -135,7 +90,7 @@ public class UnlockManager :MonoBehaviour
     public void BuyUnlockable(MaterialType material)
     {
         // 対象グループを取得
-        var group = materialUnlockables.FirstOrDefault(g => g.material == material);
+        var group = materialUnlockables.FirstOrDefault(g => g.materialType == material);
         if (group == null)
         {
             Debug.LogWarning("Group for material " + material + " not found.");
@@ -199,28 +154,28 @@ public class UnlockManager :MonoBehaviour
         foreach (var group in materialUnlockables)
         {
             // 解放されていなければスキップ
-            if (!data.MaterialUnlocked.ContainsKey(group.material) || !data.MaterialUnlocked[group.material])
+            if (!data.MaterialUnlocked.ContainsKey(group.materialType) || !data.MaterialUnlocked[group.materialType])
                 continue;
 
-            int count = data.UnlockCounts.ContainsKey(group.material) ? data.UnlockCounts[group.material] : 0;
+            int count = data.UnlockCounts.ContainsKey(group.materialType) ? data.UnlockCounts[group.materialType] : 0;
 
             // グループが全て購入済みの場合、既存の UI があれば非表示にする
             if (count >= group.unlockables.Count)
             {
-                if (activeBuyerInstances.ContainsKey(group.material))
+                if (activeBuyerInstances.ContainsKey(group.materialType))
                 {
-                    activeBuyerInstances[group.material].gameObject.SetActive(false);
+                    activeBuyerInstances[group.materialType].gameObject.SetActive(false);
                 }
                 continue;
             }
 
             // 未生成ならPrefabから生成
-            if (!activeBuyerInstances.ContainsKey(group.material) || activeBuyerInstances[group.material] == null)
+            if (!activeBuyerInstances.ContainsKey(group.materialType) || activeBuyerInstances[group.materialType] == null)
             {
                 if (unlockableBuyerPrefab != null)
                 {
                     var buyerInstance = Instantiate(unlockableBuyerPrefab);
-                    activeBuyerInstances[group.material] = buyerInstance;
+                    activeBuyerInstances[group.materialType] = buyerInstance;
                 }
                 else
                 {
@@ -230,15 +185,15 @@ public class UnlockManager :MonoBehaviour
             }
 
             // 対象グループの次に購入可能な Unlockable の情報を取得
-            var buyerUI = activeBuyerInstances[group.material];
+            var buyerUI = activeBuyerInstances[group.materialType];
             var nextUnlockable = group.unlockables[count];
             // Calculate price using the group's own baseUnlockPrice and unlockGrowthFactor.
             int price = Mathf.RoundToInt(Mathf.Round(group.baseUnlockPrice * Mathf.Pow(group.unlockGrowthFactor, count)) / 5f) * 5;
-            int paid = data.PaidAmounts.ContainsKey(group.material) ? data.PaidAmounts[group.material] : 0;
+            int paid = data.PaidAmounts.ContainsKey(group.materialType) ? data.PaidAmounts[group.materialType] : 0;
 
             // Update the buyer UI position and initialize it with the associated MaterialType.
             buyerUI.transform.position = nextUnlockable.GetBuyingPoint();
-            buyerUI.Initialize(nextUnlockable, price, paid, group.material);
+            buyerUI.Initialize(nextUnlockable, price, paid, group.materialType);
             buyerUI.gameObject.SetActive(true);
         }
         // 全体の進捗を通知
@@ -261,7 +216,7 @@ public class UnlockManager :MonoBehaviour
             if (data.MaterialUnlocked.ContainsKey(curr) && data.MaterialUnlocked[curr])
                 continue; // すでに解放済みならスキップ
 
-            var prevGroup = materialUnlockables.FirstOrDefault(g => g.material == prev);
+            var prevGroup = materialUnlockables.FirstOrDefault(g => g.materialType == prev);
             if (prevGroup == null || prevGroup.unlockables.Count == 0)
                 continue;
             int prevCount = data.UnlockCounts.ContainsKey(prev) ? data.UnlockCounts[prev] : 0;
@@ -298,10 +253,10 @@ public class UnlockManager :MonoBehaviour
         int groupCount = 0;
         foreach (var group in materialUnlockables)
         {
-            if (!data.MaterialUnlocked.ContainsKey(group.material) || !data.MaterialUnlocked[group.material])
+            if (!data.MaterialUnlocked.ContainsKey(group.materialType) || !data.MaterialUnlocked[group.materialType])
                 continue;
             groupCount++;
-            int count = data.UnlockCounts.ContainsKey(group.material) ? data.UnlockCounts[group.material] : 0;
+            int count = data.UnlockCounts.ContainsKey(group.materialType) ? data.UnlockCounts[group.materialType] : 0;
             totalProgress += (group.unlockables.Count > 0 ? (count / (float)group.unlockables.Count) : 0);
         }
         if (groupCount == 0)
@@ -317,9 +272,9 @@ public class UnlockManager :MonoBehaviour
         List<Vector3> focusPoints = new List<Vector3>();
         foreach (var group in materialUnlockables)
         {
-            if (!data.MaterialUnlocked.ContainsKey(group.material) || !data.MaterialUnlocked[group.material])
+            if (!data.MaterialUnlocked.ContainsKey(group.materialType) || !data.MaterialUnlocked[group.materialType])
                 continue;
-            int count = data.UnlockCounts.ContainsKey(group.material) ? data.UnlockCounts[group.material] : 0;
+            int count = data.UnlockCounts.ContainsKey(group.materialType) ? data.UnlockCounts[group.materialType] : 0;
             // Only add if the group still has pending unlockables.
             if (count < group.unlockables.Count)
             {

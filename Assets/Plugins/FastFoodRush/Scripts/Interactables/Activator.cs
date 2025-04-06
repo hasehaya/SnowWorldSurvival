@@ -6,8 +6,7 @@ public class Activator :Interactable
     [SerializeField, Tooltip("The GameObject to be activated/deactivated.")]
     private GameObject linkedObject;
 
-    [SerializeField]
-    private MaterialType materialType;
+    [HideInInspector] public MaterialType MaterialType;
 
     /// <summary>
     /// Called when the player enters the trigger area. It activates the linked object.
@@ -18,7 +17,7 @@ public class Activator :Interactable
         var upgradeHandlerList = FindObjectsOfType<UpgradeHandler>();
         foreach (var upgradeHandler in upgradeHandlerList)
         {
-            upgradeHandler.SetMaterialType(materialType);
+            upgradeHandler.SetMaterialType(MaterialType);
         }
     }
 

@@ -8,10 +8,9 @@ using UnityEngine;
 /// </summary>
 public class MaterialParent :Unlockable
 {
+    [HideInInspector] public MaterialType MaterialType;
     [SerializeField] private Transform materialGrid;
     private List<GameObject> materialObjects = new List<GameObject>();
-    [SerializeField] MaterialType materialType;
-    public MaterialType MaterialType => materialType;
     private bool isInitialized = false; // ‰Šú‰»Ï‚İ‚©‚Ìƒtƒ‰ƒO
 
     protected override void Awake()
@@ -104,7 +103,7 @@ public class MaterialParent :Unlockable
         EmployeeController[] employees = FindObjectsOfType<EmployeeController>();
         foreach (var employee in employees)
         {
-            if (employee.MaterialType != materialType)
+            if (employee.MaterialType != MaterialType)
             {
                 continue;
             }
