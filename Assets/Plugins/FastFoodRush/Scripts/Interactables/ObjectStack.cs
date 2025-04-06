@@ -7,8 +7,7 @@ using UnityEngine;
 
 public class ObjectStack :Interactable
 {
-    [SerializeField, Tooltip("The type of stack (e.g., food, package, etc.)")]
-    private MaterialType materialType;
+    public MaterialType MaterialType;
 
     [SerializeField, Tooltip("Time interval between each stack operation")]
     private float stackInterval = 0.05f;
@@ -17,7 +16,6 @@ public class ObjectStack :Interactable
     [SerializeField, Tooltip("Arrow object displayed when stack is ready to receive items")]
     private GameObject arrowObj;
 
-    public MaterialType MaterialType => materialType;
     public int MaxStack { get; set; }
     public int Count => objects.Count;
     public bool IsFull => Count >= MaxStack;
@@ -31,7 +29,7 @@ public class ObjectStack :Interactable
 
     void Start()
     {
-        stackOffset = GameManager.Instance.GetStackOffset(materialType);
+        stackOffset = GameManager.Instance.GetStackOffset(MaterialType);
 
         // 必要に応じて初期表示をオフにしておく場合はこちら
         if (arrowObj != null)
@@ -48,7 +46,7 @@ public class ObjectStack :Interactable
 
             if (player == null)
                 return;
-            if (player.Stack.MaterialType != materialType)
+            if (player.Stack.MaterialType != MaterialType)
                 return;
             if (player.Stack.Count == 0)
                 return;

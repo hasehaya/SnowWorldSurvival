@@ -14,6 +14,9 @@ public class UpgradeHandler :MonoBehaviour
     [SerializeField, Tooltip("Button used to purchase the upgrade.")]
     private Button upgradeButton;
 
+    [SerializeField]
+    private Button adButton;
+
     [SerializeField, Tooltip("Text label displaying the upgrade price.")]
     private TMP_Text priceLabel;
 
@@ -24,9 +27,11 @@ public class UpgradeHandler :MonoBehaviour
 
     void Start()
     {
-        // Initializes the upgrade button and subscribes to relevant events.
         upgradeButton.onClick.AddListener(() =>
             GameManager.Instance.PurchaseUpgrade(upgradeType, materialType)
+        );
+
+        adButton.onClick.AddListener(() => GameManager.Instance.RequestUpgradeByAd(upgradeType, materialType)
         );
 
         GameManager.Instance.OnUpgrade += UpdateHandler;
@@ -65,6 +70,7 @@ public class UpgradeHandler :MonoBehaviour
         {
             priceLabel.text = "MAX";
             upgradeButton.interactable = false;
+            adButton.interactable = false;
         }
     }
 }

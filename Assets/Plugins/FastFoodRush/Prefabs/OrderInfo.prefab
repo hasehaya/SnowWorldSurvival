@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 673962b08b4e8f049b8ae81fb63e407c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  iconImage: {fileID: 7176595489959958019}
+  IconImage: {fileID: 7176595489959958017}
   amountText: {fileID: 7176595491243964207}
   displayOffset: {x: 0, y: 3, z: 0}
 --- !u!1 &7176595489959958019

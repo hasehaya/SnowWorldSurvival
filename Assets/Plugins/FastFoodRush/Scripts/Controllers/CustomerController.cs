@@ -10,12 +10,10 @@ public class CustomerController :MonoBehaviour
 {
     // どのキューに並ぶかを示すプロパティ（CounterTable から設定されます）
     public int QueueIndex { get; set; }
+    public OrderInfo OrderInfo;
 
     [SerializeField, Tooltip("Max number of orders a customer can place")]
     private int maxOrder = 5;
-
-    [SerializeField, Tooltip("OrderInfoのプレハブ")]
-    private OrderInfo orderInfoPrefab;
 
     [SerializeField, Tooltip("Reference to the customer's stack for carrying items")]
     private WobblingStack stack;
@@ -98,7 +96,7 @@ public class CustomerController :MonoBehaviour
         HasOrder = true;
 
         // OrderInfo プレハブを生成し表示
-        currentOrderInfo = Instantiate(orderInfoPrefab, GameManager.Instance.Canvas.transform);
+        currentOrderInfo = Instantiate(OrderInfo, GameManager.Instance.Canvas.transform);
         currentOrderInfo.ShowInfo(transform, OrderCount);
     }
 

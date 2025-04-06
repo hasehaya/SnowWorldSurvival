@@ -39,8 +39,8 @@ public class AdObjectManager :MonoBehaviour
     private void Start()
     {
         // 利用可能な RewardType を初期化（必要に応じて他の RewardType も追加）
-        availableRewardTypes.Add(RewardType.Speed);
-        availableRewardTypes.Add(RewardType.Amount);
+        availableRewardTypes.Add(RewardType.PlayerSpeed);
+        availableRewardTypes.Add(RewardType.PlayerCapacity);
 
         popPoses = GetComponentsInChildren<Transform>();
 
@@ -79,21 +79,21 @@ public class AdObjectManager :MonoBehaviour
         // TreeMinutes 効果の場合、該当 RewardType を利用不可にしてタイマーを開始
         if (adObj.RewardEffect == RewardEffect.TreeMinutes)
         {
-            if (adObj.RewardType == RewardType.Speed)
+            if (adObj.RewardType == RewardType.PlayerSpeed)
             {
                 if (!IsSpeedEffectActive)
                 {
                     // 利用可能リストから除外
-                    availableRewardTypes.Remove(RewardType.Speed);
+                    availableRewardTypes.Remove(RewardType.PlayerSpeed);
                     StartCoroutine(SpeedEffectTimer());
                 }
                 return;
             }
-            else if (adObj.RewardType == RewardType.Amount)
+            else if (adObj.RewardType == RewardType.PlayerCapacity)
             {
                 if (!IsAmountEffectActive)
                 {
-                    availableRewardTypes.Remove(RewardType.Amount);
+                    availableRewardTypes.Remove(RewardType.PlayerCapacity);
                     StartCoroutine(AmountEffectTimer());
                 }
                 return;
@@ -111,8 +111,8 @@ public class AdObjectManager :MonoBehaviour
         yield return new WaitForSeconds(TreeMinutesDuration);
         IsSpeedEffectActive = false;
         // 効果終了後、利用可能リストに再追加
-        if (!availableRewardTypes.Contains(RewardType.Speed))
-            availableRewardTypes.Add(RewardType.Speed);
+        if (!availableRewardTypes.Contains(RewardType.PlayerSpeed))
+            availableRewardTypes.Add(RewardType.PlayerSpeed);
         RepopAdObject();
     }
 
@@ -122,8 +122,8 @@ public class AdObjectManager :MonoBehaviour
         IsAmountEffectActive = true;
         yield return new WaitForSeconds(TreeMinutesDuration);
         IsAmountEffectActive = false;
-        if (!availableRewardTypes.Contains(RewardType.Amount))
-            availableRewardTypes.Add(RewardType.Amount);
+        if (!availableRewardTypes.Contains(RewardType.PlayerCapacity))
+            availableRewardTypes.Add(RewardType.PlayerCapacity);
         RepopAdObject();
     }
 
@@ -153,7 +153,7 @@ public class AdObjectManager :MonoBehaviour
         {
             // TreeMinutes 効果の場合、RewardType が availableRewardTypes に含まれているか確認
             if (ad.RewardEffect == RewardEffect.TreeMinutes &&
-                (ad.RewardType == RewardType.Speed || ad.RewardType == RewardType.Amount))
+                (ad.RewardType == RewardType.PlayerSpeed || ad.RewardType == RewardType.PlayerCapacity))
             {
                 if (!availableRewardTypes.Contains(ad.RewardType))
                     continue;

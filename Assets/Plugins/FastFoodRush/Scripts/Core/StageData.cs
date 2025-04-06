@@ -5,27 +5,29 @@ using System.Collections.Generic;
 [Serializable]
 public class StageData
 {
-    public string StageID { get; set; }
-    public long Money { get; set; }
-    public List<Upgrade> UpgradeList { get; set; }
-    public int PlayerSpeed { get; set; }
-    public int PlayerCapacity { get; set; }
-    public int Profit { get; set; }
+    public string StageID;
+    public bool IsUnlocked;
+    public long Money;
+    public List<Upgrade> UpgradeList;
+    public int PlayerSpeed;
+    public int PlayerCapacity;
+    public int Profit;
 
-    public float ElapsedTime { get; set; }
+    public float ElapsedTime;
 
-    public bool IsAdRemoved { get; set; }
+    public bool IsAdRemoved;
 
     // Dictionaries to track the number of unlockables purchased and the paid amount for each material.
-    public Dictionary<MaterialType, int> UnlockCounts { get; set; }
-    public Dictionary<MaterialType, int> PaidAmounts { get; set; }
+    public Dictionary<MaterialType, int> UnlockCounts;
+    public Dictionary<MaterialType, int> PaidAmounts;
 
     // For each material (except None), tracks whether that group's unlockables have been opened.
-    public Dictionary<MaterialType, bool> MaterialUnlocked { get; set; }
+    public Dictionary<MaterialType, bool> MaterialUnlocked;
 
     public StageData(string StageID, long money)
     {
         this.StageID = StageID;
+        IsUnlocked = false;
         Money = money;
         PlayerSpeed = 1;
         PlayerCapacity = 1;

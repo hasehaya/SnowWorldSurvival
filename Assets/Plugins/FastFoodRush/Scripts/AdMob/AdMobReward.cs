@@ -1,3 +1,5 @@
+using System;
+
 using GoogleMobileAds.Api;
 
 using UnityEngine;
@@ -6,8 +8,9 @@ public enum RewardType
 {
     None,
     Money,
-    Speed,
-    Amount,
+    PlayerSpeed,
+    PlayerCapacity,
+    Upgrade,
 }
 
 public class AdMobReward :MonoBehaviour
@@ -24,6 +27,8 @@ public class AdMobReward :MonoBehaviour
             return instance;
         }
     }
+    public event Action<RewardType> OnRewardReceived;
+
     //やること
     //1.リワード広告IDの入力
     //2.GetReward関数に報酬内容を入力
@@ -75,6 +80,12 @@ public class AdMobReward :MonoBehaviour
     //ボタンに割付けして使用
     public void ShowAdMobReward(RewardType rewardType)
     {
+        // 広告削除済みならリクエストしない
+        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        {
+            OnRewardReceived?.Invoke(rewardType);
+            return;
+        }
         //変数rewardedAdの中身が存在しており、広告の読み込みが完了していたら広告表示
         if (rewardedAd != null && rewardedAd.CanShowAd() == true)
         {
@@ -91,19 +102,7 @@ public class AdMobReward :MonoBehaviour
     //報酬受け取り処理
     private void GetReward(Reward reward)
     {
-        Debug.Log("GetReward");
-        switch (rewardType)
-        {
-            case RewardType.Money:
-                //お金を増やす処理
-                break;
-            case RewardType.Speed:
-                //スピードを上げる処理
-                break;
-            case RewardType.None:
-            default:
-                break;
-        }
+        OnRewardReceived?.Invoke(rewardType);
     }
 
 

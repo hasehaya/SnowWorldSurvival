@@ -20,4 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Plugins/FastFoodRush/Scenes/Restaurant03.unity
     guid: 43ddfc5686635ac4e82d53862dccff20
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 221ebf4839a6ecb4a88eb05a7a501f52, type: 2}
+    com.unity.localization.settings: {fileID: 11400000, guid: 5e9182a49eda7034d92a9931846ed63b, type: 2}

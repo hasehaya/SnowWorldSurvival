@@ -207,6 +207,40 @@ public class GameManager :MonoBehaviour
         OnUpgrade?.Invoke();
     }
 
+    public void RequestUpgradeByAd(Upgrade.UpgradeType upgradeType, MaterialType materialType)
+    {
+        AdMobReward.Instance.OnRewardReceived += OnAdRewardReceived;
+
+        pendingUpgradeType = upgradeType;
+        pendingMaterialType = materialType;
+
+        AdMobReward.Instance.ShowAdMobReward(RewardType.Upgrade);
+    }
+
+    private Upgrade.UpgradeType pendingUpgradeType;
+    private MaterialType pendingMaterialType;
+
+    private void OnAdRewardReceived(RewardType rewardType)
+    {
+        if (rewardType != RewardType.Upgrade)
+            return;
+        PurchaseUpgradeByAd(pendingUpgradeType, pendingMaterialType);
+
+        AdMobReward.Instance.OnRewardReceived -= OnAdRewardReceived;
+    }
+
+    private void PurchaseUpgradeByAd(Upgrade.UpgradeType upgradeType, MaterialType materialType)
+    {
+        stageData.UpgradeUpgrade(upgradeType, materialType);
+        if (upgradeType == Upgrade.UpgradeType.EmployeeAmount)
+        {
+            SpawnEmployee();
+        }
+
+        SaveSystem.SaveData<StageData>(stageData, stageID);
+        OnUpgrade?.Invoke();
+    }
+
     public int GetUpgradePrice(Upgrade.UpgradeType upgradeType, MaterialType materialType)
     {
         int currentLevel = GetUpgradeLevel(upgradeType, materialType);
@@ -233,7 +267,7 @@ public class GameManager :MonoBehaviour
         });
     }
 
-    public void PurchaseRemoveAd()
+    public void PurchaseAdBlock()
     {
         globalData.IsAdRemoved = true;
         SaveSystem.SaveData(globalData, globalDataID);

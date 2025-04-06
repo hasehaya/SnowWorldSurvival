@@ -413,8 +413,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f4481f380ed3f419701acda1124e17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OrderInfo: {fileID: 7176595489712405169, guid: 606c0f0a663315a4d839043b1e09db1d, type: 3}
   maxOrder: 5
-  orderInfoPrefab: {fileID: 7176595489712405169, guid: 606c0f0a663315a4d839043b1e09db1d, type: 3}
   stack: {fileID: 5498682695376042253}
   leftHandTarget: {fileID: 8344340007119770282}
   rightHandTarget: {fileID: 327066353585556004}

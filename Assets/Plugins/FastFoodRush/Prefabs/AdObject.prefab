@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5002055161701664782
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6193,6 +6193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   adPopup: {fileID: 12815717586013924}
   rewardType: 0
+  rewardEffect: 0
 --- !u!1001 &8135634556301322250
 PrefabInstance:
   m_ObjectHideFlags: 0

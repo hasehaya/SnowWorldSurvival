@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CounterTable :Workstation
 {
+    public CustomerController CustomerPrefab;
+
     [SerializeField, Tooltip("Base time interval for customer spawn in seconds.")]
     private float baseInterval = 1.5f;
 
@@ -23,9 +25,6 @@ public class CounterTable :Workstation
     // íPàÍÇÃ QueuePoints Çégóp
     [SerializeField, Tooltip("Waypoints defining the customer queue.")]
     private Waypoints queuePoints;
-
-    [SerializeField, Tooltip("Prefab for customer objects.")]
-    private CustomerController customerPrefab;
 
     [SerializeField, Tooltip("Stack containing the food available for serving.")]
     private ObjectStack foodStack;
@@ -77,7 +76,7 @@ public class CounterTable :Workstation
             spawnTimer = 0f;
 
             // å⁄ãqê∂ê¨
-            var newCustomer = Instantiate(customerPrefab, spawnPoint.position, spawnPoint.rotation);
+            var newCustomer = Instantiate(CustomerPrefab, spawnPoint.position, spawnPoint.rotation);
             newCustomer.ExitPoint = despawnPoint.position;
             customers.Enqueue(newCustomer);
 

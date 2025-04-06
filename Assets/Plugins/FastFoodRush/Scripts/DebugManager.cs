@@ -67,8 +67,8 @@ public class DebugManager :MonoBehaviour
         GameManager.Instance.AdjustMoney(20000);
     }
 
-    public void RemoveAd()
+    public void AdBlock()
     {
-        GameManager.Instance.PurchaseRemoveAd();
+        GameManager.Instance.PurchaseAdBlock();
     }
 }

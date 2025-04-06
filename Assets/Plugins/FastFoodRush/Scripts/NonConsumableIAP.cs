@@ -6,6 +6,23 @@ using UnityEngine.Purchasing.Extension;
 
 public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
 {
+    private static NonConsumableIAP instance;
+    public static NonConsumableIAP Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<NonConsumableIAP>();
+                if (instance == null)
+                {
+                    GameObject obj = new GameObject("NonConsumableIAP");
+                    instance = obj.AddComponent<NonConsumableIAP>();
+                }
+            }
+            return instance;
+        }
+    }
     private IStoreController storeController;
     private IExtensionProvider extensionProvider;
 
@@ -31,7 +48,7 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
         return (storeController != null && extensionProvider != null);
     }
 
-    public void BuyNonConsumable()
+    public void Purchase()
     {
         if (!IsInitialized())
         {
@@ -103,7 +120,7 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
             if (product.definition.id == nonConsumableProductId && product.hasReceipt)
             {
                 Debug.Log("ä˘Ç…çwì¸çœÇ›ÇÃè§ïiÇ™å©Ç¬Ç©ÇËÇ‹ÇµÇΩ: " + product.definition.id);
-                GameManager.Instance.PurchaseRemoveAd();
+                GameManager.Instance.PurchaseAdBlock();
                 break;
             }
         }
@@ -138,7 +155,7 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
         if (string.Equals(args.purchasedProduct.definition.id, nonConsumableProductId, StringComparison.Ordinal))
         {
             Debug.Log("îÒè¡îÔå^è§ïiÇÃçwì¸Ç…ê¨å˜ÇµÇ‹ÇµÇΩ: " + args.purchasedProduct.definition.id);
-            GameManager.Instance.PurchaseRemoveAd();
+            GameManager.Instance.PurchaseAdBlock();
             return PurchaseProcessingResult.Complete;
         }
         else
