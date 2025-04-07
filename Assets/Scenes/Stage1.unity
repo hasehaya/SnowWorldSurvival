@@ -776,8 +776,8 @@ MonoBehaviour:
   buyingPoint: {x: 0, y: 0, z: -1.95}
   punchScale: {x: 0.1, y: 0.2, z: 0.1}
   contentIcon: {fileID: 21300000, guid: 2a7da7658c4c4f940a80a7bf63f17c2a, type: 3}
+  MaterialType: 0
   materialGrid: {fileID: 1058519408}
-  materialType: 3
 --- !u!4 &150499933
 Transform:
   m_ObjectHideFlags: 0
@@ -2375,6 +2375,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 274196848}
     m_Modifications:
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: materialType
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: materialParent
+      value: 
+      objectReference: {fileID: 150499932}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseUnlockPrice
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: unlockGrowthFactor
+      value: 1.05
+      objectReference: {fileID: 0}
     - target: {fileID: 2852790546742605576, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
       value: 
@@ -2385,7 +2401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
-      value: CounterTableParent_2
+      value: MaterialObjectParent_2
       objectReference: {fileID: 0}
     - target: {fileID: 6444501020201575773, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
@@ -3545,8 +3561,8 @@ MonoBehaviour:
   buyingPoint: {x: 0, y: 0, z: -1.95}
   punchScale: {x: 0.1, y: 0.2, z: 0.1}
   contentIcon: {fileID: 21300000, guid: 774a9f7b685280643b634c018ab3e267, type: 3}
+  MaterialType: 0
   materialGrid: {fileID: 998501547}
-  materialType: 2
 --- !u!4 &526539866
 Transform:
   m_ObjectHideFlags: 0
@@ -5564,8 +5580,8 @@ MonoBehaviour:
   buyingPoint: {x: 0, y: 0, z: -1.95}
   punchScale: {x: 0.1, y: 0.2, z: 0.1}
   contentIcon: {fileID: 21300000, guid: fefc94a639dac904a8fdd213c3c38e7e, type: 3}
+  MaterialType: 0
   materialGrid: {fileID: 1186676886}
-  materialType: 4
 --- !u!4 &955289198
 Transform:
   m_ObjectHideFlags: 0
@@ -7014,6 +7030,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 274196848}
     m_Modifications:
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: materialType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: materialParent
+      value: 
+      objectReference: {fileID: 955289197}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseUnlockPrice
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: unlockGrowthFactor
+      value: 1.03
+      objectReference: {fileID: 0}
     - target: {fileID: 2852790546742605576, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
       value: 
@@ -7024,7 +7056,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
-      value: CounterTableParent_3
+      value: MaterialObjectParent_3
       objectReference: {fileID: 0}
     - target: {fileID: 6444501020201575773, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
@@ -8652,8 +8684,8 @@ MonoBehaviour:
   buyingPoint: {x: 0, y: 0, z: -1.95}
   punchScale: {x: 0.1, y: 0.2, z: 0.1}
   contentIcon: {fileID: 21300000, guid: a6fb309cd86769c46a8232899b4a9408, type: 3}
+  MaterialType: 0
   materialGrid: {fileID: 873814286}
-  materialType: 1
 --- !u!1001 &1647556839
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9607,6 +9639,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 274196848}
     m_Modifications:
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: materialType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: materialParent
+      value: 
+      objectReference: {fileID: 526539865}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseUnlockPrice
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: unlockGrowthFactor
+      value: 1.08
+      objectReference: {fileID: 0}
     - target: {fileID: 2852790546742605576, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
       value: 
@@ -9617,7 +9665,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
-      value: CounterTableParent_1
+      value: MaterialObjectParent_1
       objectReference: {fileID: 0}
     - target: {fileID: 6444501020201575773, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
@@ -11435,6 +11483,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 274196848}
     m_Modifications:
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: materialParent
+      value: 
+      objectReference: {fileID: 1641277939}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseUnlockPrice
+      value: 50
+      objectReference: {fileID: 0}
     - target: {fileID: 2852790546742605576, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
       value: 
@@ -11445,7 +11501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
-      value: CounterTableParent
+      value: MaterialObjectParent
       objectReference: {fileID: 0}
     - target: {fileID: 6444501020201575773, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: foodStack
