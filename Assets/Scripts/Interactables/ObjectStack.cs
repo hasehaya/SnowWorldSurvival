@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class ObjectStack :Interactable
 {
-    public MaterialType MaterialType;
+    [HideInInspector] public MaterialType MaterialType;
 
     [SerializeField, Tooltip("Time interval between each stack operation")]
     private float stackInterval = 0.05f;
