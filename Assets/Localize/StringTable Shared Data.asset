@@ -43,6 +43,10 @@ MonoBehaviour:
     m_Key: "\u4EBA\u6570"
     m_Metadata:
       m_Items: []
+  - m_Id: 1091985071005696
+    m_Key: MAX
+    m_Metadata:
+      m_Items: []
   m_Metadata:
     m_Items: []
   m_KeyGenerator:

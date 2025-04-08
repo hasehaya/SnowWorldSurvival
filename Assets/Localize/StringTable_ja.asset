@@ -46,6 +46,10 @@ MonoBehaviour:
     m_Localized: "\u4EBA\u6570"
     m_Metadata:
       m_Items: []
+  - m_Id: 1091985071005696
+    m_Localized: MAX
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
