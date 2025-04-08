@@ -79,3 +79,6 @@ crashlytics-build.properties
 
 # Custom ignored assets
 NotoSansJP-Medium SDF.asset
+NotoSansKR-Medium SDF.asset
+NotoSansSC-Medium SDF.asset
+NotoSansTC-Medium SDF.asset
