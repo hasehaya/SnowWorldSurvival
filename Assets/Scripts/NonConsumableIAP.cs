@@ -113,7 +113,7 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
     /// <summary>
     /// 購入済みかどうかを各商品からチェックして、既購入なら機能解放処理を実行
     /// </summary>
-    private void CheckForPurchase()
+    public void CheckForPurchase()
     {
         foreach (var product in storeController.products.all)
         {

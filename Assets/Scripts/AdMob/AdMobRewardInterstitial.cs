@@ -27,7 +27,7 @@ public class AdMobRewardInterstitial :MonoBehaviour
 
     private void Start()
     {
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
@@ -89,7 +89,7 @@ public class AdMobRewardInterstitial :MonoBehaviour
     //リワード広告を読み込む関数 再読み込みにも使用
     public void LoadRewardedAd()
     {
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }

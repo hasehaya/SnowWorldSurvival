@@ -5767,6 +5767,7 @@ GameObject:
   - component: {fileID: 990296240866787381}
   - component: {fileID: 3484015220804021439}
   - component: {fileID: 2321875362515983821}
+  - component: {fileID: 4386070297197165927}
   m_Layer: 0
   m_Name: AdBtn
   m_TagString: Untagged
@@ -5889,6 +5890,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &4386070297197165927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6727408156627145180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aa4634effefa584bb81e2fb4343774e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  btn: {fileID: 2321875362515983821}
+  btnText: {fileID: 3781945717945607460}
 --- !u!1 &6805025233154946816
 GameObject:
   m_ObjectHideFlags: 0

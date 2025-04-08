@@ -33,6 +33,10 @@ public class AdMobOpen :MonoBehaviour
     {
         get
         {
+            if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
+            {
+                return false;
+            }
             return appOpenAd != null
                    && appOpenAd.CanShowAd()
                    && DateTime.Now < _expireTime;
@@ -42,7 +46,7 @@ public class AdMobOpen :MonoBehaviour
     private void Start()
     {
         // 広告削除済みならリクエストしない
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
@@ -62,6 +66,11 @@ public class AdMobOpen :MonoBehaviour
     /// </summary>
     private void OnApplicationPause(bool paused)
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
+        {
+            return;
+        }
+
         // アプリがバック→フォアグラウンドに戻ったら広告を表示
         if (!paused)
         {
@@ -106,7 +115,7 @@ public class AdMobOpen :MonoBehaviour
             appOpenAd = null;
         }
 
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
@@ -156,6 +165,11 @@ public class AdMobOpen :MonoBehaviour
     /// </summary>
     public void ShowAppOpenAd()
     {
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
+        {
+            return;
+        }
+
         if (IsAdAvailable)
         {
             Debug.Log("Showing app open ad.");

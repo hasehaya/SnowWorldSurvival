@@ -303,7 +303,7 @@ public class GameManager :MonoBehaviour
         }
     }
 
-    public bool IsAdRemoved() => globalData.IsAdRemoved;
+    public bool IsAdBlocked() => globalData.IsAdRemoved;
 
     void OnApplicationPause(bool pauseStatus)
     {

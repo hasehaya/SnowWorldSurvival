@@ -43,7 +43,7 @@ public class AdMobReward :MonoBehaviour
     private void Start()
     {
         // 広告削除済みならリクエストしない
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
@@ -81,7 +81,7 @@ public class AdMobReward :MonoBehaviour
     public void ShowAdMobReward(RewardType rewardType)
     {
         // 広告削除済みならリクエストしない
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             OnRewardReceived?.Invoke(rewardType);
             return;
@@ -118,7 +118,7 @@ public class AdMobReward :MonoBehaviour
             rewardedAd = null;
         }
 
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }

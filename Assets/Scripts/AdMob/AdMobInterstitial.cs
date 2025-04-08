@@ -28,7 +28,7 @@ public class AdMobInterstitial :MonoBehaviour
     private void Start()
     {
         // 広告削除済みならリクエストしない
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
@@ -90,7 +90,7 @@ public class AdMobInterstitial :MonoBehaviour
             interstitialAd = null;
         }
 
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }

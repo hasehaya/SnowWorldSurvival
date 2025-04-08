@@ -13,7 +13,7 @@ public class AdMobBanner :MonoBehaviour
     private void Start()
     {
         // 広告削除済みならリクエストしない
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
@@ -50,7 +50,7 @@ public class AdMobBanner :MonoBehaviour
             bannerView.Destroy();
         }
 
-        if (GameManager.Instance != null && GameManager.Instance.IsAdRemoved())
+        if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
