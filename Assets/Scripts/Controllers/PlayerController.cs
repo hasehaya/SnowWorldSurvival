@@ -48,12 +48,15 @@ public class PlayerController :MonoBehaviour
 
     void Start()
     {
-        GameManager.Instance.OnUpgrade += UpdateStats;
-        UpdateStats();
+        moveSpeed = baseSpeed;
+        Capacity = baseCapacity;
     }
 
     void Update()
     {
+        moveSpeed = GameManager.Instance.GlobalData.IsPlayerSpeedActive ? baseSpeed * 2 : baseSpeed;
+        Capacity = GameManager.Instance.GlobalData.IsPlayerCapacityActive ? baseCapacity * 2 : baseCapacity;
+
         // スタックが満タンかどうか
         bool isMax = (Stack.Count >= Capacity);
 
@@ -116,12 +119,6 @@ public class PlayerController :MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         animator.SetBool("IsMoving", movement != Vector3.zero);
-    }
-
-    void UpdateStats()
-    {
-        moveSpeed = baseSpeed;
-        Capacity = baseCapacity;
     }
 
     public void OnStep(AnimationEvent animationEvent)

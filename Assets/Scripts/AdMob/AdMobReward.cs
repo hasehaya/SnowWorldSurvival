@@ -11,6 +11,7 @@ public enum RewardType
     PlayerSpeed,
     PlayerCapacity,
     Upgrade,
+    MoneyCollection,
 }
 
 public class AdMobReward :MonoBehaviour

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -11,64 +10,39 @@ public class AdObjectManager :MonoBehaviour
         get
         {
             if (instance == null)
-            {
                 instance = FindObjectOfType<AdObjectManager>();
-            }
             return instance;
         }
     }
 
     [SerializeField]
     private AdObject[] adObjects;
-
     private Transform[] popPoses;
-
-    // 現在アクティブな AdObject とその生成位置の管理
     private List<AdObject> activeAdObjects = new List<AdObject>();
     private Dictionary<AdObject, Transform> activeAdPositions = new Dictionary<AdObject, Transform>();
 
-    // Speed と Amount の TreeMinutes 効果がアクティブかどうかのプロパティ
-    public bool IsSpeedEffectActive { get; private set; }
-    public bool IsAmountEffectActive { get; private set; }
+    // 効果の持続時間（例：180秒＝3分）
+    private const float TreeMinutesDuration = 180f;
 
-    private const float TreeMinutesDuration = 180f; // 3分
-
-    // 利用可能な RewardType を管理（ActiveAdPositions と同様の考え方）
+    // 利用可能な RewardType を管理するリスト
     private List<RewardType> availableRewardTypes = new List<RewardType>();
+
+    // GlobalData への参照（GameManager 経由で取得）
+    private GlobalData globalData;
 
     private void Start()
     {
-        // 利用可能な RewardType を初期化（必要に応じて他の RewardType も追加）
         availableRewardTypes.Add(RewardType.PlayerSpeed);
         availableRewardTypes.Add(RewardType.PlayerCapacity);
+        availableRewardTypes.Add(RewardType.MoneyCollection);
 
         popPoses = GetComponentsInChildren<Transform>();
+        // 初期生成処理やポジションシャッフルなど
 
-        // popPoses をシャッフル
-        List<Transform> posesList = new List<Transform>(popPoses);
-        for (int i = 0; i < posesList.Count; i++)
-        {
-            Transform temp = posesList[i];
-            int randomIndex = Random.Range(i, posesList.Count);
-            posesList[i] = posesList[randomIndex];
-            posesList[randomIndex] = temp;
-        }
-
-        // 使用するポジションは半分とする
-        int halfCount = posesList.Count / 2;
-        int count = Mathf.Min(halfCount, adObjects.Length);
-
-        for (int i = 0; i < count; i++)
-        {
-            Transform spawnPos = posesList[i];
-            AdObject adInstance = Instantiate(adObjects[i], spawnPos.position, spawnPos.rotation);
-            adInstance.OnShowAd += OnAdObjectShow;
-            activeAdObjects.Add(adInstance);
-            activeAdPositions.Add(adInstance, spawnPos);
-        }
+        // GameManager 経由で GlobalData を参照
+        globalData = GameManager.Instance.GlobalData;
     }
 
-    // AdObject の ShowAd イベント発生時の処理
     private void OnAdObjectShow(AdObject adObj)
     {
         adObj.OnShowAd -= OnAdObjectShow;
@@ -76,67 +50,38 @@ public class AdObjectManager :MonoBehaviour
         activeAdPositions.Remove(adObj);
         Destroy(adObj.gameObject);
 
-        // TreeMinutes 効果の場合、該当 RewardType を利用不可にしてタイマーを開始
         if (adObj.RewardEffect == RewardEffect.TreeMinutes)
         {
-            if (adObj.RewardType == RewardType.PlayerSpeed)
+            if (adObj.RewardType == RewardType.PlayerSpeed && !globalData.IsPlayerSpeedActive)
             {
-                if (!IsSpeedEffectActive)
-                {
-                    // 利用可能リストから除外
-                    availableRewardTypes.Remove(RewardType.PlayerSpeed);
-                    StartCoroutine(SpeedEffectTimer());
-                }
+                availableRewardTypes.Remove(RewardType.PlayerSpeed);
+                globalData.PlayerSpeedRemainingSeconds = TreeMinutesDuration;
                 return;
             }
-            else if (adObj.RewardType == RewardType.PlayerCapacity)
+            else if (adObj.RewardType == RewardType.PlayerCapacity && !globalData.IsPlayerCapacityActive)
             {
-                if (!IsAmountEffectActive)
-                {
-                    availableRewardTypes.Remove(RewardType.PlayerCapacity);
-                    StartCoroutine(AmountEffectTimer());
-                }
+                availableRewardTypes.Remove(RewardType.PlayerCapacity);
+                globalData.PlayerCapacityRemainingSeconds = TreeMinutesDuration;
+                return;
+            }
+            else if (adObj.RewardType == RewardType.MoneyCollection && !globalData.IsMoneyCollectionActive)
+            {
+                availableRewardTypes.Remove(RewardType.MoneyCollection);
+                globalData.MoneyCollectionRemainingSeconds = TreeMinutesDuration;
                 return;
             }
         }
 
-        // その他の種類（または Once など）の場合は直ちに再生成
         RepopAdObject();
     }
 
-    // Speed 効果のタイマー
-    private IEnumerator SpeedEffectTimer()
-    {
-        IsSpeedEffectActive = true;
-        yield return new WaitForSeconds(TreeMinutesDuration);
-        IsSpeedEffectActive = false;
-        // 効果終了後、利用可能リストに再追加
-        if (!availableRewardTypes.Contains(RewardType.PlayerSpeed))
-            availableRewardTypes.Add(RewardType.PlayerSpeed);
-        RepopAdObject();
-    }
-
-    // Amount 効果のタイマー
-    private IEnumerator AmountEffectTimer()
-    {
-        IsAmountEffectActive = true;
-        yield return new WaitForSeconds(TreeMinutesDuration);
-        IsAmountEffectActive = false;
-        if (!availableRewardTypes.Contains(RewardType.PlayerCapacity))
-            availableRewardTypes.Add(RewardType.PlayerCapacity);
-        RepopAdObject();
-    }
-
-    // 再生成処理：未使用の spawn position を探し、利用可能な RewardType の AdObject を生成する
     private void RepopAdObject()
     {
         List<Transform> availablePoses = new List<Transform>();
         foreach (Transform pos in popPoses)
         {
             if (!activeAdPositions.ContainsValue(pos))
-            {
                 availablePoses.Add(pos);
-            }
         }
 
         if (availablePoses.Count == 0)
@@ -145,17 +90,18 @@ public class AdObjectManager :MonoBehaviour
             return;
         }
 
-        Transform spawnPos = availablePoses[Random.Range(0, availablePoses.Count)];
-
-        // 利用可能な RewardType に基づいて生成可能な AdObject をフィルタリング
+        Transform spawnPos = availablePoses[UnityEngine.Random.Range(0, availablePoses.Count)];
         List<AdObject> candidateAds = new List<AdObject>();
+
         foreach (var ad in adObjects)
         {
-            // TreeMinutes 効果の場合、RewardType が availableRewardTypes に含まれているか確認
             if (ad.RewardEffect == RewardEffect.TreeMinutes &&
-                (ad.RewardType == RewardType.PlayerSpeed || ad.RewardType == RewardType.PlayerCapacity))
+               (ad.RewardType == RewardType.PlayerSpeed || ad.RewardType == RewardType.PlayerCapacity || ad.RewardType == RewardType.MoneyCollection))
             {
-                if (!availableRewardTypes.Contains(ad.RewardType))
+                // 該当する効果が既にアクティブなら候補から除外
+                if ((ad.RewardType == RewardType.PlayerSpeed && globalData.IsPlayerSpeedActive) ||
+                    (ad.RewardType == RewardType.PlayerCapacity && globalData.IsPlayerCapacityActive) ||
+                    (ad.RewardType == RewardType.MoneyCollection && globalData.IsMoneyCollectionActive))
                     continue;
             }
             candidateAds.Add(ad);
@@ -167,8 +113,7 @@ public class AdObjectManager :MonoBehaviour
             return;
         }
 
-        // ランダムに候補から選択して生成
-        AdObject newAd = Instantiate(candidateAds[Random.Range(0, candidateAds.Count)], spawnPos.position, spawnPos.rotation);
+        AdObject newAd = Instantiate(candidateAds[UnityEngine.Random.Range(0, candidateAds.Count)], spawnPos.position, spawnPos.rotation);
         newAd.OnShowAd += OnAdObjectShow;
         activeAdObjects.Add(newAd);
         activeAdPositions.Add(newAd, spawnPos);
