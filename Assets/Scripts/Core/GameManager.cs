@@ -158,20 +158,6 @@ public class GameManager :MonoBehaviour
         {
             stageData.ElapsedTime += Time.unscaledDeltaTime;
         }
-
-        float dt = Time.deltaTime;
-        if (globalData.PlayerSpeedRemainingSeconds > 0f)
-        {
-            globalData.PlayerSpeedRemainingSeconds = Mathf.Max(0f, globalData.PlayerSpeedRemainingSeconds - dt);
-        }
-        if (globalData.PlayerCapacityRemainingSeconds > 0f)
-        {
-            globalData.PlayerCapacityRemainingSeconds = Mathf.Max(0f, globalData.PlayerCapacityRemainingSeconds - dt);
-        }
-        if (globalData.MoneyCollectionRemainingSeconds > 0f)
-        {
-            globalData.MoneyCollectionRemainingSeconds = Mathf.Max(0f, globalData.MoneyCollectionRemainingSeconds - dt);
-        }
     }
 
     public float GetStackOffset(MaterialType materialType) => materialType switch

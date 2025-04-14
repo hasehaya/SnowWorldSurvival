@@ -41,6 +41,7 @@ public class AdObjectManager :MonoBehaviour
 
         // GameManager Œo—R‚Å GlobalData ‚ğQÆ
         globalData = GameManager.Instance.GlobalData;
+        RepopAdObject();
     }
 
     private void OnAdObjectShow(AdObject adObj)
