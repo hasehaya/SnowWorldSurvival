@@ -28,23 +28,27 @@ public class StageSelectCellView :MonoBehaviour
             previousStageData = SaveSystem.LoadData<StageData>(previousStageID);
         }
 
-        // 繧ｹ繝・・繧ｸ繧､繝ｳ繝・ャ繧ｯ繧ｹ繧単rogressDisplay縺ｫ險ｭ螳・
+        // ステージインデックスをProgressDisplayに設定
         if (progressDisplay != null)
         {
             progressDisplay.SetStageIndex(stageIndex);
-            if (stageData != null)
+            if (stageData == null)
+            {
+                progressDisplay.UpdateProgress(0);
+            }
+            else
             {
                 progressDisplay.UpdateProgress(stageData.CalculateProgress());
             }
         }
 
-        // 蜑阪・繧ｹ繝・・繧ｸ縺ｮ騾ｲ謐礼紫縺・0%譛ｪ貅縺ｮ蝣ｴ蜷医・繝懊ち繝ｳ繧堤┌蜉ｹ蛹悶＠縲√ユ繧ｭ繧ｹ繝医ｒ繧ｰ繝ｬ繝ｼ縺ｫ
+        // 前のステージの進捗率が80%未満の場合はボタンを無効化し、テキストをグレーに
         if (stageIndex > 1 && (previousStageData == null || previousStageData.CalculateProgress() < 0.8f))
         {
             btn.interactable = false;
             if (effectText != null)
             {
-                effectText.color = new Color(0.5f, 0.5f, 0.5f, 1f); // 繧ｰ繝ｬ繝ｼ濶ｲ
+                effectText.color = new Color(0.5f, 0.5f, 0.5f, 1f); // グレー色
             }
         }
         else

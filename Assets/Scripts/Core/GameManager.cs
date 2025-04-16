@@ -8,15 +8,14 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class GameManager :MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField, Tooltip("Base cost of upgrading the restaurant.")]
+    [SerializeField, Tooltip("レストランのアップグレード基礎価格。")]
     private int baseUpgradePrice = 250;
 
-    [SerializeField, Range(1.01f, 1.99f), Tooltip("The growth factor applied to upgrade prices with each upgrade.")]
+    [SerializeField, Range(1.01f, 1.99f), Tooltip("アップグレード価格に掛ける成長率。")]
     private float upgradeGrowthFactor = 1.5f;
 
     private long startingMoney = 200;
@@ -24,21 +23,22 @@ public class GameManager :MonoBehaviour
     [SerializeField]
     private Canvas canvas;
 
-    [Header("Employee")]
-    [SerializeField, Tooltip("・ｽ]・ｽﾆ茨ｿｽ・ｽv・ｽ・ｽ・ｽn・ｽu")]
+    [Header("従業員関連")]
+    [SerializeField, Tooltip("従業員のプレハブ")]
     private EmployeeController employeePrefab;
 
-    [Header("User Interface")]
-    [SerializeField, Tooltip("Text field displaying the current money.")]
+    [Header("ユーザーインターフェース")]
+    [SerializeField, Tooltip("現在の所持金を表示するテキストフィールド。")]
     private TMP_Text moneyDisplay;
 
-    [SerializeField, Tooltip("Screen fader for transitions between scenes.")]
+    [SerializeField, Tooltip("シーン遷移時のフェード用スクリプト。")]
     private ScreenFader screenFader;
 
-    [Header("Effects")]
-    [SerializeField, Tooltip("Background music to play in the restaurant.")]
+    [Header("エフェクト")]
+    [SerializeField, Tooltip("レストラン内で再生するBGM。")]
     private AudioClip backgroundMusic;
 
+    // ゲーム進行時間（ステージデータから取得）
     public float ElapsedTime => stageData?.ElapsedTime ?? 0f;
 
     public Canvas Canvas => canvas;
@@ -53,13 +53,13 @@ public class GameManager :MonoBehaviour
 
     void Awake()
     {
-        // ・ｽV・ｽ・ｽ・ｽO・ｽ・ｽ・ｽg・ｽ・ｽ・ｽﾌ設抵ｿｽ
+        // シングルトンの設定
         Instance = this;
 
-        // ・ｽ・ｽ・ｽﾝのシ・ｽ[・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽX・ｽg・ｽ・ｽ・ｽ・ｽID・ｽﾆゑｿｽ・ｽﾄ暦ｿｽ・ｽp
+        // 現在のシーン名をレストランのIDとして使用
         stageID = SceneManager.GetActiveScene().name;
 
-        // ・ｽZ・ｽ[・ｽu・ｽf・ｽ[・ｽ^・ｽﾌ・ｿｽ・ｽ[・ｽh・ｽi・ｽ・ｽ・ｽﾝゑｿｽ・ｽﾈゑｿｽ・ｽ鼾・ｿｽﾍ擾ｿｽ・ｽ・ｽ・ｽ・ｽﾔで作成・ｽj
+        // セーブデータの読み込み。存在しなければ初期状態で作成する
         stageData = SaveSystem.LoadData<StageData>(stageID);
         if (stageData == null)
             stageData = new StageData(stageID, startingMoney);
@@ -68,42 +68,44 @@ public class GameManager :MonoBehaviour
         if (globalData == null)
             globalData = new GlobalData();
 
-        // Extract number from current stageID (e.g. "Stage1" -> 1)
+        // 現在のシーンIDから数字のみ抽出（例："Stage1" -> 1）
         int currentStageNumber = int.Parse(new string(stageID.Where(char.IsDigit).ToArray()));
 
-        // Only update if current stage number is greater
+        // 現在のシーン番号がグローバルデータのシーン番号より大きければ更新する
         if (currentStageNumber > globalData.StageId)
         {
             globalData.StageId = currentStageNumber;
             SaveSystem.SaveData(globalData, globalDataID);
         }
 
-        // UI\ﾌめの擾ｿｽ・ｽ・ｽ・ｽﾊ貨設抵ｿｽ
+        // UI上の所持金表示を初期化
         AdjustMoney(0);
     }
 
     void Start()
     {
-        // ・ｽ・ｽ・ｽﾝのシ・ｽ[・ｽ・ｽ・ｽC・ｽ・ｽ・ｽf・ｽb・ｽN・ｽX・ｽ・ｽﾛ托ｿｽ
+        // 現在のシーンのビルドインデックスを保存する
         SaveSystem.SaveData<int>(SceneManager.GetActiveScene().buildIndex, "LastSceneIndex");
 
-        // ・ｽV・ｽ[・ｽ・ｽ・ｽJ・ｽn・ｽ・ｽ・ｽﾌフ・ｽF・ｽ[・ｽh・ｽA・ｽE・ｽg・ｽ・ｽ・ｽ・ｽ
+        // シーン開始時のフェードアウト処理
         screenFader.FadeOut();
 
-        // UnlockManager ・ｽﾌ擾ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽi・ｽZ・ｽ[・ｽu・ｽf・ｽ[・ｽ^・ｽﾆ・ｿｽ・ｽX・ｽg・ｽ・ｽ・ｽ・ｽID・ｽ・ｽn・ｽ・ｽ・ｽj
+        // UnlockManager の初期化（セーブデータとシーンIDを渡す）
         UnlockManager.Instance.InitializeUnlockManager(stageData, stageID);
 
-        // ・ｽ]・ｽﾆ茨ｿｽ・ｽﾌス・ｽ|・ｽ[・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
+        // 従業員の生成処理
         SpawnEmployee();
 
-        // BGM ・ｽﾌ再撰ｿｽ
+        // BGM の再生
         AudioManager.Instance.PlayBGM(backgroundMusic);
     }
 
     void SpawnEmployee()
     {
+        // シーン内の MaterialParent コンポーネントを全取得
         var materialManagerList = FindObjectsOfType<MaterialParent>(true);
-        // MaterialType ・ｽﾌ全・ｽ・ｽ
+
+        // 各 MaterialType ごとに従業員を生成する
         foreach (MaterialType materialType in Enum.GetValues(typeof(MaterialType)))
         {
             MaterialParent materialManager = null;
@@ -115,35 +117,36 @@ public class GameManager :MonoBehaviour
                     break;
                 }
             }
-            // None ・ｽ^・ｽC・ｽv・ｽﾜゑｿｽ・ｽﾍ該・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾇ暦ｿｽ・ｽI・ｽu・ｽW・ｽF・ｽN・ｽg・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾎス・ｽL・ｽb・ｽv
+            // MaterialType が None または該当の管理オブジェクトがなければスキップ
             if (materialType == MaterialType.None || materialManager == null)
                 continue;
 
-            // ・ｽ・ｽ・ｽﾝの従・ｽﾆ茨ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ謫ｾ
+            // 現在の従業員数を取得
             int currentCount = FindObjectsOfType<EmployeeController>()
                                 .Count(e => e.MaterialType == materialType);
-            // ・ｽZ・ｽ[・ｽu・ｽf・ｽ[・ｽ^・ｽ・ｽ・ｽ・ｽ]・ｽﾆ茨ｿｽ・ｽ・ｽ・ｽﾌア・ｽb・ｽv・ｽO・ｽ・ｽ・ｽ[・ｽh・ｽ・ｽ・ｽx・ｽ・ｽ・ｽ・ｽ・ｽ謫ｾ
+
+            // セーブデータ上の従業員数（アップグレードレベル）を取得
             int employeeAmount = stageData.FindUpgrade(Upgrade.UpgradeType.EmployeeAmount, materialType).Level;
             int toSpawn = employeeAmount - currentCount;
             if (toSpawn <= 0)
                 continue;
 
-            // ・ｽ・ｽ・ｽC・ｽA・ｽE・ｽg・ｽp・ｽﾉ固抵ｿｽﾌ列数ゑｿｽ・ｽw・ｽ・ｽ
+            // レイアウト調整用に、固定の列数（例：5列）を設定
             int numberOfColumns = 5;
             for (int i = currentCount; i < employeeAmount; i++)
             {
                 int columnIndex = i % numberOfColumns;
                 int rowIndex = (i / numberOfColumns) + 1;
 
-                // ・ｽw・ｽ・ｽﾌ暦ｿｽﾉ対会ｿｽ・ｽ・ｽ・ｽ・ｽp・ｽg・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽn・ｽ_・ｽ・ｽ・ｽ謫ｾ
+                // 指定列に対応するパトロールポイントを取得
                 MaterialParent.PatrolPoints patrol = materialManager.GetPatrolPointsForColumn(columnIndex + 1);
                 if (patrol == null)
                 {
-                    Debug.LogWarning("Column " + (columnIndex + 1) + " ・ｽﾌパ・ｽg・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽn・ｽ_・ｽ・ｽ・ｽ謫ｾ・ｽﾅゑｿｽ・ｽﾜゑｿｽ・ｽ・ｽB");
+                    Debug.LogWarning("Column " + (columnIndex + 1) + " のパトロールポイントが取得できません。");
                     continue;
                 }
 
-                // ・ｽp・ｽg・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽn・ｽ_・ｽp・ｽﾌ一時・ｽI・ｽu・ｽW・ｽF・ｽN・ｽg・ｽｶ撰ｿｽ
+                // パトロール用の一時オブジェクトを生成
                 GameObject pointAObj = new GameObject($"PatrolPointA_Column{columnIndex + 1}_{materialType}");
                 pointAObj.transform.position = patrol.pointA;
                 pointAObj.transform.parent = transform;
@@ -152,7 +155,7 @@ public class GameManager :MonoBehaviour
                 pointBObj.transform.position = patrol.pointB;
                 pointBObj.transform.parent = transform;
 
-                // ・ｽ]・ｽﾆ茨ｿｽ・ｽﾌ撰ｿｽ・ｽ・ｽ・ｽﾆ擾ｿｽ・ｽ・ｽ・ｽ・ｽ
+                // 従業員の生成と初期化
                 EmployeeController employee = Instantiate(employeePrefab, pointAObj.transform.position, Quaternion.identity);
                 employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
                 employee.Column = columnIndex + 1;
@@ -164,6 +167,7 @@ public class GameManager :MonoBehaviour
 
     void Update()
     {
+        // 経過時間を更新する
         if (stageData != null)
         {
             stageData.ElapsedTime += Time.unscaledDeltaTime;
@@ -207,6 +211,7 @@ public class GameManager :MonoBehaviour
         int price = GetUpgradePrice(upgradeType, materialType);
         AdjustMoney(-price);
 
+        // アップグレードの実施
         stageData.UpgradeUpgrade(upgradeType, materialType);
         if (upgradeType == Upgrade.UpgradeType.EmployeeAmount)
         {
@@ -235,6 +240,7 @@ public class GameManager :MonoBehaviour
     {
         if (rewardType != RewardType.Upgrade)
             return;
+
         PurchaseUpgradeByAd(pendingUpgradeType, pendingMaterialType);
 
         AdMobReward.Instance.OnRewardReceived -= OnAdRewardReceived;
@@ -269,7 +275,7 @@ public class GameManager :MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         if (index == currentSceneIndex)
-            return; // ・ｽ・ｽ・ｽﾝのシ・ｽ[・ｽ・ｽ・ｽﾌ再読み搾ｿｽ・ｽﾝゑｿｽh・ｽ~
+            return; // 同一シーンの再読み込みは行わない
 
         screenFader.FadeIn(() =>
         {
@@ -283,6 +289,7 @@ public class GameManager :MonoBehaviour
         globalData.IsAdRemoved = true;
         SaveSystem.SaveData(globalData, globalDataID);
 
+        // 各種広告オブジェクトの削除処理
         AdMobBanner banner = FindObjectOfType<AdMobBanner>();
         if (banner != null)
         {
@@ -342,7 +349,9 @@ public class Upgrade
 {
     public enum UpgradeType
     {
-        EmployeeSpeed, EmployeeCapacity, EmployeeAmount,
+        EmployeeSpeed,
+        EmployeeCapacity,
+        EmployeeAmount,
     }
     public UpgradeType upgradeType;
     public MaterialType MaterialType;
