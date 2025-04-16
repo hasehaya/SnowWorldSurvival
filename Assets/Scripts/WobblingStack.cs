@@ -102,8 +102,19 @@ public class WobblingStack :MonoBehaviour
 public enum MaterialType
 {
     None = 0,
-    Log = 1,
-    Rock = 2,
-    Snow = 3,
-    Tomato = 4,
-}  // Enum to define the type of stack
+    Wood_1 = 11,
+    Rock_1 = 12,
+
+    Wood_2 = 21,
+    Flower_2 = 22,
+    Rock_2 = 23,
+
+    Wood_3 = 31,
+    Rock_3 = 32,
+    Snow_3 = 33,
+    Crop_3 = 34,
+
+    Wood_4 = 41,
+    Rock_4 = 42,
+
+}
