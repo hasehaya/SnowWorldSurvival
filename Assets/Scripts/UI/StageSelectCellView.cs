@@ -1,21 +1,23 @@
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
-public class StageSelectCellView : MonoBehaviour
+public class StageSelectCellView :MonoBehaviour
 {
     [SerializeField] private int stageIndex;
     [SerializeField] private Button btn;
     [SerializeField] private ProgressDisplayInTitle progressDisplay;
     [SerializeField] private TMP_Text effectText;
+    [SerializeField] private TMP_Text stageNumText;
 
     private StageData stageData;
     private StageData previousStageData;
 
     public void Start()
     {
-        // Load stage data
+        stageNumText.text = stageIndex.ToString();
         string stageID = $"Stage{stageIndex}";
         stageData = SaveSystem.LoadData<StageData>(stageID);
 

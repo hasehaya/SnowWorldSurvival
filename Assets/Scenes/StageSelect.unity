@@ -130,6 +130,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2970931810478745119, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Name
       value: Stage_2
@@ -749,6 +765,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2970931810478745119, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Name
       value: Stage_6
@@ -981,6 +1013,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2970931810478745119, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Name
       value: Stage_7
@@ -1082,6 +1130,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2970931810478745119, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Name
       value: Stage_4
@@ -1508,6 +1572,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2970931810478745119, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Name
       value: Stage_3
@@ -1884,6 +1964,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 2706847774113802936, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2970931810478745119, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Name
       value: Stage_5
@@ -2017,17 +2113,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
+    - target: {fileID: 1141439017622179940, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2970931810478745119, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Name
       value: Stage_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3856733237169793145, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
-      propertyPath: m_text
-      value: "\u5BB9\u91CF+2"
-      objectReference: {fileID: 0}
-    - target: {fileID: 3856733237169793145, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
-      propertyPath: m_fontAsset
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6893816328194004361, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: m_Pivot.x
