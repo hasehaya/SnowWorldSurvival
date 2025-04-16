@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class SafeAreaAdjuster :MonoBehaviour
 {
@@ -13,7 +13,7 @@ public class SafeAreaAdjuster :MonoBehaviour
 
     private void Update()
     {
-        // safeArea‚ª•Ï‚í‚Á‚½‚Æ‚«‚Ì‚İXV
+        // safeAreaãŒå¤‰ã‚ã£ãŸã¨ãã®ã¿æ›´æ–°
         if (Screen.safeArea != lastSafeArea)
         {
             ApplySafeArea(Screen.safeArea);
@@ -23,7 +23,7 @@ public class SafeAreaAdjuster :MonoBehaviour
 
     private void ApplySafeArea(Rect area)
     {
-        // Y‚ÌMax‚É200ƒsƒNƒZƒ‹‚Ìƒ}[ƒWƒ“‚ğİ’èiã‘¤‚Ì—]”’‚ğŠm•Ûj
+        // Yã®Maxã«200ãƒ”ã‚¯ã‚»ãƒ«ã®ãƒãƒ¼ã‚¸ãƒ³ã‚’è¨­å®šï¼ˆä¸Šå´ã®ä½™ç™½ã‚’ç¢ºä¿ï¼‰
         area.yMax -= 200;
 
         Vector2 anchorMin = area.position;

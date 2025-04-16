@@ -1,17 +1,17 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 
 using UnityEngine;
 
 
 /// <summary>
-/// ‘fŞiMaterialBasej‚ğŠÇ—‚·‚éƒNƒ‰ƒX
+/// ç´ æï¼ˆMaterialBaseï¼‰ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class MaterialParent :Unlockable
 {
     [HideInInspector] public MaterialType MaterialType;
     [SerializeField] private Transform materialGrid;
     private List<GameObject> materialObjects = new List<GameObject>();
-    private bool isInitialized = false; // ‰Šú‰»Ï‚İ‚©‚Ìƒtƒ‰ƒO
+    private bool isInitialized = false; // åˆæœŸåŒ–æ¸ˆã¿ã‹ã®ãƒ•ãƒ©ã‚°
 
     protected override void Awake()
     {
@@ -20,7 +20,7 @@ public class MaterialParent :Unlockable
     }
 
     /// <summary>
-    /// ‘fŞƒIƒuƒWƒFƒNƒg‚Ì‰Šú‰»i’x‰„‰Šú‰»‚É‚à‘Î‰j
+    /// ç´ æã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åˆæœŸåŒ–ï¼ˆé…å»¶åˆæœŸåŒ–ã«ã‚‚å¯¾å¿œï¼‰
     /// </summary>
     private void InitializeMaterialObjects()
     {
@@ -29,7 +29,7 @@ public class MaterialParent :Unlockable
 
         isInitialized = true;
 
-        // materialGrid ”z‰º‚Ì‚·‚×‚Ä‚Ì MaterialBase ƒRƒ“ƒ|[ƒlƒ“ƒg‚ğæ“¾
+        // materialGrid é…ä¸‹ã®ã™ã¹ã¦ã® MaterialBase ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
         var materialList = materialGrid.GetComponentsInChildren<MaterialProducer>();
         materialObjects.Clear();
         foreach (var material in materialList)
@@ -44,13 +44,13 @@ public class MaterialParent :Unlockable
     {
         base.UpdateStats();
 
-        // ‘S‘fŞ‚ğˆê“x”ñƒAƒNƒeƒBƒu‰»
+        // å…¨ç´ æã‚’ä¸€åº¦éã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–
         foreach (var obj in materialObjects)
         {
             obj.SetActive(false);
         }
 
-        // unlockLevel ‚É‰‚¶‚½‘fŞ”‚ğƒAƒNƒeƒBƒu‰»i—áF1—ñ‚É‚Â‚«5ŒÂj
+        // unlockLevel ã«å¿œã˜ãŸç´ ææ•°ã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ–åŒ–ï¼ˆä¾‹ï¼š1åˆ—ã«ã¤ã5å€‹ï¼‰
         int materialCount = 5 * unlockLevel;
         for (int i = 0; i < materialCount && i < materialObjects.Count; i++)
         {
@@ -61,7 +61,7 @@ public class MaterialParent :Unlockable
     }
 
     /// <summary>
-    /// w’è‚µ‚½—ñ”Ô†‚É‘®‚·‚éƒAƒNƒeƒBƒu‚È‘fŞ‚©‚çAæ“ªiÅ¬ Rowj‚Æ––”öiÅ‘å Rowj‚ÌˆÊ’u‚ğæ“¾
+    /// æŒ‡å®šã—ãŸåˆ—ç•ªå·ã«å±ã™ã‚‹ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªç´ æã‹ã‚‰ã€å…ˆé ­ï¼ˆæœ€å° Rowï¼‰ã¨æœ«å°¾ï¼ˆæœ€å¤§ Rowï¼‰ã®ä½ç½®ã‚’å–å¾—
     /// </summary>
     public PatrolPoints GetPatrolPointsForColumn(int column)
     {
@@ -95,8 +95,8 @@ public class MaterialParent :Unlockable
     }
 
     /// <summary>
-    /// ƒV[ƒ““à‚Ì‚·‚×‚Ä‚Ì EmployeeController ‚Ì„‰ñ’n“_‚ğAŠe]‹Æˆõ‚ÌŠ‘®—ñ‚É‡‚í‚¹‚ÄXV‚µ‚Ü‚·B
-    /// ˆê“I‚É PatrolPoint ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µ‚ÄXV‚µ‚Ä‚¢‚Ü‚·B
+    /// ã‚·ãƒ¼ãƒ³å†…ã®ã™ã¹ã¦ã® EmployeeController ã®å·¡å›åœ°ç‚¹ã‚’ã€å„å¾“æ¥­å“¡ã®æ‰€å±åˆ—ã«åˆã‚ã›ã¦æ›´æ–°ã—ã¾ã™ã€‚
+    /// ä¸€æ™‚çš„ã« PatrolPoint ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¦æ›´æ–°ã—ã¦ã„ã¾ã™ã€‚
     /// </summary>
     private void UpdateEmployeePatrolPoints()
     {
@@ -111,7 +111,7 @@ public class MaterialParent :Unlockable
             PatrolPoints patrol = GetPatrolPointsForColumn(col);
             if (patrol == null)
             {
-                Debug.LogWarning("w’è‚³‚ê‚½—ñ " + col + " ‚ÉƒAƒNƒeƒBƒu‚È‘fŞ‚ª‚ ‚è‚Ü‚¹‚ñB");
+                Debug.LogWarning("æŒ‡å®šã•ã‚ŒãŸåˆ— " + col + " ã«ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªç´ æãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
                 continue;
             }
 
@@ -121,12 +121,12 @@ public class MaterialParent :Unlockable
             tempB.transform.position = patrol.pointB;
             employee.SetPatrolPoints(tempA.transform, tempB.transform);
 
-            // ¦•K—v‚É‰‚¶‚ÄA¶¬‚µ‚½ˆêƒIƒuƒWƒFƒNƒg‚Í Destroy() ‚·‚é‚©ŠÇ—‘¤‚ÅÄ—˜—p‚µ‚Ä‚­‚¾‚³‚¢B
+            // â€»å¿…è¦ã«å¿œã˜ã¦ã€ç”Ÿæˆã—ãŸä¸€æ™‚ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¯ Destroy() ã™ã‚‹ã‹ç®¡ç†å´ã§å†åˆ©ç”¨ã—ã¦ãã ã•ã„ã€‚
         }
     }
 
     /// <summary>
-    /// ’Pˆê‚Ì—ñ‚É‚¨‚¯‚éƒpƒgƒ[ƒ‹’n“_iæ“ª‚ÆÅIsj‚Ìî•ñ‚ğ•Û‚·‚éƒNƒ‰ƒX
+    /// å˜ä¸€ã®åˆ—ã«ãŠã‘ã‚‹ãƒ‘ãƒˆãƒ­ãƒ¼ãƒ«åœ°ç‚¹ï¼ˆå…ˆé ­ã¨æœ€çµ‚è¡Œï¼‰ã®æƒ…å ±ã‚’ä¿æŒã™ã‚‹ã‚¯ãƒ©ã‚¹
     /// </summary>
     public class PatrolPoints
     {

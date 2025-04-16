@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 
 using TMPro;
 
@@ -8,19 +8,19 @@ using UnityEngine.Localization;
 using UnityEngine.Localization.Components;
 
 /// <summary>
-/// TMP_FontAsset —p‚Ì LocalizedAsset ‚ğ•\‚·ƒNƒ‰ƒX
+/// TMP_FontAsset ç”¨ã® LocalizedAsset ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
 /// </summary>
 [Serializable]
 public class LocalizedTMPFontAsset :LocalizedAsset<TMP_FontAsset> { }
 
 /// <summary>
-/// TMP_FontAsset —p‚Ì UnityEvent
+/// TMP_FontAsset ç”¨ã® UnityEvent
 /// </summary>
 [Serializable]
 public class UnityEventTMPFont :UnityEvent<TMP_FontAsset> { }
 
 /// <summary>
-/// TMP_FontAsset ‚ğØ‚è‘Ö‚¦‚é‚½‚ß‚Ì LocalizedAssetEvent ƒRƒ“ƒ|[ƒlƒ“ƒg
+/// TMP_FontAsset ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹ãŸã‚ã® LocalizedAssetEvent ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
 /// </summary>
 [AddComponentMenu("Localization/Asset/" + nameof(LocalizedTmpFontEvent))]
 public class LocalizedTmpFontEvent :LocalizedAssetEvent<TMP_FontAsset, LocalizedTMPFontAsset, UnityEventTMPFont> { }

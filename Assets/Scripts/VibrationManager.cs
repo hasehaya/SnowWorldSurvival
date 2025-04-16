@@ -1,19 +1,19 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public static class VibrationManager
 {
     // ------------------------------------------------------------------------
-    // iOSŒü‚¯İ’è (SystemSoundID ‚Å‚ÌƒnƒvƒeƒBƒNƒXŒÄ‚Ño‚µ)
+    // iOSå‘ã‘è¨­å®š (SystemSoundID ã§ã®ãƒãƒ—ãƒ†ã‚£ã‚¯ã‚¹å‘¼ã³å‡ºã—)
     // ------------------------------------------------------------------------
 #if UNITY_IOS && !UNITY_EDITOR
-    // iOSƒlƒCƒeƒBƒuŠÖ”‚ÌƒCƒ“ƒ|[ƒg
+    // iOSãƒã‚¤ãƒ†ã‚£ãƒ–é–¢æ•°ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ
     [DllImport("__Internal")]
     private static extern void _playSystemSound(int systemSoundID);
 #endif
 
     /// <summary>
-    /// iOS‚ÅƒnƒvƒeƒBƒNƒX—p‚ÌSystemSound‚ğÄ¶
-    /// 1519/1520/1521/1522 ‚È‚Ç‚Å‹­“x‚âí—Ş‚ª•Ï‚í‚é
+    /// iOSã§ãƒãƒ—ãƒ†ã‚£ã‚¯ã‚¹ç”¨ã®SystemSoundã‚’å†ç”Ÿ
+    /// 1519/1520/1521/1522 ãªã©ã§å¼·åº¦ã‚„ç¨®é¡ãŒå¤‰ã‚ã‚‹
     /// </summary>
     private static void PlaySystemSound(int systemSoundID)
     {
@@ -23,7 +23,7 @@ public static class VibrationManager
     }
 
     // ------------------------------------------------------------------------
-    // AndroidŒü‚¯İ’è
+    // Androidå‘ã‘è¨­å®š
     // ------------------------------------------------------------------------
 #if UNITY_ANDROID && !UNITY_EDITOR
     private static readonly AndroidJavaClass UnityPlayer =
@@ -34,7 +34,7 @@ public static class VibrationManager
         CurrentActivity.Call<AndroidJavaObject>("getSystemService", "vibrator");
 
     /// <summary>
-    /// Android‚Ìƒo[ƒWƒ‡ƒ“ƒ`ƒFƒbƒN (API 26ˆÈã‚©‚Ç‚¤‚©)
+    /// Androidã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ (API 26ä»¥ä¸Šã‹ã©ã†ã‹)
     /// </summary>
     private static bool IsAndroidOreoOrHigher()
     {
@@ -46,11 +46,11 @@ public static class VibrationManager
     }
 
     /// <summary>
-    /// API26ˆÈã‚Ì’[––‚Å VibrationEffect‚ğg‚Á‚ÄU“®‚³‚¹‚é
+    /// API26ä»¥ä¸Šã®ç«¯æœ«ã§ VibrationEffectã‚’ä½¿ã£ã¦æŒ¯å‹•ã•ã›ã‚‹
     /// </summary>
     private static void VibrateOneShot(long milliseconds, int amplitude = -1)
     {
-        // amplitude = -1 ‚ÅƒfƒtƒHƒ‹ƒg‹­“x
+        // amplitude = -1 ã§ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆå¼·åº¦
         if (IsAndroidOreoOrHigher())
         {
             using (var vibrationEffectClass = new AndroidJavaClass("android.os.VibrationEffect"))
@@ -65,18 +65,18 @@ public static class VibrationManager
         }
         else
         {
-            // API26–¢–‚Ìê‡
+            // API26æœªæº€ã®å ´åˆ
             Vibrator.Call("vibrate", milliseconds);
         }
     }
 #endif
 
     // ------------------------------------------------------------------------
-    // ‹¤’Êƒƒ\ƒbƒhŒQ
+    // å…±é€šãƒ¡ã‚½ãƒƒãƒ‰ç¾¤
     // ------------------------------------------------------------------------
 
     /// <summary>
-    /// u’Z‚ß‚ÌƒoƒCƒuƒŒ[ƒVƒ‡ƒ“v‚ğÀs (”\ƒ~ƒŠ•b’ö“x)
+    /// ã€ŒçŸ­ã‚ã®ãƒã‚¤ãƒ–ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã€ã‚’å®Ÿè¡Œ (æ•°åãƒŸãƒªç§’ç¨‹åº¦)
     /// </summary>
     public static void ShortVibration()
     {
@@ -84,21 +84,21 @@ public static class VibrationManager
             return;
 
 #if UNITY_IOS && !UNITY_EDITOR
-        // iOS‚Ìê‡: 1519(Œy‚ß) ‚Ì Taptic Engine ƒtƒB[ƒhƒoƒbƒN‚ğÄ¶
+        // iOSã®å ´åˆ: 1519(è»½ã‚) ã® Taptic Engine ãƒ•ã‚£ãƒ¼ãƒ‰ãƒãƒƒã‚¯ã‚’å†ç”Ÿ
         PlaySystemSound(1519);
 
 #elif UNITY_ANDROID && !UNITY_EDITOR
-        // Android‚Ìê‡: 20ms‚Ù‚Ç‚Ì’Z‚¢U“®
+        // Androidã®å ´åˆ: 20msã»ã©ã®çŸ­ã„æŒ¯å‹•
         VibrateOneShot(20, -1);
 
 #else
-        // ‚»‚Ì‘¼(ƒGƒfƒBƒ^ŠÜ‚Ş)‚Ìê‡‚ÍƒtƒH[ƒ‹ƒoƒbƒN
+        // ãã®ä»–(ã‚¨ãƒ‡ã‚£ã‚¿å«ã‚€)ã®å ´åˆã¯ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯
         Handheld.Vibrate();
 #endif
     }
 
     /// <summary>
-    /// u’†’ö“x`‚â‚â’·‚ß‚ÌƒoƒCƒuƒŒ[ƒVƒ‡ƒ“v‚ğÀs (—á: 100ms)
+    /// ã€Œä¸­ç¨‹åº¦ï½ã‚„ã‚„é•·ã‚ã®ãƒã‚¤ãƒ–ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã€ã‚’å®Ÿè¡Œ (ä¾‹: 100ms)
     /// </summary>
     public static void MediumVibration()
     {
@@ -106,8 +106,8 @@ public static class VibrationManager
             return;
 
 #if UNITY_IOS && !UNITY_EDITOR
-        // 1520 ‚Ü‚½‚Í 1521, 1522 ‚È‚Ç•Ê‚ÌSystemSoundID‚Å‹­“x‚ğ•Ï‚¦‚ç‚ê‚é
-        // (‚½‚¾‚µ”÷–­‚Èˆá‚¢‚È‚Ì‚ÅÀ‹@‚Å—vŠm”F)
+        // 1520 ã¾ãŸã¯ 1521, 1522 ãªã©åˆ¥ã®SystemSoundIDã§å¼·åº¦ã‚’å¤‰ãˆã‚‰ã‚Œã‚‹
+        // (ãŸã ã—å¾®å¦™ãªé•ã„ãªã®ã§å®Ÿæ©Ÿã§è¦ç¢ºèª)
         PlaySystemSound(1520);
 
 #elif UNITY_ANDROID && !UNITY_EDITOR
@@ -119,8 +119,8 @@ public static class VibrationManager
     }
 
     /// <summary>
-    /// ”CˆÓ‚Ìƒ~ƒŠ•bU“®‚³‚¹‚é
-    /// (iOS‚Í×‚©‚¢§Œä‚ª“ï‚µ‚¢‚½‚ßƒtƒH[ƒ‹ƒoƒbƒN“I‚É—˜—p)
+    /// ä»»æ„ã®ãƒŸãƒªç§’æŒ¯å‹•ã•ã›ã‚‹
+    /// (iOSã¯ç´°ã‹ã„åˆ¶å¾¡ãŒé›£ã—ã„ãŸã‚ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯çš„ã«åˆ©ç”¨)
     /// </summary>
     public static void Vibrate(long milliseconds)
     {
@@ -128,7 +128,7 @@ public static class VibrationManager
             return;
 
 #if UNITY_IOS && !UNITY_EDITOR
-        // iOS‚Ìê‡A×‚©‚¢§Œä‚ª•W€API‚Å‚Í‚Å‚«‚È‚¢‚½‚ßˆê—¥ƒtƒH[ƒ‹ƒoƒbƒN
+        // iOSã®å ´åˆã€ç´°ã‹ã„åˆ¶å¾¡ãŒæ¨™æº–APIã§ã¯ã§ããªã„ãŸã‚ä¸€å¾‹ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯
         Handheld.Vibrate();
 #elif UNITY_ANDROID && !UNITY_EDITOR
         VibrateOneShot(milliseconds, -1);
@@ -138,8 +138,8 @@ public static class VibrationManager
     }
 
     /// <summary>
-    /// uƒ|ƒRƒ|ƒRv‚µ‚½U“®‚È‚ÇAƒpƒ^[ƒ“U“®‚ğÀs‚·‚éƒTƒ“ƒvƒ‹
-    /// (’Z‚¢U“® ¨ ŠÔŠu ¨ ’Z‚¢U“® ¨ ŠÔŠu ...)
+    /// ã€Œãƒã‚³ãƒã‚³ã€ã—ãŸæŒ¯å‹•ãªã©ã€ãƒ‘ã‚¿ãƒ¼ãƒ³æŒ¯å‹•ã‚’å®Ÿè¡Œã™ã‚‹ã‚µãƒ³ãƒ—ãƒ«
+    /// (çŸ­ã„æŒ¯å‹• â†’ é–“éš” â†’ çŸ­ã„æŒ¯å‹• â†’ é–“éš” ...)
     /// </summary>
     public static void PatternVibration()
     {
@@ -147,24 +147,24 @@ public static class VibrationManager
             return;
 
 #if UNITY_IOS && !UNITY_EDITOR
-    // iOS‚Í1“x‚«‚è‚ÌSystemSound‚µ‚©Ä¶‚Å‚«‚È‚¢‚½‚ßA•¡”‰ñ˜A‘±‚Å–Â‚ç‚·ê‡‚Í
-    // ƒRƒ‹[ƒ`ƒ““™‚Å•¡”‰ñ PlaySystemSound(1519) ‚ğŒÄ‚Ô•K—v‚ª‚ ‚è‚Ü‚·B
-    // —á‚Æ‚µ‚Ä‚Í‰º‹L‚Ì‚æ‚¤‚È‚à‚Ì:
-    // ShortVibration(); // 1‰ñ–Ú
+    // iOSã¯1åº¦ãã‚Šã®SystemSoundã—ã‹å†ç”Ÿã§ããªã„ãŸã‚ã€è¤‡æ•°å›é€£ç¶šã§é³´ã‚‰ã™å ´åˆã¯
+    // ã‚³ãƒ«ãƒ¼ãƒãƒ³ç­‰ã§è¤‡æ•°å› PlaySystemSound(1519) ã‚’å‘¼ã¶å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚
+    // ä¾‹ã¨ã—ã¦ã¯ä¸‹è¨˜ã®ã‚ˆã†ãªã‚‚ã®:
+    // ShortVibration(); // 1å›ç›®
     // yield return new WaitForSeconds(0.075f);
-    // ShortVibration(); // 2‰ñ–Ú
-    // ‚Æ‚¢‚Á‚½Š´‚¶‚ÅÀ‘•‚µ‚Ü‚·B
+    // ShortVibration(); // 2å›ç›®
+    // ã¨ã„ã£ãŸæ„Ÿã˜ã§å®Ÿè£…ã—ã¾ã™ã€‚
     PlaySystemSound(1519);
 
 #elif UNITY_ANDROID && !UNITY_EDITOR
-    // Android‚Ìê‡‚Í createWaveform ‚Åƒpƒ^[ƒ“U“®‚ğÀs‰Â”\
+    // Androidã®å ´åˆã¯ createWaveform ã§ãƒ‘ã‚¿ãƒ¼ãƒ³æŒ¯å‹•ã‚’å®Ÿè¡Œå¯èƒ½
     if (IsAndroidOreoOrHigher())
     {
         using (var vibrationEffectClass = new AndroidJavaClass("android.os.VibrationEffect"))
         {
-            // —á: ‘Ò‹@0ms ¨ 15msU“® ¨ 60ms‘Ò‹@ ¨ 15msU“®
+            // ä¾‹: å¾…æ©Ÿ0ms â†’ 15msæŒ¯å‹• â†’ 60mså¾…æ©Ÿ â†’ 15msæŒ¯å‹•
             long[] pattern = { 0, 15, 60, 15 };
-            // -1 ‚ÍƒŠƒs[ƒg‚È‚µ, 0ˆÈã‚È‚çƒpƒ^[ƒ““à‚ÌƒCƒ“ƒfƒbƒNƒX‚É–ß‚Á‚ÄƒŠƒs[ƒg
+            // -1 ã¯ãƒªãƒ”ãƒ¼ãƒˆãªã—, 0ä»¥ä¸Šãªã‚‰ãƒ‘ã‚¿ãƒ¼ãƒ³å†…ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«æˆ»ã£ã¦ãƒªãƒ”ãƒ¼ãƒˆ
             var effect = vibrationEffectClass.CallStatic<AndroidJavaObject>(
                 "createWaveform",
                 pattern,
@@ -175,13 +175,13 @@ public static class VibrationManager
     }
     else
     {
-        // API26–¢–‚Ìê‡
+        // API26æœªæº€ã®å ´åˆ
         long[] pattern = { 0, 15, 60, 15 };
-        // ‘æ2ˆø”‚ÅƒŠƒs[ƒg‚ÌƒCƒ“ƒfƒbƒNƒXw’è(-1‚ÅƒŠƒs[ƒg‚È‚µ)
+        // ç¬¬2å¼•æ•°ã§ãƒªãƒ”ãƒ¼ãƒˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹æŒ‡å®š(-1ã§ãƒªãƒ”ãƒ¼ãƒˆãªã—)
         Vibrator.Call("vibrate", pattern, -1);
     }
 #else
-        // ƒGƒfƒBƒ^‚â‚»‚Ì‘¼ƒvƒ‰ƒbƒgƒtƒH[ƒ€‚Å‚ÍƒtƒH[ƒ‹ƒoƒbƒN
+        // ã‚¨ãƒ‡ã‚£ã‚¿ã‚„ãã®ä»–ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã§ã¯ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯
         Handheld.Vibrate();
 #endif
     }

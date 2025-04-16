@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,37 +8,37 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class EmployeeController :MonoBehaviour
 {
-    // ’Ç‰ÁFŠ‘®‚·‚ésE—ñî•ñBRestaurantManager ‚Åİ’è‚³‚ê‚Ü‚·B
+    // è¿½åŠ ï¼šæ‰€å±ã™ã‚‹è¡Œãƒ»åˆ—æƒ…å ±ã€‚RestaurantManager ã§è¨­å®šã•ã‚Œã¾ã™ã€‚
     public int Row { get; set; }
     public int Column { get; set; }
 
     private Transform pointA;
     private Transform pointB;
 
-    [SerializeField, Tooltip("¶è‚ÌIKƒ^[ƒQƒbƒg")]
+    [SerializeField, Tooltip("å·¦æ‰‹ã®IKã‚¿ãƒ¼ã‚²ãƒƒãƒˆ")]
     private Transform leftHandTarget;
-    [SerializeField, Tooltip("‰Eè‚ÌIKƒ^[ƒQƒbƒg")]
+    [SerializeField, Tooltip("å³æ‰‹ã®IKã‚¿ãƒ¼ã‚²ãƒƒãƒˆ")]
     private Transform rightHandTarget;
 
-    // ]‹Æˆõ©g‚ÌƒXƒ^ƒbƒNŠÇ——pƒRƒ“ƒ|[ƒlƒ“ƒg
-    [SerializeField, Tooltip("]‹Æˆõ‚ÌƒXƒ^ƒbƒNŠÇ——pƒRƒ“ƒ|[ƒlƒ“ƒg")]
+    // å¾“æ¥­å“¡è‡ªèº«ã®ã‚¹ã‚¿ãƒƒã‚¯ç®¡ç†ç”¨ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+    [SerializeField, Tooltip("å¾“æ¥­å“¡ã®ã‚¹ã‚¿ãƒƒã‚¯ç®¡ç†ç”¨ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ")]
     private WobblingStack stack;
     public WobblingStack Stack => stack;
 
-    // Šî–{“I‚È“®ì‘¬“x‚Æ—e—ÊBƒAƒbƒvƒOƒŒ[ƒh‚É‚æ‚Á‚Ä‰ÁZ‚³‚ê‚Ü‚·B
-    [SerializeField, Tooltip("]‹Æˆõ‚ÌŠî–{ˆÚ“®‘¬“x")]
+    // åŸºæœ¬çš„ãªå‹•ä½œé€Ÿåº¦ã¨å®¹é‡ã€‚ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ã«ã‚ˆã£ã¦åŠ ç®—ã•ã‚Œã¾ã™ã€‚
+    [SerializeField, Tooltip("å¾“æ¥­å“¡ã®åŸºæœ¬ç§»å‹•é€Ÿåº¦")]
     private float baseSpeed = 1.0f;
-    [SerializeField, Tooltip("]‹Æˆõ‚ÌŠî–{ƒXƒ^ƒbƒN—e—Ê")]
+    [SerializeField, Tooltip("å¾“æ¥­å“¡ã®åŸºæœ¬ã‚¹ã‚¿ãƒƒã‚¯å®¹é‡")]
     private int baseCapacity = 3;
 
-    // LogEmployee ‚ÌƒXƒ^ƒbƒN—e—Ê‚Í UpdateStats ‚ÅXV
-    [SerializeField, Tooltip("ƒXƒ^ƒbƒN‚Ì—e—Ê (ƒAƒbƒvƒOƒŒ[ƒh‚Å‘‰Á)")]
+    // LogEmployee ã®ã‚¹ã‚¿ãƒƒã‚¯å®¹é‡ã¯ UpdateStats ã§æ›´æ–°
+    [SerializeField, Tooltip("ã‚¹ã‚¿ãƒƒã‚¯ã®å®¹é‡ (ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ã§å¢—åŠ )")]
     private int capacity = 3;
     public int Capacity => capacity;
 
     public MaterialType MaterialType;
 
-    // ƒƒO‚ğ—a‚¯‚éæBLogStack ‚Í ObjectStack ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX
+    // ãƒ­ã‚°ã‚’é ã‘ã‚‹å…ˆã€‚LogStack ã¯ ObjectStack ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     private ObjectStack objectStack;
 
     private NavMeshAgent agent;
@@ -46,7 +46,7 @@ public class EmployeeController :MonoBehaviour
     private Vector3 currentTarget;
     private float IK_Weight;
 
-    // ƒƒO—a‚¯’†‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
+    // ãƒ­ã‚°é ã‘ä¸­ã‹ã©ã†ã‹ã®ãƒ•ãƒ©ã‚°
     private bool isTransferringLogs = false;
 
     void Awake()
@@ -66,13 +66,13 @@ public class EmployeeController :MonoBehaviour
             }
         }
 
-        // „‰ñ’n“_‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡A‰Šú–Ú“I’n‚ğ A ’n“_‚Éİ’è
+        // å·¡å›åœ°ç‚¹ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã€åˆæœŸç›®çš„åœ°ã‚’ A åœ°ç‚¹ã«è¨­å®š
         if (pointA != null)
         {
             currentTarget = pointA.position;
             agent.SetDestination(currentTarget);
         }
-        // RestaurantManager ‚ÌƒAƒbƒvƒOƒŒ[ƒhƒCƒxƒ“ƒg‚Éw“Ç
+        // RestaurantManager ã®ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ã‚¤ãƒ™ãƒ³ãƒˆã«è³¼èª­
         GameManager.Instance.OnUpgrade += UpdateStats;
         UpdateStats();
     }
@@ -101,15 +101,15 @@ public class EmployeeController :MonoBehaviour
     }
 
     /// <summary>
-    /// ƒAƒbƒvƒOƒŒ[ƒh‚ÌŒø‰Ê‚ğ”½‰f‚µ‚ÄAˆÚ“®‘¬“x‚ÆƒXƒ^ƒbƒN—e—Ê‚ğXV‚·‚éB
+    /// ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ã®åŠ¹æœã‚’åæ˜ ã—ã¦ã€ç§»å‹•é€Ÿåº¦ã¨ã‚¹ã‚¿ãƒƒã‚¯å®¹é‡ã‚’æ›´æ–°ã™ã‚‹ã€‚
     /// </summary>
     void UpdateStats()
     {
-        // EmployeeSpeed ƒAƒbƒvƒOƒŒ[ƒhƒŒƒxƒ‹‚É‰‚¶‚½ˆÚ“®‘¬“x‚Ì‰ÁZi—áF0.1f‚¸‚Â‰ÁZj
+        // EmployeeSpeed ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ãƒ¬ãƒ™ãƒ«ã«å¿œã˜ãŸç§»å‹•é€Ÿåº¦ã®åŠ ç®—ï¼ˆä¾‹ï¼š0.1fãšã¤åŠ ç®—ï¼‰
         float speedLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeSpeed, MaterialType);
         agent.speed = baseSpeed + (speedLevel * 0.4f);
 
-        // EmployeeCapacity ƒAƒbƒvƒOƒŒ[ƒhƒŒƒxƒ‹‚É‰‚¶‚½ƒXƒ^ƒbƒN—e—Ê‚Ì‰ÁZ
+        // EmployeeCapacity ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰ãƒ¬ãƒ™ãƒ«ã«å¿œã˜ãŸã‚¹ã‚¿ãƒƒã‚¯å®¹é‡ã®åŠ ç®—
         int capacityLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeCapacity, MaterialType);
         capacity = baseCapacity + 3 * capacityLevel;
     }
@@ -146,14 +146,14 @@ public class EmployeeController :MonoBehaviour
         }
     }
 
-    // AnimationEvent "OnStep" —pi‘«‰¹ƒCƒxƒ“ƒg•s—v‚È‚ç‹óÀ‘•j
+    // AnimationEvent "OnStep" ç”¨ï¼ˆè¶³éŸ³ã‚¤ãƒ™ãƒ³ãƒˆä¸è¦ãªã‚‰ç©ºå®Ÿè£…ï¼‰
     public void OnStep()
     {
-        // LogEmployee ‚Í‘«‰¹ƒCƒxƒ“ƒgˆ—‚ª•s—v‚È‚ç‚±‚±‚Í‹óÀ‘•‚ÅOK
+        // LogEmployee ã¯è¶³éŸ³ã‚¤ãƒ™ãƒ³ãƒˆå‡¦ç†ãŒä¸è¦ãªã‚‰ã“ã“ã¯ç©ºå®Ÿè£…ã§OK
     }
 
     /// <summary>
-    /// ŠO•”‚©‚çƒpƒgƒ[ƒ‹’n“_‚ğİ’è‚·‚éƒƒ\ƒbƒh
+    /// å¤–éƒ¨ã‹ã‚‰ãƒ‘ãƒˆãƒ­ãƒ¼ãƒ«åœ°ç‚¹ã‚’è¨­å®šã™ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
     /// </summary>
     public void SetPatrolPoints(Transform a, Transform b)
     {
@@ -167,8 +167,8 @@ public class EmployeeController :MonoBehaviour
     }
 
     /// <summary>
-    /// ƒXƒ^ƒbƒN‚ª–”t‚É‚È‚Á‚½ÛALogStack ‚ÖƒƒO‚ğ—a‚¯‚éˆ—B
-    /// “]‘—‚ªŠ®—¹‚·‚é‚Æ„‰ñƒtƒF[ƒY‚Í•K‚¸ A ’n“_‚©‚çÄŠJ‚·‚éB
+    /// ã‚¹ã‚¿ãƒƒã‚¯ãŒæº€æ¯ã«ãªã£ãŸéš›ã€LogStack ã¸ãƒ­ã‚°ã‚’é ã‘ã‚‹å‡¦ç†ã€‚
+    /// è»¢é€ãŒå®Œäº†ã™ã‚‹ã¨å·¡å›ãƒ•ã‚§ãƒ¼ã‚ºã¯å¿…ãš A åœ°ç‚¹ã‹ã‚‰å†é–‹ã™ã‚‹ã€‚
     /// </summary>
     private IEnumerator TransferLogsToLogStack()
     {

@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 
 using UnityEngine;
 using UnityEngine.AI;
@@ -8,7 +8,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class CustomerController :MonoBehaviour
 {
-    // ‚Ç‚ÌƒLƒ…[‚É•À‚Ô‚©‚ğ¦‚·ƒvƒƒpƒeƒBiCounterTable ‚©‚çİ’è‚³‚ê‚Ü‚·j
+    // ã©ã®ã‚­ãƒ¥ãƒ¼ã«ä¸¦ã¶ã‹ã‚’ç¤ºã™ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ï¼ˆCounterTable ã‹ã‚‰è¨­å®šã•ã‚Œã¾ã™ï¼‰
     public int QueueIndex { get; set; }
     public OrderInfo OrderInfo;
 
@@ -33,7 +33,7 @@ public class CustomerController :MonoBehaviour
     private LayerMask entranceLayer;
     private float IK_Weight;
 
-    // ¶¬‚µ‚½ OrderInfo ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Û‚·‚é•Ï”
+    // ç”Ÿæˆã—ãŸ OrderInfo ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä¿æŒã™ã‚‹å¤‰æ•°
     private OrderInfo currentOrderInfo;
 
     void Awake()
@@ -95,7 +95,7 @@ public class CustomerController :MonoBehaviour
         OrderCount = Random.Range(1, maxOrder + 1);
         HasOrder = true;
 
-        // OrderInfo ƒvƒŒƒnƒu‚ğ¶¬‚µ•\¦
+        // OrderInfo ãƒ—ãƒ¬ãƒãƒ–ã‚’ç”Ÿæˆã—è¡¨ç¤º
         currentOrderInfo = Instantiate(OrderInfo, GameManager.Instance.Canvas.transform);
         currentOrderInfo.ShowInfo(transform, OrderCount);
     }
@@ -110,7 +110,7 @@ public class CustomerController :MonoBehaviour
         OrderCount--;
         stack.AddToStack(food, stack.MaterialType);
 
-        // Šù‚É¶¬‚µ‚Ä‚¢‚é OrderInfo ƒCƒ“ƒXƒ^ƒ“ƒX‚ğXV
+        // æ—¢ã«ç”Ÿæˆã—ã¦ã„ã‚‹ OrderInfo ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ›´æ–°
         if (currentOrderInfo != null)
         {
             currentOrderInfo.ShowInfo(transform, OrderCount);
@@ -118,7 +118,7 @@ public class CustomerController :MonoBehaviour
 
         if (OrderCount <= 0)
         {
-            // ’•¶Š®—¹‚Í OrderInfo ‚ğ”ñ•\¦
+            // æ³¨æ–‡å®Œäº†æ™‚ã¯ OrderInfo ã‚’éè¡¨ç¤º
             if (currentOrderInfo != null)
             {
                 currentOrderInfo.HideInfo();
@@ -172,13 +172,13 @@ public class CustomerController :MonoBehaviour
     }
 
     /// <summary>
-    /// OnDestroy ‚ÅACustomerController ‚ª”jŠü‚³‚ê‚éÛ‚É©g‚Ì stack ‚Éc‚Á‚Ä‚¢‚é Log ‚ğ PoolManager ‚É•Ô‹p‚µ‚Ü‚·B
+    /// OnDestroy ã§ã€CustomerController ãŒç ´æ£„ã•ã‚Œã‚‹éš›ã«è‡ªèº«ã® stack ã«æ®‹ã£ã¦ã„ã‚‹ Log ã‚’ PoolManager ã«è¿”å´ã—ã¾ã™ã€‚
     /// </summary>
     void OnDestroy()
     {
         if (stack != null)
         {
-            // ‚±‚±‚Å‚Í stack.Count ƒvƒƒpƒeƒB‚Æ RemoveFromStack() ƒƒ\ƒbƒh‚ğ—˜—p‚µ‚ÄA‚·‚×‚Ä‚Ì Log ‚ğ•Ô‹p‚µ‚Ü‚·B
+            // ã“ã“ã§ã¯ stack.Count ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã¨ RemoveFromStack() ãƒ¡ã‚½ãƒƒãƒ‰ã‚’åˆ©ç”¨ã—ã¦ã€ã™ã¹ã¦ã® Log ã‚’è¿”å´ã—ã¾ã™ã€‚
             while (stack.Count > 0)
             {
                 Transform log = stack.RemoveFromStack();

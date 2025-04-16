@@ -1,4 +1,4 @@
-using GoogleMobileAds.Api;
+ï»¿using GoogleMobileAds.Api;
 
 using UnityEngine;
 
@@ -16,12 +16,12 @@ public class AdMobRewardInterstitial :MonoBehaviour
             return instance;
         }
     }
-    //‚â‚é‚±‚Æ
-    //1.ƒŠƒ[ƒhLID‚Ì“ü—Í
-    //2.GetRewardŠÖ”‚É•ñV“à—e‚ğ“ü—Í
-    //3.ƒŠƒ[ƒh‹N“®İ’è@ShowAdMobReward()‚ğg‚¤
+    //ã‚„ã‚‹ã“ã¨
+    //1.ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘ŠIDã®å…¥åŠ›
+    //2.GetRewardé–¢æ•°ã«å ±é…¬å†…å®¹ã‚’å…¥åŠ›
+    //3.ãƒªãƒ¯ãƒ¼ãƒ‰èµ·å‹•è¨­å®šã€€ShowAdMobReward()ã‚’ä½¿ã†
 
-    private RewardedInterstitialAd rewardedInterstitialAd;//RewardedAdŒ^‚Ì•Ï” rewardedAd‚ğéŒ¾ ‚±‚Ì’†‚ÉƒŠƒ[ƒhL‚Ìî•ñ‚ª“ü‚é
+    private RewardedInterstitialAd rewardedInterstitialAd;//RewardedAdå‹ã®å¤‰æ•° rewardedAdã‚’å®£è¨€ ã“ã®ä¸­ã«ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã®æƒ…å ±ãŒå…¥ã‚‹
 
     private string adUnitId;
 
@@ -32,23 +32,23 @@ public class AdMobRewardInterstitial :MonoBehaviour
             return;
         }
 
-        //Android‚ÆiOS‚ÅLID‚ªˆá‚¤‚Ì‚Åƒvƒ‰ƒbƒgƒtƒH[ƒ€‚Åˆ—‚ğ•ª‚¯‚Ü‚·B
-        // Ql
-        //yUnityzAndroid‚ÆiOS‚Åˆ—‚ğ•ª‚¯‚é•û–@
+        //Androidã¨iOSã§åºƒå‘ŠIDãŒé•ã†ã®ã§ãƒ—ãƒ©ãƒƒãƒˆãƒ•ã‚©ãƒ¼ãƒ ã§å‡¦ç†ã‚’åˆ†ã‘ã¾ã™ã€‚
+        // å‚è€ƒ
+        //ã€Unityã€‘Androidã¨iOSã§å‡¦ç†ã‚’åˆ†ã‘ã‚‹æ–¹æ³•
         // https://marumaro7.hatenablog.com/entry/platformsyoriwakeru
 
 #if UNITY_ANDROID
         adUnitId = "ca-app-pub-2788807416533951/7735739968";
 #elif UNITY_IPHONE
-        adUnitId = "ca-app-pub-2788807416533951/9675174452";//‚±‚±‚ÉiOS‚ÌƒŠƒ[ƒhLID‚ğ“ü—Í
+        adUnitId = "ca-app-pub-2788807416533951/9675174452";//ã“ã“ã«iOSã®ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘ŠIDã‚’å…¥åŠ›
 #else
         adUnitId = "unexpected_platform";
 #endif
 
-        //ƒŠƒ[ƒh “Ç‚İ‚İŠJn
+        //ãƒªãƒ¯ãƒ¼ãƒ‰ èª­ã¿è¾¼ã¿é–‹å§‹
         Debug.Log("Rewarded ad load start");
 
-        LoadRewardedAd();//ƒŠƒ[ƒhL“Ç‚İ‚İ
+        LoadRewardedAd();//ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šèª­ã¿è¾¼ã¿
     }
 
     public void DestroyAd()
@@ -60,33 +60,33 @@ public class AdMobRewardInterstitial :MonoBehaviour
         }
     }
 
-    //ƒŠƒ[ƒhL‚ğ•\¦‚·‚éŠÖ”
-    //ƒ{ƒ^ƒ“‚ÉŠ„•t‚¯‚µ‚Äg—p
+    //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã‚’è¡¨ç¤ºã™ã‚‹é–¢æ•°
+    //ãƒœã‚¿ãƒ³ã«å‰²ä»˜ã‘ã—ã¦ä½¿ç”¨
     public void ShowAdMobReward()
     {
-        //•Ï”rewardedAd‚Ì’†g‚ª‘¶İ‚µ‚Ä‚¨‚èAL‚Ì“Ç‚İ‚İ‚ªŠ®—¹‚µ‚Ä‚¢‚½‚çL•\¦
+        //å¤‰æ•°rewardedAdã®ä¸­èº«ãŒå­˜åœ¨ã—ã¦ãŠã‚Šã€åºƒå‘Šã®èª­ã¿è¾¼ã¿ãŒå®Œäº†ã—ã¦ã„ãŸã‚‰åºƒå‘Šè¡¨ç¤º
         if (rewardedInterstitialAd != null && rewardedInterstitialAd.CanShowAd() == true)
         {
-            //ƒŠƒ[ƒhL •\¦‚ğÀ{@•ñV‚Ìó‚¯æ‚è‚ÌŠÖ”GetReward‚ğˆø”‚Éİ’è
+            //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Š è¡¨ç¤ºã‚’å®Ÿæ–½ã€€å ±é…¬ã®å—ã‘å–ã‚Šã®é–¢æ•°GetRewardã‚’å¼•æ•°ã«è¨­å®š
             rewardedInterstitialAd.Show(GetReward);
         }
         else
         {
-            //ƒŠƒ[ƒhL“Ç‚İ‚İ–¢Š®—¹
+            //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šèª­ã¿è¾¼ã¿æœªå®Œäº†
             Debug.Log("Rewarded ad not loaded");
         }
     }
 
-    //•ñVó‚¯æ‚èˆ—
+    //å ±é…¬å—ã‘å–ã‚Šå‡¦ç†
     private void GetReward(Reward reward)
     {
-        //•ñVó‚¯æ‚è
+        //å ±é…¬å—ã‘å–ã‚Š
         Debug.Log("GetReward");
 
-        //‚±‚±‚É•ñV‚Ìˆ—‚ğ‘‚­
+        //ã“ã“ã«å ±é…¬ã®å‡¦ç†ã‚’æ›¸ã
     }
 
-    //ƒŠƒ[ƒhL‚ğ“Ç‚İ‚ŞŠÖ” Ä“Ç‚İ‚İ‚É‚àg—p
+    //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã‚’èª­ã¿è¾¼ã‚€é–¢æ•° å†èª­ã¿è¾¼ã¿ã«ã‚‚ä½¿ç”¨
     public void LoadRewardedAd()
     {
         if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
@@ -94,34 +94,34 @@ public class AdMobRewardInterstitial :MonoBehaviour
             return;
         }
 
-        //L‚ÌÄ“Ç‚İ‚İ‚Ì‚½‚ß‚Ìˆ—
-        //rewardedAd‚Ì’†g‚ª“ü‚Á‚Ä‚¢‚½ê‡ˆ—
+        //åºƒå‘Šã®å†èª­ã¿è¾¼ã¿ã®ãŸã‚ã®å‡¦ç†
+        //rewardedAdã®ä¸­èº«ãŒå…¥ã£ã¦ã„ãŸå ´åˆå‡¦ç†
         if (rewardedInterstitialAd != null)
         {
-            //ƒŠƒ[ƒhL‚Íg‚¢Ì‚Ä‚È‚Ì‚Åˆê’U”jŠü
+            //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã¯ä½¿ã„æ¨ã¦ãªã®ã§ä¸€æ—¦ç ´æ£„
             rewardedInterstitialAd.Destroy();
             rewardedInterstitialAd = null;
         }
 
-        //ƒŠƒNƒGƒXƒg‚ğ¶¬
+        //ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ç”Ÿæˆ
         AdRequest request = new AdRequest();
 
-        //L‚ÌƒL[ƒ[ƒh‚ğ’Ç‰Á
+        //åºƒå‘Šã®ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’è¿½åŠ 
         //===================================================================
-        // ƒAƒvƒŠ‚ÉŠÖ˜A‚·‚éƒL[ƒ[ƒh‚ğ•¶š—ñ‚Åİ’è‚·‚é‚ÆƒAƒvƒŠ‚ÆL‚ÌŠÖ˜A«‚ª‚‚Ü‚è‚Ü‚·B
-        // Œ‹‰ÊAû‰v‚ªã‚ª‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B
-        // ”CˆÓİ’è‚Ì‚½‚ß•s—v‚Å‚ ‚ê‚ÎÁ‚µ‚Ä‚¢‚½‚¾‚¢‚Ä–â‘è‚Í‚ ‚è‚Ü‚¹‚ñB
+        // ã‚¢ãƒ—ãƒªã«é–¢é€£ã™ã‚‹ã‚­ãƒ¼ãƒ¯ãƒ¼ãƒ‰ã‚’æ–‡å­—åˆ—ã§è¨­å®šã™ã‚‹ã¨ã‚¢ãƒ—ãƒªã¨åºƒå‘Šã®é–¢é€£æ€§ãŒé«˜ã¾ã‚Šã¾ã™ã€‚
+        // çµæœã€åç›ŠãŒä¸ŠãŒã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚
+        // ä»»æ„è¨­å®šã®ãŸã‚ä¸è¦ã§ã‚ã‚Œã°æ¶ˆã—ã¦ã„ãŸã ã„ã¦å•é¡Œã¯ã‚ã‚Šã¾ã›ã‚“ã€‚
 
-        // Application.systemLanguage‚ÅOS‚ÌŒ¾Œê”»•Ê@
-        // •Ô‚è’l‚ÍSystemLanguage.Œ¾Œê
-        // ’[––‚ÌŒ¾Œê‚ª“ú–{Œê‚Ì
+        // Application.systemLanguageã§OSã®è¨€èªåˆ¤åˆ¥ã€€
+        // è¿”ã‚Šå€¤ã¯SystemLanguage.è¨€èª
+        // ç«¯æœ«ã®è¨€èªãŒæ—¥æœ¬èªã®æ™‚
         if (Application.systemLanguage == SystemLanguage.Japanese)
         {
-            request.Keywords.Add("ƒQ[ƒ€");
-            request.Keywords.Add("ƒ‚ƒoƒCƒ‹ƒQ[ƒ€");
+            request.Keywords.Add("ã‚²ãƒ¼ãƒ ");
+            request.Keywords.Add("ãƒ¢ãƒã‚¤ãƒ«ã‚²ãƒ¼ãƒ ");
         }
 
-        //’[––‚ÌŒ¾Œê‚ª“ú–{ŒêˆÈŠO‚Ì
+        //ç«¯æœ«ã®è¨€èªãŒæ—¥æœ¬èªä»¥å¤–ã®æ™‚
         else
         {
             request.Keywords.Add("game");
@@ -129,62 +129,62 @@ public class AdMobRewardInterstitial :MonoBehaviour
         }
         //==================================================================
 
-        //L‚ğƒ[ƒh  ‚»‚ÌŒãAŠÖ”OnRewardedAdLoaded‚ğŒÄ‚Ño‚·
+        //åºƒå‘Šã‚’ãƒ­ãƒ¼ãƒ‰  ãã®å¾Œã€é–¢æ•°OnRewardedAdLoadedã‚’å‘¼ã³å‡ºã™
         RewardedInterstitialAd.Load(adUnitId, request, OnRewardedAdLoaded);
     }
 
 
-    // L‚Ìƒ[ƒh‚ğÀ{‚µ‚½Œã‚ÉŒÄ‚Ño‚³‚ê‚éŠÖ”
+    // åºƒå‘Šã®ãƒ­ãƒ¼ãƒ‰ã‚’å®Ÿæ–½ã—ãŸå¾Œã«å‘¼ã³å‡ºã•ã‚Œã‚‹é–¢æ•°
     private void OnRewardedAdLoaded(RewardedInterstitialAd ad, LoadAdError error)
     {
-        //•Ï”error‚Éî•ñ‚ª“ü‚Á‚Ä‚¢‚é@‚Ü‚½‚ÍA•Ï”ad‚Éî•ñ‚ª‚Í‚¢‚Á‚Ä‚¢‚È‚©‚Á‚½‚çÀs
+        //å¤‰æ•°errorã«æƒ…å ±ãŒå…¥ã£ã¦ã„ã‚‹ã€€ã¾ãŸã¯ã€å¤‰æ•°adã«æƒ…å ±ãŒã¯ã„ã£ã¦ã„ãªã‹ã£ãŸã‚‰å®Ÿè¡Œ
         if (error != null || ad == null)
         {
-            //ƒŠƒ[ƒh “Ç‚İ‚İ¸”s
-            Debug.LogError("Failed to load reward ad : " + error);//error:ƒGƒ‰[“à—e 
+            //ãƒªãƒ¯ãƒ¼ãƒ‰ èª­ã¿è¾¼ã¿å¤±æ•—
+            Debug.LogError("Failed to load reward ad : " + error);//error:ã‚¨ãƒ©ãƒ¼å†…å®¹ 
             Invoke("LoadRewardedAd", 3f);
-            return;//‚±‚Ì“_‚Å‚±‚ÌŠÖ”‚ÌÀs‚ÍI—¹
+            return;//ã“ã®æ™‚ç‚¹ã§ã“ã®é–¢æ•°ã®å®Ÿè¡Œã¯çµ‚äº†
         }
 
-        //ƒŠƒ[ƒh “Ç‚İ‚İŠ®—¹
+        //ãƒªãƒ¯ãƒ¼ãƒ‰ èª­ã¿è¾¼ã¿å®Œäº†
         Debug.Log("Reward ad loaded");
 
-        //RewardedAd.Load(~—ª~)ŠÖ”‚ğÀs‚·‚é‚±‚Æ‚É‚æ‚èARewardedAdŒ^‚Ì•Ï”ad‚ÉRewardedAd‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚·‚éB
-        //¶¬‚µ‚½RewardedAdŒ^‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ•Ï”rewardedAd‚ÖŠ„‚è“–‚Ä
+        //RewardedAd.Load(~ç•¥~)é–¢æ•°ã‚’å®Ÿè¡Œã™ã‚‹ã“ã¨ã«ã‚ˆã‚Šã€RewardedAdå‹ã®å¤‰æ•°adã«RewardedAdã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+        //ç”Ÿæˆã—ãŸRewardedAdå‹ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å¤‰æ•°rewardedAdã¸å‰²ã‚Šå½“ã¦
         rewardedInterstitialAd = ad;
 
-        //L‚Ì •\¦E•\¦I—¹E•\¦¸”s ‚Ì“à—e‚ğ“o˜^
+        //åºƒå‘Šã® è¡¨ç¤ºãƒ»è¡¨ç¤ºçµ‚äº†ãƒ»è¡¨ç¤ºå¤±æ•— ã®å†…å®¹ã‚’ç™»éŒ²
         RegisterEventHandlers(rewardedInterstitialAd);
     }
 
 
-    //L‚Ì •\¦E•\¦I—¹E•\¦¸”s ‚Ì“à—e
+    //åºƒå‘Šã® è¡¨ç¤ºãƒ»è¡¨ç¤ºçµ‚äº†ãƒ»è¡¨ç¤ºå¤±æ•— ã®å†…å®¹
     private void RegisterEventHandlers(RewardedInterstitialAd ad)
     {
-        //ƒŠƒ[ƒhL‚ª•\¦‚³‚ê‚½‚É‹N“®‚·‚é“à—e
+        //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘ŠãŒè¡¨ç¤ºã•ã‚ŒãŸæ™‚ã«èµ·å‹•ã™ã‚‹å†…å®¹
         ad.OnAdFullScreenContentOpened += () =>
         {
-            //ƒŠƒ[ƒhL •\¦
+            //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Š è¡¨ç¤º
             Debug.Log("Rewarded ad full screen content opened.");
         };
 
-        //ƒŠƒ[ƒhL‚ª•\¦I—¹ ‚Æ‚È‚Á‚½‚É‹N“®‚·‚é“à—e
+        //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘ŠãŒè¡¨ç¤ºçµ‚äº† ã¨ãªã£ãŸæ™‚ã«èµ·å‹•ã™ã‚‹å†…å®¹
         ad.OnAdFullScreenContentClosed += () =>
         {
-            //ƒŠƒ[ƒhL •\¦I—¹
+            //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Š è¡¨ç¤ºçµ‚äº†
             Debug.Log("Rewarded ad full screen content closed.");
 
-            //ƒŠƒ[ƒh Ä“Ç‚İ‚İ
+            //ãƒªãƒ¯ãƒ¼ãƒ‰ å†èª­ã¿è¾¼ã¿
             LoadRewardedAd();
         };
 
-        //ƒŠƒ[ƒhL‚Ì•\¦¸”s ‚Æ‚È‚Á‚½‚É‹N“®‚·‚é“à—e
+        //ãƒªãƒ¯ãƒ¼ãƒ‰åºƒå‘Šã®è¡¨ç¤ºå¤±æ•— ã¨ãªã£ãŸæ™‚ã«èµ·å‹•ã™ã‚‹å†…å®¹
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
-            //ƒGƒ‰[•\¦
+            //ã‚¨ãƒ©ãƒ¼è¡¨ç¤º
             Debug.LogError("Rewarded ad failed to open full screen content with error : " + error);
 
-            //ƒŠƒ[ƒh Ä“Ç‚İ‚İ
+            //ãƒªãƒ¯ãƒ¼ãƒ‰ å†èª­ã¿è¾¼ã¿
             LoadRewardedAd();
         };
     }

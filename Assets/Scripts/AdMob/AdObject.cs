@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 
 using UnityEngine;
@@ -11,13 +11,13 @@ public enum RewardEffect
 }
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚ªˆê’èŠÔƒGƒŠƒA“à‚É‚¢‚é‚ÆL‹’®‚Ìƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚·‚éƒNƒ‰ƒX
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒä¸€å®šæ™‚é–“ã‚¨ãƒªã‚¢å†…ã«ã„ã‚‹ã¨åºƒå‘Šè¦–è´ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã™ã‚‹ã‚¯ãƒ©ã‚¹
 /// </summary>
 public class AdObject :Interactable
 {
     public Action<AdObject> OnShowAd;
 
-    [SerializeField, Tooltip("•\¦‚·‚éLƒ|ƒbƒvƒAƒbƒv‚Ì GameObject")]
+    [SerializeField, Tooltip("è¡¨ç¤ºã™ã‚‹åºƒå‘Šãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã® GameObject")]
     private GameObject adPopup;
 
     [SerializeField]
@@ -40,16 +40,16 @@ public class AdObject :Interactable
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ªƒGƒŠƒA‚É“ü‚Á‚½‚Æ‚«Aˆê’èŠÔŒã‚Éƒ|ƒbƒvƒAƒbƒv•\¦‚ğŠJn‚·‚é
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚¨ãƒªã‚¢ã«å…¥ã£ãŸã¨ãã€ä¸€å®šæ™‚é–“å¾Œã«ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—è¡¨ç¤ºã‚’é–‹å§‹ã™ã‚‹
     /// </summary>
     protected override void OnPlayerEnter()
     {
-        // ˆê’èŠÔŒo‰ßŒã‚ÉLƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚·‚éƒRƒ‹[ƒ`ƒ“‚ğŠJn
+        // ä¸€å®šæ™‚é–“çµŒéå¾Œã«åºƒå‘Šãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã™ã‚‹ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’é–‹å§‹
         adCoroutine = StartCoroutine(WaitForAdPopup());
     }
 
     /// <summary>
-    /// ƒvƒŒƒCƒ„[‚ªƒGƒŠƒA‚ğ‘Şo‚µ‚½‚Æ‚«Aƒ|ƒbƒvƒAƒbƒv‘Ò‹@’†‚ÌƒRƒ‹[ƒ`ƒ“‚ğ’â~‚·‚é
+    /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚¨ãƒªã‚¢ã‚’é€€å‡ºã—ãŸã¨ãã€ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—å¾…æ©Ÿä¸­ã®ã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’åœæ­¢ã™ã‚‹
     /// </summary>
     protected override void OnPlayerExit()
     {
@@ -61,7 +61,7 @@ public class AdObject :Interactable
     }
 
     /// <summary>
-    /// w’è‚µ‚½ŠÔ‘Ò‹@‚µAƒvƒŒƒCƒ„[‚ª‚Ü‚¾ƒGƒŠƒA“à‚É‚¢‚éê‡‚ÉLƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚·‚é
+    /// æŒ‡å®šã—ãŸæ™‚é–“å¾…æ©Ÿã—ã€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã¾ã ã‚¨ãƒªã‚¢å†…ã«ã„ã‚‹å ´åˆã«åºƒå‘Šãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã™ã‚‹
     /// </summary>
     IEnumerator WaitForAdPopup()
     {
@@ -73,7 +73,7 @@ public class AdObject :Interactable
     }
 
     /// <summary>
-    /// L‹’®‚Ìƒ|ƒbƒvƒAƒbƒv‚ğ•\¦‚·‚é
+    /// åºƒå‘Šè¦–è´ã®ãƒãƒƒãƒ—ã‚¢ãƒƒãƒ—ã‚’è¡¨ç¤ºã™ã‚‹
     /// </summary>
     void ShowAdPopup()
     {
@@ -83,7 +83,7 @@ public class AdObject :Interactable
         }
         else
         {
-            Debug.LogWarning("Ad Popup ‚ªƒAƒ^ƒbƒ`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.LogWarning("Ad Popup ãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
         }
     }
 

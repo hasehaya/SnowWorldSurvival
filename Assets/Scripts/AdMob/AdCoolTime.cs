@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 
 using TMPro;
 
@@ -22,7 +22,7 @@ public class AdCoolTime :MonoBehaviour
             var coolTime = AdManager.Instance.CoolTime;
             bool isActive = coolTime <= 0;
             btn.interactable = isActive;
-            btnText.text = isActive ? "–³—¿" : $"{coolTime}";
+            btnText.text = isActive ? "ç„¡æ–™" : $"{coolTime}";
             yield return new WaitForSeconds(1f);
         }
     }

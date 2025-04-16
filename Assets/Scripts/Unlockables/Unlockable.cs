@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using System.Linq;
 
 using DG.Tweening;
@@ -26,7 +26,7 @@ public class Unlockable :MonoBehaviour
     protected virtual void Awake()
     {
         upgradeableMeshes = GetComponentsInChildren<UpgradeableMesh>(true)
-            .Where(x => x != null)  // null ‚ðœŠO
+            .Where(x => x != null)  // null ã‚’é™¤å¤–
             .ToList();
         gameObject.SetActive(false);  // Set the object to inactive initially
     }

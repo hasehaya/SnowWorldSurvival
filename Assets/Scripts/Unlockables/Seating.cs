@@ -1,4 +1,4 @@
-public class Seating :Unlockable
+﻿public class Seating :Unlockable
 {
     /*
     [SerializeField, Tooltip("Base time it takes for a customer to finish eating")]

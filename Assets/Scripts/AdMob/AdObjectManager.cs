@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -21,13 +21,13 @@ public class AdObjectManager :MonoBehaviour
     private List<AdObject> activeAdObjects = new List<AdObject>();
     private Dictionary<AdObject, Transform> activeAdPositions = new Dictionary<AdObject, Transform>();
 
-    // Œø‰Ê‚Ì‘±ŠÔi—áF180•b3•ªj
+    // åŠ¹æœã®æŒç¶šæ™‚é–“ï¼ˆä¾‹ï¼š180ç§’ï¼3åˆ†ï¼‰
     private const float TreeMinutesDuration = 180f;
 
-    // —˜—p‰Â”\‚È RewardType ‚ğŠÇ—‚·‚éƒŠƒXƒg
+    // åˆ©ç”¨å¯èƒ½ãª RewardType ã‚’ç®¡ç†ã™ã‚‹ãƒªã‚¹ãƒˆ
     private List<RewardType> availableRewardTypes = new List<RewardType>();
 
-    // GlobalData ‚Ö‚ÌQÆiGameManager Œo—R‚Åæ“¾j
+    // GlobalData ã¸ã®å‚ç…§ï¼ˆGameManager çµŒç”±ã§å–å¾—ï¼‰
     private GlobalData globalData;
 
     private void Start()
@@ -37,9 +37,9 @@ public class AdObjectManager :MonoBehaviour
         availableRewardTypes.Add(RewardType.MoneyCollection);
 
         popPoses = GetComponentsInChildren<Transform>();
-        // ‰Šú¶¬ˆ—‚âƒ|ƒWƒVƒ‡ƒ“ƒVƒƒƒbƒtƒ‹‚È‚Ç
+        // åˆæœŸç”Ÿæˆå‡¦ç†ã‚„ãƒã‚¸ã‚·ãƒ§ãƒ³ã‚·ãƒ£ãƒƒãƒ•ãƒ«ãªã©
 
-        // GameManager Œo—R‚Å GlobalData ‚ğQÆ
+        // GameManager çµŒç”±ã§ GlobalData ã‚’å‚ç…§
         globalData = GameManager.Instance.GlobalData;
         RepopAdObject();
     }
@@ -87,7 +87,7 @@ public class AdObjectManager :MonoBehaviour
 
         if (availablePoses.Count == 0)
         {
-            Debug.LogWarning("—˜—p‰Â”\‚Èƒ|ƒWƒVƒ‡ƒ“‚ª‚ ‚è‚Ü‚¹‚ñB");
+            Debug.LogWarning("åˆ©ç”¨å¯èƒ½ãªãƒã‚¸ã‚·ãƒ§ãƒ³ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
             return;
         }
 
@@ -99,7 +99,7 @@ public class AdObjectManager :MonoBehaviour
             if (ad.RewardEffect == RewardEffect.TreeMinutes &&
                (ad.RewardType == RewardType.PlayerSpeed || ad.RewardType == RewardType.PlayerCapacity || ad.RewardType == RewardType.MoneyCollection))
             {
-                // ŠY“–‚·‚éŒø‰Ê‚ªŠù‚ÉƒAƒNƒeƒBƒu‚È‚çŒó•â‚©‚çœŠO
+                // è©²å½“ã™ã‚‹åŠ¹æœãŒæ—¢ã«ã‚¢ã‚¯ãƒ†ã‚£ãƒ–ãªã‚‰å€™è£œã‹ã‚‰é™¤å¤–
                 if ((ad.RewardType == RewardType.PlayerSpeed && globalData.IsPlayerSpeedActive) ||
                     (ad.RewardType == RewardType.PlayerCapacity && globalData.IsPlayerCapacityActive) ||
                     (ad.RewardType == RewardType.MoneyCollection && globalData.IsMoneyCollectionActive))
@@ -110,7 +110,7 @@ public class AdObjectManager :MonoBehaviour
 
         if (candidateAds.Count == 0)
         {
-            Debug.LogWarning("—˜—p‰Â”\‚È RewardType ‚Ì AdObject ‚ª‚ ‚è‚Ü‚¹‚ñB");
+            Debug.LogWarning("åˆ©ç”¨å¯èƒ½ãª RewardType ã® AdObject ãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
             return;
         }
 

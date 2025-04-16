@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 
 [RequireComponent(typeof(Animator))]
@@ -14,7 +14,7 @@ public class PlayerController :MonoBehaviour
     [SerializeField] private Transform leftHandTarget;
     [SerializeField] private Transform rightHandTarget;
 
-    // ‹N“®‚Í”ñ•\¦‚É‚·‚é
+    // èµ·å‹•æ™‚ã¯éè¡¨ç¤ºã«ã™ã‚‹
     [SerializeField] private GameObject maxTextObj;
 
     public WobblingStack Stack => stack;
@@ -40,7 +40,7 @@ public class PlayerController :MonoBehaviour
         controller = GetComponent<CharacterController>();
         audioSource = GetComponent<AudioSource>();
 
-        // ƒXƒ^[ƒg‚É”ñ•\¦
+        // ã‚¹ã‚¿ãƒ¼ãƒˆæ™‚ã«éè¡¨ç¤º
         if (maxTextObj != null)
         {
             maxTextObj.SetActive(false);
@@ -61,10 +61,10 @@ public class PlayerController :MonoBehaviour
         moveSpeed = globalData.IsPlayerSpeedActive ? baseSpeed * 2 : baseSpeed;
         Capacity = globalData.IsPlayerCapacityActive ? baseCapacity * 2 : baseCapacity;
 
-        // ƒXƒ^ƒbƒN‚ª–ƒ^ƒ“‚©‚Ç‚¤‚©
+        // ã‚¹ã‚¿ãƒƒã‚¯ãŒæº€ã‚¿ãƒ³ã‹ã©ã†ã‹
         bool isMax = (Stack.Count >= Capacity);
 
-        // ó‘Ô‚ªØ‚è‘Ö‚í‚Á‚½‚É‚¾‚¯ UI ‚ğØ‚è‘Ö‚¦
+        // çŠ¶æ…‹ãŒåˆ‡ã‚Šæ›¿ã‚ã£ãŸæ™‚ã«ã ã‘ UI ã‚’åˆ‡ã‚Šæ›¿ãˆ
         if (isMax != previousIsMax)
         {
             if (maxTextObj != null)
@@ -85,25 +85,25 @@ public class PlayerController :MonoBehaviour
             }
             else
             {
-                // –ƒ^ƒ“‚ª‰ğœ‚³‚ê‚½ê‡‚É•K—v‚ª‚ ‚ê‚Î‚±‚±‚Å–îˆó‚È‚Ç‚ğÁ‚·ˆ—
+                // æº€ã‚¿ãƒ³ãŒè§£é™¤ã•ã‚ŒãŸå ´åˆã«å¿…è¦ãŒã‚ã‚Œã°ã“ã“ã§çŸ¢å°ãªã©ã‚’æ¶ˆã™å‡¦ç†
             }
         }
 
-        // isMax ’†‚Í–ˆƒtƒŒ[ƒ€ LookAt ‚ÅƒJƒƒ‰‚ğŒü‚©‚¹‚é
-        // Œã‚ëŒü‚«‚É‚È‚Á‚Ä‚µ‚Ü‚¤ê‡‚Í LookAt Œã‚É180“x‰ñ“]‚³‚¹‚é
+        // isMax ä¸­ã¯æ¯ãƒ•ãƒ¬ãƒ¼ãƒ  LookAt ã§ã‚«ãƒ¡ãƒ©ã‚’å‘ã‹ã›ã‚‹
+        // å¾Œã‚å‘ãã«ãªã£ã¦ã—ã¾ã†å ´åˆã¯ LookAt å¾Œã«180åº¦å›è»¢ã•ã›ã‚‹
         if (isMax && maxTextObj != null && maxTextObj.activeSelf)
         {
             if (Camera.main != null)
             {
                 maxTextObj.transform.LookAt(Camera.main.transform);
-                // 180“x”½“]
+                // 180åº¦åè»¢
                 maxTextObj.transform.Rotate(0f, 180f, 0f);
             }
         }
 
         previousIsMax = isMax;
 
-        // ˆÈ‰ºAˆÚ“®‚âƒAƒjƒ[ƒVƒ‡ƒ“‚Ìˆ—
+        // ä»¥ä¸‹ã€ç§»å‹•ã‚„ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã®å‡¦ç†
         isGrounded = controller.isGrounded;
         if (isGrounded && velocity.y < 0)
             velocity.y = 0f;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 
 using DG.Tweening;
@@ -25,7 +25,7 @@ public class GameManager :MonoBehaviour
     private Canvas canvas;
 
     [Header("Employee")]
-    [SerializeField, Tooltip("�]�ƈ��v���n�u")]
+    [SerializeField, Tooltip("・ｽ]・ｽﾆ茨ｿｽ・ｽv・ｽ・ｽ・ｽn・ｽu")]
     private EmployeeController employeePrefab;
 
     [Header("User Interface")]
@@ -53,13 +53,13 @@ public class GameManager :MonoBehaviour
 
     void Awake()
     {
-        // �V���O���g���̐ݒ�
+        // ・ｽV・ｽ・ｽ・ｽO・ｽ・ｽ・ｽg・ｽ・ｽ・ｽﾌ設抵ｿｽ
         Instance = this;
 
-        // ���݂̃V�[���������X�g����ID�Ƃ��ė��p
+        // ・ｽ・ｽ・ｽﾝのシ・ｽ[・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽX・ｽg・ｽ・ｽ・ｽ・ｽID・ｽﾆゑｿｽ・ｽﾄ暦ｿｽ・ｽp
         stageID = SceneManager.GetActiveScene().name;
 
-        // �Z�[�u�f�[�^�̃��[�h�i���݂��Ȃ��ꍇ�͏�����Ԃō쐬�j
+        // ・ｽZ・ｽ[・ｽu・ｽf・ｽ[・ｽ^・ｽﾌ・ｿｽ・ｽ[・ｽh・ｽi・ｽ・ｽ・ｽﾝゑｿｽ・ｽﾈゑｿｽ・ｽ鼾・ｿｽﾍ擾ｿｽ・ｽ・ｽ・ｽ・ｽﾔで作成・ｽj
         stageData = SaveSystem.LoadData<StageData>(stageID);
         if (stageData == null)
             stageData = new StageData(stageID, startingMoney);
@@ -78,32 +78,32 @@ public class GameManager :MonoBehaviour
             SaveSystem.SaveData(globalData, globalDataID);
         }
 
-        // UI\̂߂̏����ʉݐݒ�
+        // UI\ﾌめの擾ｿｽ・ｽ・ｽ・ｽﾊ貨設抵ｿｽ
         AdjustMoney(0);
     }
 
     void Start()
     {
-        // ���݂̃V�[���C���f�b�N�X��ۑ�
+        // ・ｽ・ｽ・ｽﾝのシ・ｽ[・ｽ・ｽ・ｽC・ｽ・ｽ・ｽf・ｽb・ｽN・ｽX・ｽ・ｽﾛ托ｿｽ
         SaveSystem.SaveData<int>(SceneManager.GetActiveScene().buildIndex, "LastSceneIndex");
 
-        // �V�[���J�n���̃t�F�[�h�A�E�g����
+        // ・ｽV・ｽ[・ｽ・ｽ・ｽJ・ｽn・ｽ・ｽ・ｽﾌフ・ｽF・ｽ[・ｽh・ｽA・ｽE・ｽg・ｽ・ｽ・ｽ・ｽ
         screenFader.FadeOut();
 
-        // UnlockManager �̏������i�Z�[�u�f�[�^�ƃ��X�g����ID��n���j
+        // UnlockManager ・ｽﾌ擾ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽi・ｽZ・ｽ[・ｽu・ｽf・ｽ[・ｽ^・ｽﾆ・ｿｽ・ｽX・ｽg・ｽ・ｽ・ｽ・ｽID・ｽ・ｽn・ｽ・ｽ・ｽj
         UnlockManager.Instance.InitializeUnlockManager(stageData, stageID);
 
-        // �]�ƈ��̃X�|�[������
+        // ・ｽ]・ｽﾆ茨ｿｽ・ｽﾌス・ｽ|・ｽ[・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ
         SpawnEmployee();
 
-        // BGM �̍Đ�
+        // BGM ・ｽﾌ再撰ｿｽ
         AudioManager.Instance.PlayBGM(backgroundMusic);
     }
 
     void SpawnEmployee()
     {
         var materialManagerList = FindObjectsOfType<MaterialParent>(true);
-        // MaterialType �̑S��
+        // MaterialType ・ｽﾌ全・ｽ・ｽ
         foreach (MaterialType materialType in Enum.GetValues(typeof(MaterialType)))
         {
             MaterialParent materialManager = null;
@@ -115,35 +115,35 @@ public class GameManager :MonoBehaviour
                     break;
                 }
             }
-            // None �^�C�v�܂��͊Y������Ǘ��I�u�W�F�N�g��������΃X�L�b�v
+            // None ・ｽ^・ｽC・ｽv・ｽﾜゑｿｽ・ｽﾍ該・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾇ暦ｿｽ・ｽI・ｽu・ｽW・ｽF・ｽN・ｽg・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽ・ｽﾎス・ｽL・ｽb・ｽv
             if (materialType == MaterialType.None || materialManager == null)
                 continue;
 
-            // ���݂̏]�ƈ������擾
+            // ・ｽ・ｽ・ｽﾝの従・ｽﾆ茨ｿｽ・ｽ・ｽ・ｽ・ｽ・ｽ謫ｾ
             int currentCount = FindObjectsOfType<EmployeeController>()
                                 .Count(e => e.MaterialType == materialType);
-            // �Z�[�u�f�[�^����]�ƈ����̃A�b�v�O���[�h���x�����擾
+            // ・ｽZ・ｽ[・ｽu・ｽf・ｽ[・ｽ^・ｽ・ｽ・ｽ・ｽ]・ｽﾆ茨ｿｽ・ｽ・ｽ・ｽﾌア・ｽb・ｽv・ｽO・ｽ・ｽ・ｽ[・ｽh・ｽ・ｽ・ｽx・ｽ・ｽ・ｽ・ｽ・ｽ謫ｾ
             int employeeAmount = stageData.FindUpgrade(Upgrade.UpgradeType.EmployeeAmount, materialType).Level;
             int toSpawn = employeeAmount - currentCount;
             if (toSpawn <= 0)
                 continue;
 
-            // ���C�A�E�g�p�ɌŒ�̗񐔂��w��
+            // ・ｽ・ｽ・ｽC・ｽA・ｽE・ｽg・ｽp・ｽﾉ固抵ｿｽﾌ列数ゑｿｽ・ｽw・ｽ・ｽ
             int numberOfColumns = 5;
             for (int i = currentCount; i < employeeAmount; i++)
             {
                 int columnIndex = i % numberOfColumns;
                 int rowIndex = (i / numberOfColumns) + 1;
 
-                // �w��̗�ɑΉ�����p�g���[���n�_���擾
+                // ・ｽw・ｽ・ｽﾌ暦ｿｽﾉ対会ｿｽ・ｽ・ｽ・ｽ・ｽp・ｽg・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽn・ｽ_・ｽ・ｽ・ｽ謫ｾ
                 MaterialParent.PatrolPoints patrol = materialManager.GetPatrolPointsForColumn(columnIndex + 1);
                 if (patrol == null)
                 {
-                    Debug.LogWarning("Column " + (columnIndex + 1) + " �̃p�g���[���n�_���擾�ł��܂���B");
+                    Debug.LogWarning("Column " + (columnIndex + 1) + " ・ｽﾌパ・ｽg・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽn・ｽ_・ｽ・ｽ・ｽ謫ｾ・ｽﾅゑｿｽ・ｽﾜゑｿｽ・ｽ・ｽB");
                     continue;
                 }
 
-                // �p�g���[���n�_�p�̈ꎞ�I�u�W�F�N�g�𐶐�
+                // ・ｽp・ｽg・ｽ・ｽ・ｽ[・ｽ・ｽ・ｽn・ｽ_・ｽp・ｽﾌ一時・ｽI・ｽu・ｽW・ｽF・ｽN・ｽg・ｽｶ撰ｿｽ
                 GameObject pointAObj = new GameObject($"PatrolPointA_Column{columnIndex + 1}_{materialType}");
                 pointAObj.transform.position = patrol.pointA;
                 pointAObj.transform.parent = transform;
@@ -152,7 +152,7 @@ public class GameManager :MonoBehaviour
                 pointBObj.transform.position = patrol.pointB;
                 pointBObj.transform.parent = transform;
 
-                // �]�ƈ��̐����Ə�����
+                // ・ｽ]・ｽﾆ茨ｿｽ・ｽﾌ撰ｿｽ・ｽ・ｽ・ｽﾆ擾ｿｽ・ｽ・ｽ・ｽ・ｽ
                 EmployeeController employee = Instantiate(employeePrefab, pointAObj.transform.position, Quaternion.identity);
                 employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
                 employee.Column = columnIndex + 1;
@@ -269,7 +269,7 @@ public class GameManager :MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         if (index == currentSceneIndex)
-            return; // ���݂̃V�[���̍ēǂݍ��݂�h�~
+            return; // ・ｽ・ｽ・ｽﾝのシ・ｽ[・ｽ・ｽ・ｽﾌ再読み搾ｿｽ・ｽﾝゑｿｽh・ｽ~
 
         screenFader.FadeIn(() =>
         {

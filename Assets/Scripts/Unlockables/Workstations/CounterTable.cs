@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -22,7 +22,7 @@ public class CounterTable :Workstation
     [SerializeField, Tooltip("Point where customers exit after being served.")]
     private Transform despawnPoint;
 
-    // ’Pˆê‚Ì QueuePoints ‚ğg—p
+    // å˜ä¸€ã® QueuePoints ã‚’ä½¿ç”¨
     [SerializeField, Tooltip("Waypoints defining the customer queue.")]
     private Waypoints queuePoints;
 
@@ -32,20 +32,20 @@ public class CounterTable :Workstation
     [SerializeField, Tooltip("Pile where earned money is stored.")]
     private MoneyPile moneyPile;
 
-    // ’Pˆê‚ÌŒÚ‹qŠÇ—ƒLƒ…[
+    // å˜ä¸€ã®é¡§å®¢ç®¡ç†ã‚­ãƒ¥ãƒ¼
     private Queue<CustomerController> customers = new Queue<CustomerController>();
 
-    private float spawnInterval; // ŒÚ‹q¶¬ŠÔŠu
-    private float serveInterval; // H–’ñ‹ŸŠÔŠu
-    private float spawnTimer;    // ŒÚ‹q¶¬—pƒ^ƒCƒ}[
-    private float serveTimer;    // H–’ñ‹Ÿ—pƒ^ƒCƒ}[
+    private float spawnInterval; // é¡§å®¢ç”Ÿæˆé–“éš”
+    private float serveInterval; // é£Ÿäº‹æä¾›é–“éš”
+    private float spawnTimer;    // é¡§å®¢ç”Ÿæˆç”¨ã‚¿ã‚¤ãƒãƒ¼
+    private float serveTimer;    // é£Ÿäº‹æä¾›ç”¨ã‚¿ã‚¤ãƒãƒ¼
 
-    // Å‘åŒÚ‹q”‚Í unlockLevel ‚É‰‚¶‚Ä‘‰Á‚·‚é
+    // æœ€å¤§é¡§å®¢æ•°ã¯ unlockLevel ã«å¿œã˜ã¦å¢—åŠ ã™ã‚‹
     private int maxCustomers => unlockLevel;
 
     void Start()
     {
-        // ‰Šú‰»ˆ—i•K—v‚É‰‚¶‚Ä seating ‚È‚Ç‚Ì‰Šú‰»‚ğs‚¤j
+        // åˆæœŸåŒ–å‡¦ç†ï¼ˆå¿…è¦ã«å¿œã˜ã¦ seating ãªã©ã®åˆæœŸåŒ–ã‚’è¡Œã†ï¼‰
     }
 
     void Update()
@@ -75,12 +75,12 @@ public class CounterTable :Workstation
         {
             spawnTimer = 0f;
 
-            // ŒÚ‹q¶¬
+            // é¡§å®¢ç”Ÿæˆ
             var newCustomer = Instantiate(CustomerPrefab, spawnPoint.position, spawnPoint.rotation);
             newCustomer.ExitPoint = despawnPoint.position;
             customers.Enqueue(newCustomer);
 
-            // ’Pˆê‚Ì QueuePoints ‚©‚ç‘Ò‹@ˆÊ’u‚ğŠ„‚è“–‚Ä
+            // å˜ä¸€ã® QueuePoints ã‹ã‚‰å¾…æ©Ÿä½ç½®ã‚’å‰²ã‚Šå½“ã¦
             AssignQueuePoint(newCustomer, customers.Count - 1);
         }
     }
@@ -96,7 +96,7 @@ public class CounterTable :Workstation
             return;
         }
 
-        // ‘Ò‹@ˆÊ’u‚ÍAqueuePoints.GetPoint(index) ‚Åæ“¾
+        // å¾…æ©Ÿä½ç½®ã¯ã€queuePoints.GetPoint(index) ã§å–å¾—
         Transform queuePoint = queuePoints.GetPoint(index);
         bool isFirst = (index == 0);
         customer.UpdateQueue(queuePoint, isFirst);

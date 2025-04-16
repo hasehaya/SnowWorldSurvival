@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 
 using DG.Tweening;
 
@@ -12,7 +12,7 @@ public class ObjectStack :Interactable
     [SerializeField, Tooltip("Time interval between each stack operation")]
     private float stackInterval = 0.05f;
 
-    // š ’Ç‰ÁF–îˆóƒIƒuƒWƒFƒNƒg‚ğƒCƒ“ƒXƒyƒNƒ^[‚Åİ’è‚Å‚«‚é‚æ‚¤SerializeField‚ğ’Ç‰Á
+    // â˜… è¿½åŠ ï¼šçŸ¢å°ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã§è¨­å®šã§ãã‚‹ã‚ˆã†SerializeFieldã‚’è¿½åŠ 
     [SerializeField, Tooltip("Arrow object displayed when stack is ready to receive items")]
     private GameObject arrowObj;
 
@@ -24,14 +24,14 @@ public class ObjectStack :Interactable
     private float stackOffset;
     private float stackTimer;
 
-    // š ’Ç‰ÁFIsShowŠÇ——pƒtƒ‰ƒO
+    // â˜… è¿½åŠ ï¼šIsShowç®¡ç†ç”¨ãƒ•ãƒ©ã‚°
     private bool isShow;
 
     void Start()
     {
         stackOffset = GameManager.Instance.GetStackOffset(MaterialType);
 
-        // •K—v‚É‰‚¶‚Ä‰Šú•\¦‚ğƒIƒt‚É‚µ‚Ä‚¨‚­ê‡‚Í‚±‚¿‚ç
+        // å¿…è¦ã«å¿œã˜ã¦åˆæœŸè¡¨ç¤ºã‚’ã‚ªãƒ•ã«ã—ã¦ãŠãå ´åˆã¯ã“ã¡ã‚‰
         if (arrowObj != null)
             arrowObj.SetActive(false);
     }
@@ -64,7 +64,7 @@ public class ObjectStack :Interactable
         }
     }
 
-    // š V‹KFArrow‚ğ•\¦‚µ‚Äã‰º“®‚³‚¹‚é
+    // â˜… æ–°è¦ï¼šArrowã‚’è¡¨ç¤ºã—ã¦ä¸Šä¸‹å‹•ã•ã›ã‚‹
     public void ShowArrow()
     {
         isShow = true;
@@ -72,27 +72,27 @@ public class ObjectStack :Interactable
             return;
 
         arrowObj.SetActive(true);
-        // ŒJ‚è•Ô‚µƒAƒjƒ[ƒVƒ‡ƒ“‚ğƒŠƒZƒbƒg‚·‚é‚½‚ß‚Éˆê“xKill
+        // ç¹°ã‚Šè¿”ã—ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’ãƒªã‚»ãƒƒãƒˆã™ã‚‹ãŸã‚ã«ä¸€åº¦Kill
         DOTween.Kill(arrowObj.transform);
 
-        // Œ´“_ˆÊ’u‚ğŠm•Û
+        // åŸç‚¹ä½ç½®ã‚’ç¢ºä¿
         Vector3 startPos = arrowObj.transform.position;
 
-        // –îˆó‚ğã‰º‚É“®‚©‚µ‘±‚¯‚é
+        // çŸ¢å°ã‚’ä¸Šä¸‹ã«å‹•ã‹ã—ç¶šã‘ã‚‹
         arrowObj.transform
             .DOMoveY(startPos.y + 0.3f, 0.5f)
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.Linear);
     }
 
-    // ƒIƒuƒWƒFƒNƒg‚ğƒXƒ^ƒbƒN‚É‰Á‚¦‚é
+    // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ã‚¹ã‚¿ãƒƒã‚¯ã«åŠ ãˆã‚‹
     public void AddToStack(GameObject obj)
     {
-        // š AddToStackŒÄ‚Ño‚µ‚ÉArrow‚ğ”ñ•\¦
+        // â˜… AddToStackå‘¼ã³å‡ºã—æ™‚ã«Arrowã‚’éè¡¨ç¤º
         isShow = false;
         if (arrowObj != null)
         {
-            DOTween.Kill(arrowObj.transform);  // ã‰º“®ƒAƒjƒ[ƒVƒ‡ƒ“‚ğ’â~
+            DOTween.Kill(arrowObj.transform);  // ä¸Šä¸‹å‹•ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’åœæ­¢
             arrowObj.SetActive(false);
         }
 
@@ -104,7 +104,7 @@ public class ObjectStack :Interactable
         obj.transform.DOJump(targetPos, 5f, 1, 0.3f);
     }
 
-    // ƒXƒ^ƒbƒN‚©‚çƒIƒuƒWƒFƒNƒg‚ğŠO‚µ‚ÄTransform‚ğ•Ô‚·
+    // ã‚¹ã‚¿ãƒƒã‚¯ã‹ã‚‰ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’å¤–ã—ã¦Transformã‚’è¿”ã™
     public Transform RemoveFromStack()
     {
         Transform removed = objects.Pop().transform;

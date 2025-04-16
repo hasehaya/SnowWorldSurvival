@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 
 using UnityEngine;
 using UnityEngine.Purchasing;
@@ -52,66 +52,66 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
     {
         if (!IsInitialized())
         {
-            Debug.Log("IAP‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.Log("IAPãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return;
         }
 
         Product product = storeController.products.WithID(nonConsumableProductId);
         if (product != null && product.availableToPurchase)
         {
-            Debug.Log("w“üŠJn: " + product.definition.id);
+            Debug.Log("è³¼å…¥é–‹å§‹: " + product.definition.id);
             storeController.InitiatePurchase(product);
         }
         else
         {
-            Debug.Log("w“ü‘ÎÛ‚Ì¤•i‚ª‘¶İ‚µ‚È‚¢‚©Aw“ü‚Å‚«‚Ü‚¹‚ñB");
+            Debug.Log("è³¼å…¥å¯¾è±¡ã®å•†å“ãŒå­˜åœ¨ã—ãªã„ã‹ã€è³¼å…¥ã§ãã¾ã›ã‚“ã€‚");
         }
     }
 
     /// <summary>
-    /// iOS—p‚Ì•œŒ³ˆ—iƒ†[ƒU[‘€ì‚ÅŒÄ‚Ño‚µ‚Ä‚­‚¾‚³‚¢j
+    /// iOSç”¨ã®å¾©å…ƒå‡¦ç†ï¼ˆãƒ¦ãƒ¼ã‚¶ãƒ¼æ“ä½œã§å‘¼ã³å‡ºã—ã¦ãã ã•ã„ï¼‰
     /// </summary>
     public void RestorePurchasesForIOS()
     {
 #if UNITY_IOS
         if (!IsInitialized())
         {
-            Debug.Log("IAP‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.Log("IAPãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return;
         }
-        Debug.Log("iOS—pƒŒƒV[ƒg•œŒ³ˆ—‚ğŠJn‚µ‚Ü‚·B");
+        Debug.Log("iOSç”¨ãƒ¬ã‚·ãƒ¼ãƒˆå¾©å…ƒå‡¦ç†ã‚’é–‹å§‹ã—ã¾ã™ã€‚");
         var apple = extensionProvider.GetExtension<IAppleExtensions>();
         apple.RestoreTransactions(result =>
         {
-            Debug.Log("ƒŒƒV[ƒg•œŒ³‚ÌŒ‹‰Ê: " + result);
+            Debug.Log("ãƒ¬ã‚·ãƒ¼ãƒˆå¾©å…ƒã®çµæœ: " + result);
             if(result)
             {
                 CheckForPurchase();
             }
         });
 #else
-        Debug.Log("‚±‚Ì‹@”\‚ÍiOS‚Ì‚İ—LŒø‚Å‚·B");
+        Debug.Log("ã“ã®æ©Ÿèƒ½ã¯iOSã®ã¿æœ‰åŠ¹ã§ã™ã€‚");
 #endif
     }
 
     /// <summary>
-    /// Android‚Ìê‡A‰Šú‰»Š®—¹‚É©“®“I‚Éw“üó‘Ô‚ğƒ`ƒFƒbƒN‚µ‚Ü‚·B
+    /// Androidã®å ´åˆã€åˆæœŸåŒ–å®Œäº†æ™‚ã«è‡ªå‹•çš„ã«è³¼å…¥çŠ¶æ…‹ã‚’ãƒã‚§ãƒƒã‚¯ã—ã¾ã™ã€‚
     /// </summary>
     private void AutoRestoreForAndroid()
     {
 #if UNITY_ANDROID
         if (!IsInitialized())
         {
-            Debug.Log("IAP‚ª‰Šú‰»‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+            Debug.Log("IAPãŒåˆæœŸåŒ–ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
             return;
         }
-        Debug.Log("Android—p©“®w“üó‘ÔŠm”F‚ğŠJn‚µ‚Ü‚·B");
+        Debug.Log("Androidç”¨è‡ªå‹•è³¼å…¥çŠ¶æ…‹ç¢ºèªã‚’é–‹å§‹ã—ã¾ã™ã€‚");
         CheckForPurchase();
 #endif
     }
 
     /// <summary>
-    /// w“üÏ‚İ‚©‚Ç‚¤‚©‚ğŠe¤•i‚©‚çƒ`ƒFƒbƒN‚µ‚ÄAŠùw“ü‚È‚ç‹@”\‰ğ•úˆ—‚ğÀs
+    /// è³¼å…¥æ¸ˆã¿ã‹ã©ã†ã‹ã‚’å„å•†å“ã‹ã‚‰ãƒã‚§ãƒƒã‚¯ã—ã¦ã€æ—¢è³¼å…¥ãªã‚‰æ©Ÿèƒ½è§£æ”¾å‡¦ç†ã‚’å®Ÿè¡Œ
     /// </summary>
     public void CheckForPurchase()
     {
@@ -119,22 +119,22 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
         {
             if (product.definition.id == nonConsumableProductId && product.hasReceipt)
             {
-                Debug.Log("Šù‚Éw“üÏ‚İ‚Ì¤•i‚ªŒ©‚Â‚©‚è‚Ü‚µ‚½: " + product.definition.id);
+                Debug.Log("æ—¢ã«è³¼å…¥æ¸ˆã¿ã®å•†å“ãŒè¦‹ã¤ã‹ã‚Šã¾ã—ãŸ: " + product.definition.id);
                 GameManager.Instance.PurchaseAdBlock();
                 break;
             }
         }
     }
 
-    // IDetailedStoreListener ‚ÌÀ‘•
+    // IDetailedStoreListener ã®å®Ÿè£…
 
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
     {
-        Debug.Log("IAP‚Ì‰Šú‰»‚É¬Œ÷‚µ‚Ü‚µ‚½B");
+        Debug.Log("IAPã®åˆæœŸåŒ–ã«æˆåŠŸã—ã¾ã—ãŸã€‚");
         storeController = controller;
         extensionProvider = extensions;
 
-        // Android‚Ìê‡‚Í‰Šú‰»Š®—¹‚É©“®“I‚Éw“üó‘Ô‚ğƒ`ƒFƒbƒN
+        // Androidã®å ´åˆã¯åˆæœŸåŒ–å®Œäº†æ™‚ã«è‡ªå‹•çš„ã«è³¼å…¥çŠ¶æ…‹ã‚’ãƒã‚§ãƒƒã‚¯
 #if UNITY_ANDROID
         AutoRestoreForAndroid();
 #endif
@@ -142,36 +142,36 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
 
     public void OnInitializeFailed(InitializationFailureReason error)
     {
-        Debug.Log("IAP‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½: " + error);
+        Debug.Log("IAPã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸ: " + error);
     }
 
     public void OnInitializeFailed(InitializationFailureReason error, string message)
     {
-        Debug.Log("IAP‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½: " + error + " - " + message);
+        Debug.Log("IAPã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸ: " + error + " - " + message);
     }
 
     public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args)
     {
         if (string.Equals(args.purchasedProduct.definition.id, nonConsumableProductId, StringComparison.Ordinal))
         {
-            Debug.Log("”ñÁ”ïŒ^¤•i‚Ìw“ü‚É¬Œ÷‚µ‚Ü‚µ‚½: " + args.purchasedProduct.definition.id);
+            Debug.Log("éæ¶ˆè²»å‹å•†å“ã®è³¼å…¥ã«æˆåŠŸã—ã¾ã—ãŸ: " + args.purchasedProduct.definition.id);
             GameManager.Instance.PurchaseAdBlock();
             return PurchaseProcessingResult.Complete;
         }
         else
         {
-            Debug.Log("”F¯‚Å‚«‚È‚¢w“ü¤•i: " + args.purchasedProduct.definition.id);
+            Debug.Log("èªè­˜ã§ããªã„è³¼å…¥å•†å“: " + args.purchasedProduct.definition.id);
             return PurchaseProcessingResult.Complete;
         }
     }
 
     public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
     {
-        Debug.Log("w“ü¸”s: " + product.definition.id + ", ——R: " + failureReason);
+        Debug.Log("è³¼å…¥å¤±æ•—: " + product.definition.id + ", ç†ç”±: " + failureReason);
     }
 
     public void OnPurchaseFailed(Product product, PurchaseFailureDescription failureDescription)
     {
-        Debug.Log("w“ü¸”s: " + product.definition.id + ", ——R: " + failureDescription.reason + ", Ú×: " + failureDescription.message);
+        Debug.Log("è³¼å…¥å¤±æ•—: " + product.definition.id + ", ç†ç”±: " + failureDescription.reason + ", è©³ç´°: " + failureDescription.message);
     }
 }

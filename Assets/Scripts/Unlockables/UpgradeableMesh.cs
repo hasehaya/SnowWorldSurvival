@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 
 [RequireComponent(typeof(MeshFilter))]
@@ -21,28 +21,28 @@ public class UpgradeableMesh :MonoBehaviour
     /// <param name="unlockLevel">The level at which the upgrade is applied.</param>
     public void ApplyUpgrade(int unlockLevel)
     {
-        // upgradeMeshes ‚ª null ‚Ü‚½‚Í‹ó‚Ìê‡‚Íˆ—‚ğ’†’f
+        // upgradeMeshes ãŒ null ã¾ãŸã¯ç©ºã®å ´åˆã¯å‡¦ç†ã‚’ä¸­æ–­
         if (upgradeMeshes == null || upgradeMeshes.Length == 0)
         {
             Debug.LogWarning("Upgrade meshes are not assigned on " + gameObject.name);
             return;
         }
 
-        // unlockLevel ‚ª“KØ‚È”ÍˆÍ‚©ƒ`ƒFƒbƒNi‚±‚±‚Å‚Í unlockLevel ‚ª 2 –¢–‚Ìê‡‚ÍƒAƒbƒvƒOƒŒ[ƒh‘ÎÛŠOj
+        // unlockLevel ãŒé©åˆ‡ãªç¯„å›²ã‹ãƒã‚§ãƒƒã‚¯ï¼ˆã“ã“ã§ã¯ unlockLevel ãŒ 2 æœªæº€ã®å ´åˆã¯ã‚¢ãƒƒãƒ—ã‚°ãƒ¬ãƒ¼ãƒ‰å¯¾è±¡å¤–ï¼‰
         if (unlockLevel < 2 || unlockLevel >= upgradeMeshes.Length + 2)
         {
             Debug.LogWarning("The unlock level is out of valid range on " + gameObject.name);
             return;
         }
 
-        // meshFilter ‚ª null ‚Å‚È‚¢‚©Šm”Fi’Êí‚Í RequireComponent ‚Å•ÛØ‚³‚ê‚éj
+        // meshFilter ãŒ null ã§ãªã„ã‹ç¢ºèªï¼ˆé€šå¸¸ã¯ RequireComponent ã§ä¿è¨¼ã•ã‚Œã‚‹ï¼‰
         if (meshFilter == null)
         {
             Debug.LogWarning("MeshFilter component is missing on " + gameObject.name);
             return;
         }
 
-        // ‘Î‰‚·‚éƒƒbƒVƒ…‚ğİ’è
+        // å¯¾å¿œã™ã‚‹ãƒ¡ãƒƒã‚·ãƒ¥ã‚’è¨­å®š
         meshFilter.mesh = upgradeMeshes[unlockLevel - 2];
     }
 

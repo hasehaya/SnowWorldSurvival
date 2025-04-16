@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 
 using UnityEngine;
 
@@ -11,10 +11,10 @@ public class ATTPermissionManager :MonoBehaviour
 #if UNITY_IOS
     private IEnumerator Start()
     {
-        // 1•b‘Ò‹@i‹N“®’¼Œã‚É•\¦‚³‚ê‚È‚¢Œ»Û‚Ö‚Ì‘Îôj
+        // 1ç§’å¾…æ©Ÿï¼ˆèµ·å‹•ç›´å¾Œã«è¡¨ç¤ºã•ã‚Œãªã„ç¾è±¡ã¸ã®å¯¾ç­–ï¼‰
         yield return new WaitForSeconds(1.0f);
 
-        // ‹–‰Âƒ_ƒCƒAƒƒO•\¦
+        // è¨±å¯ãƒ€ã‚¤ã‚¢ãƒ­ã‚°è¡¨ç¤º
         ATTrackingStatusBinding.RequestAuthorizationTracking();
     }
 #endif

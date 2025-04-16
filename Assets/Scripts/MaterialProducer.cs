@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 
 using DG.Tweening;
 
@@ -8,31 +8,31 @@ using Random = UnityEngine.Random;
 
 
 /// <summary>
-/// ”Ä—p“I‚È‘fŞƒNƒ‰ƒXBLog ‚È‚ÇA‚ ‚ç‚ä‚é‘fŞ‚Ì¶¬‚âÄ¶ˆ—‚ğ‚Ü‚Æ‚ß‚Ä‚¢‚Ü‚·B
+/// æ±ç”¨çš„ãªç´ æã‚¯ãƒ©ã‚¹ã€‚Log ãªã©ã€ã‚ã‚‰ã‚†ã‚‹ç´ æã®ç”Ÿæˆã‚„å†ç”Ÿå‡¦ç†ã‚’ã¾ã¨ã‚ã¦ã„ã¾ã™ã€‚
 /// </summary>
 public class MaterialProducer :Interactable
 {
-    // ƒpƒgƒ[ƒ‹‚â”z’u‚É—˜—p‚·‚é‚½‚ß‚ÌsE—ñ”Ô†
+    // ãƒ‘ãƒˆãƒ­ãƒ¼ãƒ«ã‚„é…ç½®ã«åˆ©ç”¨ã™ã‚‹ãŸã‚ã®è¡Œãƒ»åˆ—ç•ªå·
     public int Row;
     public int Column;
 
-    [Header("‘fŞƒpƒ‰ƒ[ƒ^")]
-    [SerializeField] protected int materialHealth = 2;         // ‘fŞ‚Ì‘Ì—Í
-    [SerializeField] protected int resourceCount = 1;          // ‘Ì—ÍŒ¸­‚É¶¬‚·‚éÅ‘åƒŠƒ\[ƒX”
-    [SerializeField] protected float decreaseInterval = 0.45f; // ‘Ì—Í‚ªŒ¸‚éŠÔŠu
+    [Header("ç´ æãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿")]
+    [SerializeField] protected int materialHealth = 2;         // ç´ æã®ä½“åŠ›
+    [SerializeField] protected int resourceCount = 1;          // ä½“åŠ›æ¸›å°‘æ™‚ã«ç”Ÿæˆã™ã‚‹æœ€å¤§ãƒªã‚½ãƒ¼ã‚¹æ•°
+    [SerializeField] protected float decreaseInterval = 0.45f; // ä½“åŠ›ãŒæ¸›ã‚‹é–“éš”
 
-    [Header("ƒ‚ƒfƒ‹EÄ¶İ’è")]
-    [SerializeField] protected GameObject materialModel;       // ‘fŞ‚ÌŒ©‚½–Ú‚Ìƒ‚ƒfƒ‹
-    [SerializeField] protected float regrowDelay = 12f;        // Ä¶‚Ü‚Å‚Ì‘Ò‹@ŠÔ
-    [SerializeField] protected float growthDuration = 0.5f;    // ¬’·‚É‚©‚©‚éŠÔ
+    [Header("ãƒ¢ãƒ‡ãƒ«ãƒ»å†ç”Ÿè¨­å®š")]
+    [SerializeField] protected GameObject materialModel;       // ç´ æã®è¦‹ãŸç›®ã®ãƒ¢ãƒ‡ãƒ«
+    [SerializeField] protected float regrowDelay = 12f;        // å†ç”Ÿã¾ã§ã®å¾…æ©Ÿæ™‚é–“
+    [SerializeField] protected float growthDuration = 0.5f;    // æˆé•·ã«ã‹ã‹ã‚‹æ™‚é–“
 
-    [Header("ƒv[ƒ‹İ’è")]
+    [Header("ãƒ—ãƒ¼ãƒ«è¨­å®š")]
     [SerializeField] protected MaterialType materialType = MaterialType.Log;
 
     protected float timer = 0f;
     protected int initialHealth;
     protected Vector3 initialScale;
-    protected bool isDepleted = false; // ‘fŞ‚ªg‚¢‰Ê‚½‚³‚ê‚½‚©‚Ç‚¤‚©
+    protected bool isDepleted = false; // ç´ æãŒä½¿ã„æœãŸã•ã‚ŒãŸã‹ã©ã†ã‹
 
     void Start()
     {
@@ -52,7 +52,7 @@ public class MaterialProducer :Interactable
         if (timer < decreaseInterval)
             return;
 
-        // Player ‘Î‰
+        // Player å¯¾å¿œ
         if (other.CompareTag("Player"))
         {
             if (player == null)
@@ -66,7 +66,7 @@ public class MaterialProducer :Interactable
                 int spawnCount = Mathf.Min(resourceCount, remainingCapacity);
                 materialHealth--;
 
-                // š HP Œ¸­‚É‰¡—h‚ê‰‰o‚ğ’Ç‰Á
+                // â˜… HP æ¸›å°‘æ™‚ã«æ¨ªæºã‚Œæ¼”å‡ºã‚’è¿½åŠ 
                 if (materialModel != null)
                 {
                     materialModel.transform.DOShakePosition(
@@ -82,7 +82,7 @@ public class MaterialProducer :Interactable
                 SpawnResourceForPlayer(spawnCount);
             }
         }
-        // Employee ‘Î‰
+        // Employee å¯¾å¿œ
         else if (other.CompareTag("Employee"))
         {
             EmployeeController employee = other.GetComponent<EmployeeController>();
@@ -94,7 +94,7 @@ public class MaterialProducer :Interactable
                     int spawnCount = Mathf.Min(resourceCount, remainingCapacity);
                     materialHealth--;
 
-                    // š HP Œ¸­‚É‰¡—h‚ê‰‰o‚ğ’Ç‰Á
+                    // â˜… HP æ¸›å°‘æ™‚ã«æ¨ªæºã‚Œæ¼”å‡ºã‚’è¿½åŠ 
                     if (materialModel != null)
                     {
                         materialModel.transform.DOShakePosition(
@@ -112,14 +112,14 @@ public class MaterialProducer :Interactable
             }
         }
 
-        // HP ‚ª 0 ˆÈ‰º‚É‚È‚Á‚½ƒ^ƒCƒ~ƒ“ƒO‚ÅU“®Š®—¹Œã‚É RegrowMaterial
+        // HP ãŒ 0 ä»¥ä¸‹ã«ãªã£ãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§æŒ¯å‹•å®Œäº†å¾Œã« RegrowMaterial
         if (materialHealth <= 0 && materialModel != null)
         {
-            // Deplete ƒtƒ‰ƒO‚ğƒZƒbƒg
+            // Deplete ãƒ•ãƒ©ã‚°ã‚’ã‚»ãƒƒãƒˆ
             isDepleted = true;
 
-            // ‚Ü‚¸‰¡—h‚êƒAƒjƒ[ƒVƒ‡ƒ“‚ğ‰ü‚ß‚Ä•t—^‚µ‚ÄAI—¹‚ğ‘Ò‚Â
-            //   i‚·‚Å‚ÉU“®‚³‚¹‚½‚¯‚ê‚ÎA“¯‚¶’l‚Å‚à OKB—h‚ê‚ğ•ÏX‚µ‚½‚¯‚ê‚Îˆá‚¤’l‚Å‚à‚æ‚¢j
+            // ã¾ãšæ¨ªæºã‚Œã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã‚’æ”¹ã‚ã¦ä»˜ä¸ã—ã¦ã€çµ‚äº†ã‚’å¾…ã¤
+            //   ï¼ˆã™ã§ã«æŒ¯å‹•ã•ã›ãŸã‘ã‚Œã°ã€åŒã˜å€¤ã§ã‚‚ OKã€‚æºã‚Œã‚’å¤‰æ›´ã—ãŸã‘ã‚Œã°é•ã†å€¤ã§ã‚‚ã‚ˆã„ï¼‰
             materialModel.transform.DOShakePosition(
                 duration: 0.2f,
                 strength: new Vector3(0.2f, 0f, 0f),
@@ -130,7 +130,7 @@ public class MaterialProducer :Interactable
             )
             .OnComplete(() =>
             {
-                // U“®Š®—¹Œã‚ÉÄ¶ƒRƒ‹[ƒ`ƒ“‚ğ‹N“®
+                // æŒ¯å‹•å®Œäº†å¾Œã«å†ç”Ÿã‚³ãƒ«ãƒ¼ãƒãƒ³ã‚’èµ·å‹•
                 StartCoroutine(RegrowMaterial());
             });
         }
@@ -148,7 +148,7 @@ public class MaterialProducer :Interactable
     }
 
     /// <summary>
-    /// Player —p‚ÉƒŠƒ\[ƒX‚ğ¶¬‚µ‚Ü‚·B
+    /// Player ç”¨ã«ãƒªã‚½ãƒ¼ã‚¹ã‚’ç”Ÿæˆã—ã¾ã™ã€‚
     /// </summary>
     void SpawnResourceForPlayer(int count)
     {
@@ -159,7 +159,7 @@ public class MaterialProducer :Interactable
     }
 
     /// <summary>
-    /// Employee —p‚ÉƒŠƒ\[ƒX‚ğ¶¬‚µ‚Ü‚·B
+    /// Employee ç”¨ã«ãƒªã‚½ãƒ¼ã‚¹ã‚’ç”Ÿæˆã—ã¾ã™ã€‚
     /// </summary>
     void SpawnResourceForEmployee(int count, EmployeeController employee)
     {
@@ -170,11 +170,11 @@ public class MaterialProducer :Interactable
     }
 
     /// <summary>
-    /// ‹¤’Ê‚ÌƒŠƒ\[ƒX¶¬ˆ—BpoolKey (MaterialType) ‚ğ•¶š—ñ‚É‚µ‚Ä PoolManager ‚Ö“n‚µAƒWƒƒƒ“ƒv‰‰oŒã‚É Stack ‚Ö’Ç‰Á‚µ‚Ü‚·B
+    /// å…±é€šã®ãƒªã‚½ãƒ¼ã‚¹ç”Ÿæˆå‡¦ç†ã€‚poolKey (MaterialType) ã‚’æ–‡å­—åˆ—ã«ã—ã¦ PoolManager ã¸æ¸¡ã—ã€ã‚¸ãƒ£ãƒ³ãƒ—æ¼”å‡ºå¾Œã« Stack ã¸è¿½åŠ ã—ã¾ã™ã€‚
     /// </summary>
     void SpawnResource(int index, EmployeeController employee)
     {
-        // ¦ƒvƒŒƒCƒ„[‚Ü‚½‚Í]‹Æˆõ‚Ì MaterialType ‚ª None ‚© poolKey ‚Æˆê’v‚µ‚Ä‚¢‚é‚©‚ğŠm”F
+        // â€»ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã¾ãŸã¯å¾“æ¥­å“¡ã® MaterialType ãŒ None ã‹ poolKey ã¨ä¸€è‡´ã—ã¦ã„ã‚‹ã‹ã‚’ç¢ºèª
         if (employee == null)
         {
             if (player == null ||
@@ -196,7 +196,7 @@ public class MaterialProducer :Interactable
             }
         }
 
-        // PoolManager ‚©‚ç¶¬‚·‚éÛ‚ÉApoolKey ‚ğ•¶š—ñ‚Ö•ÏŠ·
+        // PoolManager ã‹ã‚‰ç”Ÿæˆã™ã‚‹éš›ã«ã€poolKey ã‚’æ–‡å­—åˆ—ã¸å¤‰æ›
         var resource = PoolManager.Instance.SpawnObject(materialType.ToString());
         Vector3 startPos = transform.position + Vector3.up * index;
         resource.transform.position = startPos;
@@ -216,7 +216,7 @@ public class MaterialProducer :Interactable
     }
 
     /// <summary>
-    /// ‘fŞ‚ÌÄ¶ˆ—Bˆê’èŠÔ‘Ò‹@ŒãA‘Ì—Í‚ğƒŠƒZƒbƒg‚µÄ‚Ñ¬’·‚³‚¹‚Ü‚·B
+    /// ç´ æã®å†ç”Ÿå‡¦ç†ã€‚ä¸€å®šæ™‚é–“å¾…æ©Ÿå¾Œã€ä½“åŠ›ã‚’ãƒªã‚»ãƒƒãƒˆã—å†ã³æˆé•·ã•ã›ã¾ã™ã€‚
     /// </summary>
     IEnumerator RegrowMaterial()
     {

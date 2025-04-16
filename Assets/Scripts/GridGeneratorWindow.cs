@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+Ôªø#if UNITY_EDITOR
 using UnityEditor;
 
 #endif
@@ -60,7 +60,7 @@ public class GridGenerator :MonoBehaviour
                 }
 
                 clone.name = $"{childBaseName}_{index}";
-                // ó·: X=col, Y=row, Z=row Ç≈îzíu
+                // ‰æã: X=col, Y=row, Z=row „ÅßÈÖçÁΩÆ
                 clone.transform.localPosition = new Vector3(
                     col * spacing.x,
                     0,

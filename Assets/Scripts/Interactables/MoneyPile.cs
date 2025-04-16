@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 
 using DG.Tweening;
 
@@ -23,11 +23,11 @@ public class MoneyPile :ObjectPile
 
     private void Update()
     {
-        // �����O���[�o���ȋ����W���A�N�e�B�u�Ȃ�A�ς�ł���������ׂăv���C���[�̏������ɉ��Z����B
+        // もしグローバルな金収集がアクティブなら、積んでいる金をすべてプレイヤーの所持金に加算する。
         if (GameManager.Instance.GlobalData.IsMoneyCollectionActive && (objects.Count > 0 || hiddenMoney > 0))
         {
             int totalMoney = objects.Count + hiddenMoney;
-            // �X�^�b�N���̂��ׂĂ̋��I�u�W�F�N�g��ԋp���A�B�������N���A
+            // スタック内のすべての金オブジェクトを返却し、隠し金もクリア
             while (objects.Count > 0)
             {
                 PoolManager.Instance.ReturnObject(objects.Pop());
@@ -38,15 +38,15 @@ public class MoneyPile :ObjectPile
     }
 
     /// <summary>
-    /// (��A�N�e�B�u���̂ݗ��p) �h���b�v�����B�R���N�V�������łȂ���Ή������Ȃ��B
-    /// �O���[�o�����W���A�N�e�B�u�̍ۂ� Update() �ňꊇ���W���Ă��邽�߁ADrop() �͎��s����܂���B
+    /// (非アクティブ時のみ利用) ドロップ処理。コレクション中でなければ何もしない。
+    /// グローバル収集がアクティブの際は Update() で一括収集しているため、Drop() は実行されません。
     /// </summary>
     protected override void Drop()
     {
         if (!isCollectingMoney)
-            return; // ���W���łȂ���Ή������Ȃ��B
+            return; // 収集中でなければ何もしない。
 
-        // �O���[�o���Ȏ��W�������ȏꍇ�̂݁A�]���ʂ�A�j���[�V�����t���̋��I�u�W�F�N�g�̃h���b�v�������s��
+        // グローバルな収集が無効な場合のみ、従来通りアニメーション付きの金オブジェクトのドロップ処理を行う
         if (!GameManager.Instance.GlobalData.IsMoneyCollectionActive)
         {
             var moneyObj = PoolManager.Instance.SpawnObject("Money");
@@ -60,7 +60,7 @@ public class MoneyPile :ObjectPile
     }
 
     /// <summary>
-    /// �v���C���[���g���K�[�G���A�ɓ������ۂɎ��W�v���Z�X���J�n����B
+    /// プレイヤーがトリガーエリアに入った際に収集プロセスを開始する。
     /// </summary>
     protected override void OnPlayerEnter()
     {
@@ -68,18 +68,18 @@ public class MoneyPile :ObjectPile
     }
 
     /// <summary>
-    /// �R���[�`���B���̃I�u�W�F�N�g���������W���āA�v���C���[�̏������𑝉�������B
-    /// �O���[�o�����W���A�N�e�B�u�łȂ��ꍇ�ɂ̂݁A�I�u�W�F�N�g�P�ʂł̎��W���������{����B
+    /// コルーチン。金のオブジェクトを順次収集して、プレイヤーの所持金を増加させる。
+    /// グローバル収集がアクティブでない場合にのみ、オブジェクト単位での収集処理を実施する。
     /// </summary>
     IEnumerator CollectMoney()
     {
         isCollectingMoney = true;
 
-        // �܂��͉B���������Z
+        // まずは隠し金を加算
         GameManager.Instance.AdjustMoney(hiddenMoney);
         hiddenMoney = 0;
 
-        // �I�u�W�F�N�g�����݂��������W�������p��
+        // オブジェクトが存在する限り収集処理を継続
         while (player != null && objects.Count > 0)
         {
             for (int i = 0; i < collectRate; i++)
@@ -90,7 +90,7 @@ public class MoneyPile :ObjectPile
                     break;
                 }
 
-                // �I�u�W�F�N�g����菜���A���ڏ������ɉ��Z
+                // オブジェクトを取り除き、直接所持金に加算
                 objects.Pop();
                 GameManager.Instance.AdjustMoney(1);
             }
@@ -105,15 +105,15 @@ public class MoneyPile :ObjectPile
     }
 
     /// <summary>
-    /// ����ǉ�����ہA�O���[�o�����W���A�N�e�B�u�ł���Α����ɉ��Z���A
-    /// �����łȂ���Ώ]���ʂ菈���i�e�ʓ��Ȃ璼�ډ��Z�A���t�Ȃ� hiddenMoney �ɒ~����j���܂��B
-    /// �܂��A���I�u�W�F�N�g���X�|�[���������ɁA���ڒ����������s���܂��B
+    /// 金を追加する際、グローバル収集がアクティブであれば即座に加算し、
+    /// そうでなければ従来通り処理（容量内なら直接加算、満杯なら hiddenMoney に蓄える）します。
+    /// また、金オブジェクトをスポーンさせずに、直接調整処理を行います。
     /// </summary>
     public void AddMoney()
     {
         if (GameManager.Instance.GlobalData.IsMoneyCollectionActive)
         {
-            // ���W���A�N�e�B�u�Ȃ�A�V���ȋ��͑����ɏ������ɉ��Z�i�X�|�[�����Ȃ��j
+            // 収集がアクティブなら、新たな金は即座に所持金に加算（スポーンしない）
             GameManager.Instance.AdjustMoney(1);
         }
         else
@@ -125,7 +125,7 @@ public class MoneyPile :ObjectPile
             }
             else
             {
-                // ���ɍő吔�ɒB���Ă���ꍇ�� hiddenMoney �ɉ��Z
+                // 既に最大数に達している場合は hiddenMoney に加算
                 hiddenMoney++;
             }
         }

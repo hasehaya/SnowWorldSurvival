@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class UnlockManager :MonoBehaviour
 {
-    // ƒVƒ“ƒOƒ‹ƒgƒ“ƒCƒ“ƒXƒ^ƒ“ƒX
+    // ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
     private static UnlockManager instance;
     public static UnlockManager Instance
     {
@@ -24,7 +24,7 @@ public class UnlockManager :MonoBehaviour
     [SerializeField, Tooltip("Prefab for the unlockable buyer UI element.")]
     private UnlockableBuyer unlockableBuyerPrefab;
 
-    // Še MaterialType ‚²‚Æ‚Ì UnlockableBuyer ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğŠÇ—‚·‚é Dictionary
+    // å„ MaterialType ã”ã¨ã® UnlockableBuyer ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç®¡ç†ã™ã‚‹ Dictionary
     private Dictionary<MaterialType, UnlockableBuyer> activeBuyerInstances = new Dictionary<MaterialType, UnlockableBuyer>();
 
     [SerializeField, Tooltip("List of unlockable groups by MaterialType (None is excluded).")]
@@ -36,14 +36,14 @@ public class UnlockManager :MonoBehaviour
     [SerializeField, Tooltip("Reference to the camera controller to focus on unlock points.")]
     private CameraController cameraController;
 
-    // ƒCƒxƒ“ƒgF‘S‘Ì‚ÌƒAƒ“ƒƒbƒNi’»‚ğ’Ê’m
+    // ã‚¤ãƒ™ãƒ³ãƒˆï¼šå…¨ä½“ã®ã‚¢ãƒ³ãƒ­ãƒƒã‚¯é€²æ—ã‚’é€šçŸ¥
     public event Action<float> OnUnlock;
 
-    // SaveData ‚ÆƒŒƒXƒgƒ‰ƒ“ID ‚Ì•Û
+    // SaveData ã¨ãƒ¬ã‚¹ãƒˆãƒ©ãƒ³ID ã®ä¿æŒ
     private StageData data;
     private string restaurantID;
 
-    // Awake ‚ÅƒVƒ“ƒOƒ‹ƒgƒ“‚ğİ’è
+    // Awake ã§ã‚·ãƒ³ã‚°ãƒ«ãƒˆãƒ³ã‚’è¨­å®š
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -55,14 +55,14 @@ public class UnlockManager :MonoBehaviour
     }
 
     /// <summary>
-    /// UnlockManager ‚Ì‰Šú‰»BGameManager ‚©‚ç SaveData ‚ÆƒŒƒXƒgƒ‰ƒ“ID ‚ğ“n‚µ‚Ü‚·B
+    /// UnlockManager ã®åˆæœŸåŒ–ã€‚GameManager ã‹ã‚‰ SaveData ã¨ãƒ¬ã‚¹ãƒˆãƒ©ãƒ³ID ã‚’æ¸¡ã—ã¾ã™ã€‚
     /// </summary>
     public void InitializeUnlockManager(StageData saveData, string restaurantID)
     {
         this.data = saveData;
         this.restaurantID = restaurantID;
 
-        // ŠeƒOƒ‹[ƒv‚É‚Â‚¢‚ÄAŠù‚É‰ğ•úÏ‚İ‚È‚çw“üÏ‚İ‚Ì Unlockable ‚ğ”½‰f
+        // å„ã‚°ãƒ«ãƒ¼ãƒ—ã«ã¤ã„ã¦ã€æ—¢ã«è§£æ”¾æ¸ˆã¿ãªã‚‰è³¼å…¥æ¸ˆã¿ã® Unlockable ã‚’åæ˜ 
         foreach (var group in materialUnlockables)
         {
             if (!data.MaterialUnlocked.ContainsKey(group.materialType))
@@ -78,18 +78,18 @@ public class UnlockManager :MonoBehaviour
             }
         }
 
-        // ‚·‚Å‚É‰ğ•ú‚³‚ê‚Ä‚¢‚éŠeƒOƒ‹[ƒv‚É‘Î‚µ‚ÄAUnlockableBuyer ‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚ğ¶¬‚µUIXV
+        // ã™ã§ã«è§£æ”¾ã•ã‚Œã¦ã„ã‚‹å„ã‚°ãƒ«ãƒ¼ãƒ—ã«å¯¾ã—ã¦ã€UnlockableBuyer ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç”Ÿæˆã—UIæ›´æ–°
         UpdateAllUnlockableBuyers();
         // Update camera focus to show all active unlockable points.
         UpdateCameraFocusForAll();
     }
 
     /// <summary>
-    /// w’è‚³‚ê‚½ MaterialType ‚Ì Unlockable ‚ğw“ü‚µ‚Ü‚·B
+    /// æŒ‡å®šã•ã‚ŒãŸ MaterialType ã® Unlockable ã‚’è³¼å…¥ã—ã¾ã™ã€‚
     /// </summary>
     public void BuyUnlockable(MaterialType material)
     {
-        // ‘ÎÛƒOƒ‹[ƒv‚ğæ“¾
+        // å¯¾è±¡ã‚°ãƒ«ãƒ¼ãƒ—ã‚’å–å¾—
         var group = materialUnlockables.FirstOrDefault(g => g.materialType == material);
         if (group == null)
         {
@@ -108,24 +108,24 @@ public class UnlockManager :MonoBehaviour
             return;
         }
 
-        // ‘S‘Ì‚ÌUnlockCount‚ğŒvZ
+        // å…¨ä½“ã®UnlockCountã‚’è¨ˆç®—
         int overallUnlockCount = data.UnlockCounts.Values.Sum();
-        // ‘S‘Ì‚ÌUnlockCount‚ª3‚ÅŠ„‚Á‚½—]‚è‚ª2‚Ìê‡AL‚ğ•\¦‚·‚é
+        // å…¨ä½“ã®UnlockCountãŒ3ã§å‰²ã£ãŸä½™ã‚ŠãŒ2ã®å ´åˆã€åºƒå‘Šã‚’è¡¨ç¤ºã™ã‚‹
         if (overallUnlockCount % 3 == 2)
         {
             AdMobRewardInterstitial.Instance.ShowAdMobReward();
         }
 
-        // ‘ÎÛ Unlockable ‚ğw“ü
+        // å¯¾è±¡ Unlockable ã‚’è³¼å…¥
         var unlockable = group.unlockables[currentCount];
         unlockable.Unlock();
 
-        // ƒp[ƒeƒBƒNƒ‹ƒGƒtƒFƒNƒg‚ÆŒø‰Ê‰¹‚ğÄ¶
+        // ãƒ‘ãƒ¼ãƒ†ã‚£ã‚¯ãƒ«ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã¨åŠ¹æœéŸ³ã‚’å†ç”Ÿ
         unlockParticle.transform.position = unlockable.transform.position;
         unlockParticle.Play();
         AudioManager.Instance.PlaySFX(AudioID.Magical);
 
-        // i’»XV
+        // é€²æ—æ›´æ–°
         if (data.UnlockCounts.ContainsKey(material))
             data.UnlockCounts[material]++;
         else
@@ -134,32 +134,32 @@ public class UnlockManager :MonoBehaviour
 
         SaveSystem.SaveData<StageData>(data, restaurantID);
 
-        // ‘O‚ÌƒOƒ‹[ƒv‚Ìi’»‚ª50%ˆÈã‚Ìê‡AŸ‚ÌƒOƒ‹[ƒv‚ğ‡Ÿ‰ğ•ú
+        // å‰ã®ã‚°ãƒ«ãƒ¼ãƒ—ã®é€²æ—ãŒ50%ä»¥ä¸Šã®å ´åˆã€æ¬¡ã®ã‚°ãƒ«ãƒ¼ãƒ—ã‚’é †æ¬¡è§£æ”¾
         TryUnlockNextGroups();
 
-        // ‘SƒOƒ‹[ƒv‚Ì UnlockableBuyer UI ‚ğXV
+        // å…¨ã‚°ãƒ«ãƒ¼ãƒ—ã® UnlockableBuyer UI ã‚’æ›´æ–°
         UpdateAllUnlockableBuyers();
         // Also update camera focus so that it now visits all active unlockable points.
         UpdateCameraFocusForAll();
 
-        // ƒIƒvƒVƒ‡ƒ“Fw“ü‚É‘ÎÛ Unlockable ‚ÌˆÊ’u‚ÖƒJƒƒ‰‚ğˆÚ“®i‚±‚±‚ÍÈ—ª‚Ü‚½‚ÍŒÂ•Ê‘Î‰j
+        // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼šè³¼å…¥æ™‚ã«å¯¾è±¡ Unlockable ã®ä½ç½®ã¸ã‚«ãƒ¡ãƒ©ã‚’ç§»å‹•ï¼ˆã“ã“ã¯çœç•¥ã¾ãŸã¯å€‹åˆ¥å¯¾å¿œï¼‰
         // cameraController.FocusOnPointAndReturn(unlockable.GetBuyingPoint());
     }
 
     /// <summary>
-    /// ‚·‚×‚Ä‚Ì‰ğ•úÏ‚İ MaterialGroup ‚É‘Î‚µ‚ÄAUnlockableBuyer ‚Ì UI ‚ğXV‚Ü‚½‚Í¶¬‚µ‚Ü‚·B
+    /// ã™ã¹ã¦ã®è§£æ”¾æ¸ˆã¿ MaterialGroup ã«å¯¾ã—ã¦ã€UnlockableBuyer ã® UI ã‚’æ›´æ–°ã¾ãŸã¯ç”Ÿæˆã—ã¾ã™ã€‚
     /// </summary>
     private void UpdateAllUnlockableBuyers()
     {
         foreach (var group in materialUnlockables)
         {
-            // ‰ğ•ú‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎƒXƒLƒbƒv
+            // è§£æ”¾ã•ã‚Œã¦ã„ãªã‘ã‚Œã°ã‚¹ã‚­ãƒƒãƒ—
             if (!data.MaterialUnlocked.ContainsKey(group.materialType) || !data.MaterialUnlocked[group.materialType])
                 continue;
 
             int count = data.UnlockCounts.ContainsKey(group.materialType) ? data.UnlockCounts[group.materialType] : 0;
 
-            // ƒOƒ‹[ƒv‚ª‘S‚Äw“üÏ‚İ‚Ìê‡AŠù‘¶‚Ì UI ‚ª‚ ‚ê‚Î”ñ•\¦‚É‚·‚é
+            // ã‚°ãƒ«ãƒ¼ãƒ—ãŒå…¨ã¦è³¼å…¥æ¸ˆã¿ã®å ´åˆã€æ—¢å­˜ã® UI ãŒã‚ã‚Œã°éè¡¨ç¤ºã«ã™ã‚‹
             if (count >= group.unlockables.Count)
             {
                 if (activeBuyerInstances.ContainsKey(group.materialType))
@@ -169,7 +169,7 @@ public class UnlockManager :MonoBehaviour
                 continue;
             }
 
-            // –¢¶¬‚È‚çPrefab‚©‚ç¶¬
+            // æœªç”Ÿæˆãªã‚‰Prefabã‹ã‚‰ç”Ÿæˆ
             if (!activeBuyerInstances.ContainsKey(group.materialType) || activeBuyerInstances[group.materialType] == null)
             {
                 if (unlockableBuyerPrefab != null)
@@ -184,7 +184,7 @@ public class UnlockManager :MonoBehaviour
                 }
             }
 
-            // ‘ÎÛƒOƒ‹[ƒv‚ÌŸ‚Éw“ü‰Â”\‚È Unlockable ‚Ìî•ñ‚ğæ“¾
+            // å¯¾è±¡ã‚°ãƒ«ãƒ¼ãƒ—ã®æ¬¡ã«è³¼å…¥å¯èƒ½ãª Unlockable ã®æƒ…å ±ã‚’å–å¾—
             var buyerUI = activeBuyerInstances[group.materialType];
             var nextUnlockable = group.unlockables[count];
             // Calculate price using the group's own baseUnlockPrice and unlockGrowthFactor.
@@ -196,25 +196,25 @@ public class UnlockManager :MonoBehaviour
             buyerUI.Initialize(nextUnlockable, price, paid, group.materialType);
             buyerUI.gameObject.SetActive(true);
         }
-        // ‘S‘Ì‚Ìi’»‚ğ’Ê’m
+        // å…¨ä½“ã®é€²æ—ã‚’é€šçŸ¥
         OnUnlock?.Invoke(ComputeOverallProgress());
     }
 
     /// <summary>
-    /// ‘O‚Ì MaterialGroup ‚Ìi’»‚ª50%ˆÈã‚Ìê‡A‡ŸŸ‚Ì MaterialGroup ‚ğ‰ğ•ú‚µ‚Ü‚·B
+    /// å‰ã® MaterialGroup ã®é€²æ—ãŒ50%ä»¥ä¸Šã®å ´åˆã€é †æ¬¡æ¬¡ã® MaterialGroup ã‚’è§£æ”¾ã—ã¾ã™ã€‚
     /// </summary>
     private void TryUnlockNextGroups()
     {
-        // MaterialType ‚Ì‡˜FLog, Rock, Snow, Tomato
+        // MaterialType ã®é †åºï¼šLog, Rock, Snow, Tomato
         MaterialType[] order = new MaterialType[] { MaterialType.Log, MaterialType.Rock, MaterialType.Snow, MaterialType.Tomato };
 
-        // 2”Ô–ÚˆÈ~‚ÌƒOƒ‹[ƒv‚É‚Â‚¢‚ÄA‘O‚ÌƒOƒ‹[ƒv‚Ìi’»‚ğƒ`ƒFƒbƒN
+        // 2ç•ªç›®ä»¥é™ã®ã‚°ãƒ«ãƒ¼ãƒ—ã«ã¤ã„ã¦ã€å‰ã®ã‚°ãƒ«ãƒ¼ãƒ—ã®é€²æ—ã‚’ãƒã‚§ãƒƒã‚¯
         for (int i = 1; i < order.Length; i++)
         {
             MaterialType prev = order[i - 1];
             MaterialType curr = order[i];
             if (data.MaterialUnlocked.ContainsKey(curr) && data.MaterialUnlocked[curr])
-                continue; // ‚·‚Å‚É‰ğ•úÏ‚İ‚È‚çƒXƒLƒbƒv
+                continue; // ã™ã§ã«è§£æ”¾æ¸ˆã¿ãªã‚‰ã‚¹ã‚­ãƒƒãƒ—
 
             var prevGroup = materialUnlockables.FirstOrDefault(g => g.materialType == prev);
             if (prevGroup == null || prevGroup.unlockables.Count == 0)
@@ -224,7 +224,7 @@ public class UnlockManager :MonoBehaviour
             if (progress >= 0.5f)
             {
                 data.MaterialUnlocked[curr] = true;
-                // ƒIƒvƒVƒ‡ƒ“FV‚µ‚­‰ğ•ú‚³‚ê‚½ƒOƒ‹[ƒv‚ÌÅ‰‚Ì Unlockable ‚ğ©“®w“üii’» 1 ‚É‚·‚éj
+                // ã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼šæ–°ã—ãè§£æ”¾ã•ã‚ŒãŸã‚°ãƒ«ãƒ¼ãƒ—ã®æœ€åˆã® Unlockable ã‚’è‡ªå‹•è³¼å…¥ï¼ˆé€²æ— 1 ã«ã™ã‚‹ï¼‰
                 data.UnlockCounts[curr] = 1;
                 data.PaidAmounts[curr] = 0;
             }
@@ -232,7 +232,7 @@ public class UnlockManager :MonoBehaviour
     }
 
     /// <summary>
-    /// w’è‚³‚ê‚½ MaterialType ‚Ì Unlockable ‚É‘Î‚·‚éx•¥‚¢Ï‚İ‹àŠz‚ğXV‚µ‚Ü‚·B
+    /// æŒ‡å®šã•ã‚ŒãŸ MaterialType ã® Unlockable ã«å¯¾ã™ã‚‹æ”¯æ‰•ã„æ¸ˆã¿é‡‘é¡ã‚’æ›´æ–°ã—ã¾ã™ã€‚
     /// </summary>
     public void UpdatePaidAmount(MaterialType material, int amount)
     {
@@ -245,7 +245,7 @@ public class UnlockManager :MonoBehaviour
     }
 
     /// <summary>
-    /// ‚·‚×‚Ä‚Ì‰ğ•úÏ‚İƒOƒ‹[ƒv‚É‘Î‚·‚é‘S‘Ì‚Ìi’»iŠeƒOƒ‹[ƒv‚Ìi’»‚Ì•½‹Ïj‚ğŒvZ‚µ‚Ü‚·B
+    /// ã™ã¹ã¦ã®è§£æ”¾æ¸ˆã¿ã‚°ãƒ«ãƒ¼ãƒ—ã«å¯¾ã™ã‚‹å…¨ä½“ã®é€²æ—ï¼ˆå„ã‚°ãƒ«ãƒ¼ãƒ—ã®é€²æ—ã®å¹³å‡ï¼‰ã‚’è¨ˆç®—ã—ã¾ã™ã€‚
     /// </summary>
     private float ComputeOverallProgress()
     {

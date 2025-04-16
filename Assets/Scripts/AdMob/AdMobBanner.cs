@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 
 using GoogleMobileAds.Api;
 
@@ -7,12 +7,12 @@ using UnityEngine;
 public class AdMobBanner :MonoBehaviour
 {
     private BannerView bannerView;
-    private bool isRetrying = false; // ƒŠƒgƒ‰ƒC’†‚©‚Ç‚¤‚©”»’è
-    private float retryDelay = 3f;   // ƒŠƒgƒ‰ƒCŠÔŠui•bj
+    private bool isRetrying = false; // ãƒªãƒˆãƒ©ã‚¤ä¸­ã‹ã©ã†ã‹åˆ¤å®š
+    private float retryDelay = 3f;   // ãƒªãƒˆãƒ©ã‚¤é–“éš”ï¼ˆç§’ï¼‰
 
     private void Start()
     {
-        // LíœÏ‚İ‚È‚çƒŠƒNƒGƒXƒg‚µ‚È‚¢
+        // åºƒå‘Šå‰Šé™¤æ¸ˆã¿ãªã‚‰ãƒªã‚¯ã‚¨ã‚¹ãƒˆã—ãªã„
         if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
@@ -44,7 +44,7 @@ public class AdMobBanner :MonoBehaviour
         string adUnitId = "unexpected_platform";
 #endif
 
-        // ŒÃ‚¢ƒoƒi[‚ªc‚Á‚Ä‚½‚çíœ
+        // å¤ã„ãƒãƒŠãƒ¼ãŒæ®‹ã£ã¦ãŸã‚‰å‰Šé™¤
         if (bannerView != null)
         {
             bannerView.Destroy();
@@ -59,16 +59,16 @@ public class AdMobBanner :MonoBehaviour
         var bannerPosY = Screen.safeArea.yMax - Screen.height;
         bannerView = new BannerView(adUnitId, adaptiveSize, 0, (int)bannerPosY);
 
-        // ƒR[ƒ‹ƒoƒbƒNİ’è
+        // ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯è¨­å®š
         bannerView.OnBannerAdLoaded += OnBannerAdLoaded;
         bannerView.OnBannerAdLoadFailed += OnBannerAdLoadFailed;
 
-        // ƒŠƒNƒGƒXƒgì¬
+        // ãƒªã‚¯ã‚¨ã‚¹ãƒˆä½œæˆ
         AdRequest adRequest = new AdRequest();
         if (Application.systemLanguage == SystemLanguage.Japanese)
         {
-            adRequest.Keywords.Add("ƒQ[ƒ€");
-            adRequest.Keywords.Add("ƒ‚ƒoƒCƒ‹ƒQ[ƒ€");
+            adRequest.Keywords.Add("ã‚²ãƒ¼ãƒ ");
+            adRequest.Keywords.Add("ãƒ¢ãƒã‚¤ãƒ«ã‚²ãƒ¼ãƒ ");
         }
         else
         {
@@ -83,13 +83,13 @@ public class AdMobBanner :MonoBehaviour
 
     private void OnBannerAdLoaded()
     {
-        Debug.Log("ƒoƒi[•\¦Š®—¹");
-        isRetrying = false; // ¬Œ÷‚µ‚½‚çƒŠƒgƒ‰ƒC‰ğœ
+        Debug.Log("ãƒãƒŠãƒ¼è¡¨ç¤ºå®Œäº†");
+        isRetrying = false; // æˆåŠŸã—ãŸã‚‰ãƒªãƒˆãƒ©ã‚¤è§£é™¤
     }
 
     private void OnBannerAdLoadFailed(LoadAdError error)
     {
-        Debug.LogWarning("ƒoƒi[“Ç‚İ‚İ¸”s: " + error);
+        Debug.LogWarning("ãƒãƒŠãƒ¼èª­ã¿è¾¼ã¿å¤±æ•—: " + error);
 
         if (!isRetrying)
         {
@@ -100,10 +100,10 @@ public class AdMobBanner :MonoBehaviour
 
     #endregion
 
-    //ƒŠƒgƒ‰ƒCˆ—
+    //ãƒªãƒˆãƒ©ã‚¤å‡¦ç†
     private IEnumerator RetryLoadBanner()
     {
-        Debug.Log($"ƒoƒi[ƒŠƒgƒ‰ƒC‚ğ{retryDelay}•bŒã‚És‚µ‚Ü‚·");
+        Debug.Log($"ãƒãƒŠãƒ¼ãƒªãƒˆãƒ©ã‚¤ã‚’{retryDelay}ç§’å¾Œã«è©¦è¡Œã—ã¾ã™");
         yield return new WaitForSeconds(retryDelay);
         RequestBanner();
     }

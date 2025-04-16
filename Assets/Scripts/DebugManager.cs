@@ -1,19 +1,19 @@
-using TMPro;
+ï»¿using TMPro;
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class DebugManager :MonoBehaviour
 {
-    // Inspector ‚©‚ç UI GameObject ‚ğİ’è‚Å‚«‚é‚æ‚¤‚É‚µ‚Ü‚·B
-    [SerializeField, Tooltip("Escape ƒL[‚Å•\¦‚·‚é UI GameObject")]
+    // Inspector ã‹ã‚‰ UI GameObject ã‚’è¨­å®šã§ãã‚‹ã‚ˆã†ã«ã—ã¾ã™ã€‚
+    [SerializeField, Tooltip("Escape ã‚­ãƒ¼ã§è¡¨ç¤ºã™ã‚‹ UI GameObject")]
     private GameObject debugUI;
 
     [SerializeField]
     private TMP_Text elapsedTimeText;
 
     private string saveFileName;
-    // ƒQ[ƒ€‘¬“x‚ğ•ÏX‚·‚éƒXƒeƒbƒv’lB—á‚¦‚Î 0.5f ‚¸‚Â•Ï‰»‚³‚¹‚é
+    // ã‚²ãƒ¼ãƒ é€Ÿåº¦ã‚’å¤‰æ›´ã™ã‚‹ã‚¹ãƒ†ãƒƒãƒ—å€¤ã€‚ä¾‹ãˆã° 0.5f ãšã¤å¤‰åŒ–ã•ã›ã‚‹
     float gameSpeedDegree = 0.5f;
 
     private void Update()
@@ -25,7 +25,7 @@ public class DebugManager :MonoBehaviour
 
     public void ToggleDebugUI()
     {
-        // debugUI ‚ª null ‚Å‚È‚¢ê‡AactiveSelf ‚ğ”½“]‚³‚¹‚é
+        // debugUI ãŒ null ã§ãªã„å ´åˆã€activeSelf ã‚’åè»¢ã•ã›ã‚‹
         if (debugUI != null)
         {
             debugUI.SetActive(!debugUI.activeSelf);
@@ -36,23 +36,23 @@ public class DebugManager :MonoBehaviour
     {
         saveFileName = SceneManager.GetActiveScene().name;
 
-        // ƒZ[ƒuƒf[ƒ^‚ğíœ
+        // ã‚»ãƒ¼ãƒ–ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤
         SaveSystem.DeleteData(saveFileName);
         SaveSystem.DeleteData("GlobalData");
-        // Œ»İ‚ÌƒV[ƒ“‚ğƒŠƒ[ƒh
+        // ç¾åœ¨ã®ã‚·ãƒ¼ãƒ³ã‚’ãƒªãƒ­ãƒ¼ãƒ‰
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void SpeedUpGameSpeed()
     {
-        // Time.timeScale ‚ğ gameSpeedDegree •ª‚¾‚¯ã‚°‚é
+        // Time.timeScale ã‚’ gameSpeedDegree åˆ†ã ã‘ä¸Šã’ã‚‹
         Time.timeScale += gameSpeedDegree;
         Debug.Log("Game speed increased to: " + Time.timeScale);
     }
 
     public void SpeedDownGameSpeed()
     {
-        // Time.timeScale ‚ğ gameSpeedDegree •ª‚¾‚¯‰º‚°‚éBÅ’á’l‚Í 0.5f ‚Éİ’èB
+        // Time.timeScale ã‚’ gameSpeedDegree åˆ†ã ã‘ä¸‹ã’ã‚‹ã€‚æœ€ä½å€¤ã¯ 0.5f ã«è¨­å®šã€‚
         Time.timeScale = Mathf.Max(0.5f, Time.timeScale - gameSpeedDegree);
         Debug.Log("Game speed decreased to: " + Time.timeScale);
     }

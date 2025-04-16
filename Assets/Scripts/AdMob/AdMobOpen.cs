@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 
 using GoogleMobileAds.Api;
 
@@ -18,16 +18,16 @@ public class AdMobOpen :MonoBehaviour
     private AppOpenAd appOpenAd;
     private DateTime _expireTime;
 
-    // ---- ’Ç‰Áƒ|ƒCƒ“ƒg: ƒŠƒ[ƒhŠÖ˜A ----
+    // ---- è¿½åŠ ãƒã‚¤ãƒ³ãƒˆ: ãƒªãƒ­ãƒ¼ãƒ‰é–¢é€£ ----
     [Header("Retry Settings")]
-    [Tooltip("¸”s‚µ‚½‚É‰½•bŒã‚ÉÄƒŠƒ[ƒh‚·‚é‚©")]
+    [Tooltip("å¤±æ•—ã—ãŸæ™‚ã«ä½•ç§’å¾Œã«å†ãƒªãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã‹")]
     [SerializeField] private float reloadInterval = 5f;
 
-    // ƒ[ƒh’†ƒtƒ‰ƒOF“ñdƒ[ƒh‚ğ–h~‚·‚é
+    // ãƒ­ãƒ¼ãƒ‰ä¸­ãƒ•ãƒ©ã‚°ï¼šäºŒé‡ãƒ­ãƒ¼ãƒ‰ã‚’é˜²æ­¢ã™ã‚‹
     private bool isLoading = false;
 
     /// <summary>
-    /// L‚ª—LŒø‚©‚Ç‚¤‚©”»’è
+    /// åºƒå‘ŠãŒæœ‰åŠ¹ã‹ã©ã†ã‹åˆ¤å®š
     /// </summary>
     public bool IsAdAvailable
     {
@@ -45,24 +45,24 @@ public class AdMobOpen :MonoBehaviour
 
     private void Start()
     {
-        // LíœÏ‚İ‚È‚çƒŠƒNƒGƒXƒg‚µ‚È‚¢
+        // åºƒå‘Šå‰Šé™¤æ¸ˆã¿ãªã‚‰ãƒªã‚¯ã‚¨ã‚¹ãƒˆã—ãªã„
         if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             return;
         }
 
-        // LSDK‚ğ‰Šú‰»
+        // åºƒå‘ŠSDKã‚’åˆæœŸåŒ–
         MobileAds.Initialize(initStatus =>
         {
             Debug.Log("GoogleMobileAds Initialized");
         });
 
-        // ƒAƒvƒŠ‹N“®‚Éƒ[ƒh‚ğ‚İ‚é
+        // ã‚¢ãƒ—ãƒªèµ·å‹•æ™‚ã«ãƒ­ãƒ¼ãƒ‰ã‚’è©¦ã¿ã‚‹
         LoadAppOpenAd(false);
     }
 
     /// <summary>
-    /// OnApplicationPause ‚ÅƒtƒHƒAƒOƒ‰ƒEƒ“ƒh‚É•œ‹A‚µ‚½ƒ^ƒCƒ~ƒ“ƒO‚ğE‚¤
+    /// OnApplicationPause ã§ãƒ•ã‚©ã‚¢ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ã«å¾©å¸°ã—ãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’æ‹¾ã†
     /// </summary>
     private void OnApplicationPause(bool paused)
     {
@@ -71,12 +71,12 @@ public class AdMobOpen :MonoBehaviour
             return;
         }
 
-        // ƒAƒvƒŠ‚ªƒoƒbƒN¨ƒtƒHƒAƒOƒ‰ƒEƒ“ƒh‚É–ß‚Á‚½‚çL‚ğ•\¦
+        // ã‚¢ãƒ—ãƒªãŒãƒãƒƒã‚¯â†’ãƒ•ã‚©ã‚¢ã‚°ãƒ©ã‚¦ãƒ³ãƒ‰ã«æˆ»ã£ãŸã‚‰åºƒå‘Šã‚’è¡¨ç¤º
         if (!paused)
         {
             if (IsAdAvailable)
             {
-                // ‚Ü‚¾4ŠÔˆÈ“à‚Å—LŒø‚È‚ç‘¦•\¦
+                // ã¾ã 4æ™‚é–“ä»¥å†…ã§æœ‰åŠ¹ãªã‚‰å³è¡¨ç¤º
                 ShowAppOpenAd();
             }
             else
@@ -96,18 +96,18 @@ public class AdMobOpen :MonoBehaviour
     }
 
     /// <summary>
-    /// ƒI[ƒvƒ“L‚Ì“Ç‚İ‚İ
+    /// ã‚ªãƒ¼ãƒ—ãƒ³åºƒå‘Šã®èª­ã¿è¾¼ã¿
     /// </summary>
     public void LoadAppOpenAd(bool showWhenLoaded)
     {
-        // ‚·‚Å‚Éƒ[ƒh’†‚È‚çAd•¡ƒŠƒNƒGƒXƒg‚ğ”ğ‚¯‚é‚½‚ß‚Éreturn
+        // ã™ã§ã«ãƒ­ãƒ¼ãƒ‰ä¸­ãªã‚‰ã€é‡è¤‡ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’é¿ã‘ã‚‹ãŸã‚ã«return
         if (isLoading)
         {
             Debug.Log("LoadAppOpenAd: Already loading an ad. Skip.");
             return;
         }
 
-        // ŒÃ‚¢L‚ªc‚Á‚Ä‚½‚ç”jŠü•ƒCƒxƒ“ƒg‰ğœ
+        // å¤ã„åºƒå‘ŠãŒæ®‹ã£ã¦ãŸã‚‰ç ´æ£„ï¼†ã‚¤ãƒ™ãƒ³ãƒˆè§£é™¤
         if (appOpenAd != null)
         {
             UnregisterEventHandlers(appOpenAd);
@@ -123,23 +123,23 @@ public class AdMobOpen :MonoBehaviour
         Debug.Log("Loading the app open ad...");
         isLoading = true;
 
-        // ƒŠƒNƒGƒXƒgì¬
+        // ãƒªã‚¯ã‚¨ã‚¹ãƒˆä½œæˆ
         AdRequest adRequest = new AdRequest();
 
-        // ƒ[ƒhÀs
+        // ãƒ­ãƒ¼ãƒ‰å®Ÿè¡Œ
         AppOpenAd.Load(
             _adUnitId,
             adRequest,
             (AppOpenAd ad, LoadAdError error) =>
             {
-                // ƒR[ƒ‹ƒoƒbƒN–ß‚Á‚½‚çƒ[ƒhŠ®—¹i¬Œ÷ or ¸”sj
+                // ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯æˆ»ã£ãŸã‚‰ãƒ­ãƒ¼ãƒ‰å®Œäº†ï¼ˆæˆåŠŸ or å¤±æ•—ï¼‰
                 isLoading = false;
                 bool isFailed = error != null || ad == null;
                 if (isFailed && !showWhenLoaded)
                 {
                     Debug.LogError("App open ad failed to load with error : " + error);
 
-                    // ---- ¸”s‚ÉÄƒŠƒ[ƒh ----
+                    // ---- å¤±æ•—æ™‚ã«å†ãƒªãƒ­ãƒ¼ãƒ‰ ----
                     Debug.Log($"Retry load after {reloadInterval} seconds...");
                     Invoke(nameof(LoadAppOpenAd), reloadInterval);
 
@@ -147,7 +147,7 @@ public class AdMobOpen :MonoBehaviour
                 }
 
                 Debug.Log("App open ad loaded successfully! ResponseInfo: " + ad.GetResponseInfo());
-                // —LŒøŠúŒÀ‚ğ4ŠÔæ‚Éİ’è
+                // æœ‰åŠ¹æœŸé™ã‚’4æ™‚é–“å…ˆã«è¨­å®š
                 _expireTime = DateTime.Now + TimeSpan.FromHours(4);
                 appOpenAd = ad;
                 RegisterEventHandlers(appOpenAd);
@@ -161,7 +161,7 @@ public class AdMobOpen :MonoBehaviour
     }
 
     /// <summary>
-    /// ƒI[ƒvƒ“L‚Ì•\¦
+    /// ã‚ªãƒ¼ãƒ—ãƒ³åºƒå‘Šã®è¡¨ç¤º
     /// </summary>
     public void ShowAppOpenAd()
     {
@@ -182,7 +182,7 @@ public class AdMobOpen :MonoBehaviour
     }
 
     /// <summary>
-    /// ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰‚Ì“o˜^
+    /// ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©ã®ç™»éŒ²
     /// </summary>
     private void RegisterEventHandlers(AppOpenAd ad)
     {
@@ -195,7 +195,7 @@ public class AdMobOpen :MonoBehaviour
     }
 
     /// <summary>
-    /// ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰‚Ì‰ğœ
+    /// ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©ã®è§£é™¤
     /// </summary>
     private void UnregisterEventHandlers(AppOpenAd ad)
     {
@@ -216,7 +216,7 @@ public class AdMobOpen :MonoBehaviour
         }
     }
 
-    // --- ˆÈ‰ºAŠeƒCƒxƒ“ƒg‚Ìˆ— ---
+    // --- ä»¥ä¸‹ã€å„ã‚¤ãƒ™ãƒ³ãƒˆã®å‡¦ç† ---
 
     private void OnAdPaid(AdValue adValue)
     {
@@ -242,7 +242,7 @@ public class AdMobOpen :MonoBehaviour
     {
         Debug.Log("App open ad full screen content closed.");
 
-        // Ÿ‰ñ‚É”õ‚¦‚ÄÄƒ[ƒh
+        // æ¬¡å›ã«å‚™ãˆã¦å†ãƒ­ãƒ¼ãƒ‰
         LoadAppOpenAd(false);
     }
 
@@ -250,7 +250,7 @@ public class AdMobOpen :MonoBehaviour
     {
         Debug.LogError("App open ad failed to open full screen content with error : " + error);
 
-        // ¸”s‚Å‚àÄƒ[ƒh
+        // å¤±æ•—ã§ã‚‚å†ãƒ­ãƒ¼ãƒ‰
         LoadAppOpenAd(false);
     }
 }
