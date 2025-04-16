@@ -476,6 +476,7 @@ MonoBehaviour:
   stageIndex: 1
   btn: {fileID: 6595705114394016958}
   progressDisplay: {fileID: 45772262902474244}
+  effectText: {fileID: 3856733237169793145}
 --- !u!1 &5549491013838869432
 GameObject:
   m_ObjectHideFlags: 0

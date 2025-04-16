@@ -29,48 +29,7 @@ public class ProgressDisplayInTitle : MonoBehaviour
         LoadStageData();
     }
 
-    private void LoadStageData()
-    {
-        string stageID = stageIndex >= 0 ? $"Stage{stageIndex}" : UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        stageData = SaveSystem.LoadData<StageData>(stageID);
-        
-        if (stageData != null)
-        {
-            UpdateProgress(CalculateProgress());
-        }
-    }
-
-    private float CalculateProgress()
-    {
-        if (stageData == null) return 0f;
-
-        int totalUnlocks = 0;
-        int unlockedCount = 0;
-
-        // Count total unlocks and unlocked items
-        foreach (var materialType in stageData.MaterialUnlocked.Keys)
-        {
-            if (materialType == MaterialType.None) continue;
-
-            // Count material group unlocks
-            totalUnlocks++;
-            if (stageData.MaterialUnlocked[materialType])
-            {
-                unlockedCount++;
-            }
-
-            // Count individual unlocks
-            if (stageData.UnlockCounts.ContainsKey(materialType))
-            {
-                totalUnlocks += stageData.UnlockCounts[materialType];
-                unlockedCount += stageData.UnlockCounts[materialType];
-            }
-        }
-
-        return totalUnlocks > 0 ? (float)unlockedCount / totalUnlocks : 0f;
-    }
-
-    void UpdateProgress(float progress)
+    public void UpdateProgress(float progress)
     {
         // Update fill color based on gradient evaluation
         progressFill.color = progressGradient.Evaluate(progress);
@@ -80,5 +39,16 @@ public class ProgressDisplayInTitle : MonoBehaviour
 
         // Update progress text with percentage format
         progressText.text = $"PROGRESS {progress * 100:0.##}%";
+    }
+
+    private void LoadStageData()
+    {
+        string stageID = stageIndex >= 0 ? $"Stage{stageIndex}" : UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        stageData = SaveSystem.LoadData<StageData>(stageID);
+        
+        if (stageData != null)
+        {
+            UpdateProgress(stageData.CalculateProgress());
+        }
     }
 }

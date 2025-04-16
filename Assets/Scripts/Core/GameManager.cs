@@ -25,7 +25,7 @@ public class GameManager :MonoBehaviour
     private Canvas canvas;
 
     [Header("Employee")]
-    [SerializeField, Tooltip("]‹ÆˆõƒvƒŒƒnƒu")]
+    [SerializeField, Tooltip("ï¿½]ï¿½Æˆï¿½ï¿½vï¿½ï¿½ï¿½nï¿½u")]
     private EmployeeController employeePrefab;
 
     [Header("User Interface")]
@@ -53,13 +53,13 @@ public class GameManager :MonoBehaviour
 
     void Awake()
     {
-        // ƒVƒ“ƒOƒ‹ƒgƒ“‚Ìİ’è
+        // ï¿½Vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Ìİ’ï¿½
         Instance = this;
 
-        // Œ»İ‚ÌƒV[ƒ“–¼‚ğƒŒƒXƒgƒ‰ƒ“ID‚Æ‚µ‚Ä—˜—p
+        // ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½IDï¿½Æ‚ï¿½ï¿½Ä—ï¿½ï¿½p
         stageID = SceneManager.GetActiveScene().name;
 
-        // ƒZ[ƒuƒf[ƒ^‚Ìƒ[ƒhi‘¶İ‚µ‚È‚¢ê‡‚Í‰Šúó‘Ô‚Åì¬j
+        // ï¿½Zï¿½[ï¿½uï¿½fï¿½[ï¿½^ï¿½Ìƒï¿½ï¿½[ï¿½hï¿½iï¿½ï¿½ï¿½İ‚ï¿½ï¿½È‚ï¿½ï¿½ê‡ï¿½Íï¿½ï¿½ï¿½ï¿½ï¿½Ô‚Åì¬ï¿½j
         stageData = SaveSystem.LoadData<StageData>(stageID);
         if (stageData == null)
             stageData = new StageData(stageID, startingMoney);
@@ -68,32 +68,42 @@ public class GameManager :MonoBehaviour
         if (globalData == null)
             globalData = new GlobalData();
 
-        // UI•\¦‚Ì‚½‚ß‚Ì‰Šú’Ê‰İİ’è
+        // Extract number from current stageID (e.g. "Stage1" -> 1)
+        int currentStageNumber = int.Parse(new string(stageID.Where(char.IsDigit).ToArray()));
+
+        // Only update if current stage number is greater
+        if (currentStageNumber > globalData.StageId)
+        {
+            globalData.StageId = currentStageNumber;
+            SaveSystem.SaveData(globalData, globalDataID);
+        }
+
+        // UI\Ì‚ß‚Ìï¿½ï¿½ï¿½ï¿½Ê‰İİ’ï¿½
         AdjustMoney(0);
     }
 
     void Start()
     {
-        // Œ»İ‚ÌƒV[ƒ“ƒCƒ“ƒfƒbƒNƒX‚ğ•Û‘¶
+        // ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½fï¿½bï¿½Nï¿½Xï¿½ï¿½Û‘ï¿½
         SaveSystem.SaveData<int>(SceneManager.GetActiveScene().buildIndex, "LastSceneIndex");
 
-        // ƒV[ƒ“ŠJn‚ÌƒtƒF[ƒhƒAƒEƒgˆ—
+        // ï¿½Vï¿½[ï¿½ï¿½ï¿½Jï¿½nï¿½ï¿½ï¿½Ìƒtï¿½Fï¿½[ï¿½hï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ï¿½
         screenFader.FadeOut();
 
-        // UnlockManager ‚Ì‰Šú‰»iƒZ[ƒuƒf[ƒ^‚ÆƒŒƒXƒgƒ‰ƒ“ID‚ğ“n‚·j
+        // UnlockManager ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½iï¿½Zï¿½[ï¿½uï¿½fï¿½[ï¿½^ï¿½Æƒï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½ï¿½IDï¿½ï¿½nï¿½ï¿½ï¿½j
         UnlockManager.Instance.InitializeUnlockManager(stageData, stageID);
 
-        // ]‹Æˆõ‚ÌƒXƒ|[ƒ“ˆ—
+        // ï¿½]ï¿½Æˆï¿½ï¿½ÌƒXï¿½|ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         SpawnEmployee();
 
-        // BGM ‚ÌÄ¶
+        // BGM ï¿½ÌÄï¿½
         AudioManager.Instance.PlayBGM(backgroundMusic);
     }
 
     void SpawnEmployee()
     {
         var materialManagerList = FindObjectsOfType<MaterialParent>(true);
-        // MaterialType ‚Ì‘S—ñ‹“
+        // MaterialType ï¿½Ì‘Sï¿½ï¿½
         foreach (MaterialType materialType in Enum.GetValues(typeof(MaterialType)))
         {
             MaterialParent materialManager = null;
@@ -105,35 +115,35 @@ public class GameManager :MonoBehaviour
                     break;
                 }
             }
-            // None ƒ^ƒCƒv‚Ü‚½‚ÍŠY“–‚·‚éŠÇ—ƒIƒuƒWƒFƒNƒg‚ª–³‚¯‚ê‚ÎƒXƒLƒbƒv
+            // None ï¿½^ï¿½Cï¿½vï¿½Ü‚ï¿½ï¿½ÍŠYï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç—ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎƒXï¿½Lï¿½bï¿½v
             if (materialType == MaterialType.None || materialManager == null)
                 continue;
 
-            // Œ»İ‚Ì]‹Æˆõ”‚ğæ“¾
+            // ï¿½ï¿½ï¿½İ‚Ì]ï¿½Æˆï¿½ï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
             int currentCount = FindObjectsOfType<EmployeeController>()
                                 .Count(e => e.MaterialType == materialType);
-            // ƒZ[ƒuƒf[ƒ^‚©‚ç]‹Æˆõ”‚ÌƒAƒbƒvƒOƒŒ[ƒhƒŒƒxƒ‹‚ğæ“¾
+            // ï¿½Zï¿½[ï¿½uï¿½fï¿½[ï¿½^ï¿½ï¿½ï¿½ï¿½]ï¿½Æˆï¿½ï¿½ï¿½ï¿½ÌƒAï¿½bï¿½vï¿½Oï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½æ“¾
             int employeeAmount = stageData.FindUpgrade(Upgrade.UpgradeType.EmployeeAmount, materialType).Level;
             int toSpawn = employeeAmount - currentCount;
             if (toSpawn <= 0)
                 continue;
 
-            // ƒŒƒCƒAƒEƒg—p‚ÉŒÅ’è‚Ì—ñ”‚ğw’è
+            // ï¿½ï¿½ï¿½Cï¿½Aï¿½Eï¿½gï¿½pï¿½ÉŒÅ’ï¿½Ì—ñ”‚ï¿½ï¿½wï¿½ï¿½
             int numberOfColumns = 5;
             for (int i = currentCount; i < employeeAmount; i++)
             {
                 int columnIndex = i % numberOfColumns;
                 int rowIndex = (i / numberOfColumns) + 1;
 
-                // w’è‚Ì—ñ‚É‘Î‰‚·‚éƒpƒgƒ[ƒ‹’n“_‚ğæ“¾
+                // ï¿½wï¿½ï¿½Ì—ï¿½É‘Î‰ï¿½ï¿½ï¿½ï¿½ï¿½pï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½nï¿½_ï¿½ï¿½ï¿½æ“¾
                 MaterialParent.PatrolPoints patrol = materialManager.GetPatrolPointsForColumn(columnIndex + 1);
                 if (patrol == null)
                 {
-                    Debug.LogWarning("Column " + (columnIndex + 1) + " ‚Ìƒpƒgƒ[ƒ‹’n“_‚ªæ“¾‚Å‚«‚Ü‚¹‚ñB");
+                    Debug.LogWarning("Column " + (columnIndex + 1) + " ï¿½Ìƒpï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½nï¿½_ï¿½ï¿½ï¿½æ“¾ï¿½Å‚ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½B");
                     continue;
                 }
 
-                // ƒpƒgƒ[ƒ‹’n“_—p‚ÌˆêƒIƒuƒWƒFƒNƒg‚ğ¶¬
+                // ï¿½pï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½nï¿½_ï¿½pï¿½Ìˆêï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ğ¶ï¿½
                 GameObject pointAObj = new GameObject($"PatrolPointA_Column{columnIndex + 1}_{materialType}");
                 pointAObj.transform.position = patrol.pointA;
                 pointAObj.transform.parent = transform;
@@ -142,7 +152,7 @@ public class GameManager :MonoBehaviour
                 pointBObj.transform.position = patrol.pointB;
                 pointBObj.transform.parent = transform;
 
-                // ]‹Æˆõ‚Ì¶¬‚Æ‰Šú‰»
+                // ï¿½]ï¿½Æˆï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½Æï¿½ï¿½ï¿½ï¿½ï¿½
                 EmployeeController employee = Instantiate(employeePrefab, pointAObj.transform.position, Quaternion.identity);
                 employee.SetPatrolPoints(pointAObj.transform, pointBObj.transform);
                 employee.Column = columnIndex + 1;
@@ -259,7 +269,7 @@ public class GameManager :MonoBehaviour
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         if (index == currentSceneIndex)
-            return; // Œ»İ‚ÌƒV[ƒ“‚ÌÄ“Ç‚İ‚İ‚ğ–h~
+            return; // ï¿½ï¿½ï¿½İ‚ÌƒVï¿½[ï¿½ï¿½ï¿½ÌÄ“Ç‚İï¿½ï¿½İ‚ï¿½hï¿½~
 
         screenFader.FadeIn(() =>
         {

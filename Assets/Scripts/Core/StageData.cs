@@ -91,4 +91,32 @@ public class StageData
         }
         return new Upgrade();
     }
+
+    public float CalculateProgress()
+    {
+        int totalUnlocks = 0;
+        int unlockedCount = 0;
+
+        // Count total unlocks and unlocked items
+        foreach (var materialType in MaterialUnlocked.Keys)
+        {
+            if (materialType == MaterialType.None) continue;
+
+            // Count material group unlocks
+            totalUnlocks++;
+            if (MaterialUnlocked[materialType])
+            {
+                unlockedCount++;
+            }
+
+            // Count individual unlocks
+            if (UnlockCounts.ContainsKey(materialType))
+            {
+                totalUnlocks += UnlockCounts[materialType];
+                unlockedCount += UnlockCounts[materialType];
+            }
+        }
+
+        return totalUnlocks > 0 ? (float)unlockedCount / totalUnlocks : 0f;
+    }
 }
