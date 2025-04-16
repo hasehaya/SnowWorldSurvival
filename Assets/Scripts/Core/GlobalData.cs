@@ -3,20 +3,60 @@ using System;
 [Serializable]
 public class GlobalData
 {
-    public bool IsAdRemoved { get; set; }
+    public bool IsAdRemoved;
+    public int StageId;
 
-    // 残り秒数を直接設定・保存し、状態はプロパティで判定
-    public float PlayerSpeedRemainingSeconds { get; set; }
-    public float PlayerCapacityRemainingSeconds { get; set; }
-    public float MoneyCollectionRemainingSeconds { get; set; }
+    public float PlayerSpeedRemainingSeconds;
+    public float PlayerCapacityRemainingSeconds;
+    public float MoneyCollectionRemainingSeconds;
 
-    // 残り秒数が0より大きければ各効果は有効と判定
     public bool IsPlayerSpeedActive => PlayerSpeedRemainingSeconds > 0f;
     public bool IsPlayerCapacityActive => PlayerCapacityRemainingSeconds > 0f;
     public bool IsMoneyCollectionActive => MoneyCollectionRemainingSeconds > 0f;
+    public float SpeedUpRate()
+    {
+        if (StageId >= 6)
+        {
+            return 1.2f;
+        }
+        if (StageId >= 3)
+        {
+            return 1.1f;
+        }
+        return 1.0f;
+    }
 
-    // 最後に更新（または一時停止直前）の時刻を保存するためのプロパティ
-    public DateTime LastUpdateTime { get; set; }
+    public int CapacityUpCount()
+    {
+        if (StageId >= 5)
+        {
+            return 4;
+        }
+        if (StageId >= 2)
+        {
+            return 2;
+        }
+        return 0;
+    }
+
+    public float EarnedUpRate()
+    {
+        if (StageId >= 8)
+        {
+            return 1.5f;
+        }
+        if (StageId >= 7)
+        {
+            return 1.3f;
+        }
+        if (StageId >= 4)
+        {
+            return 1.15f;
+        }
+        return 1.0f;
+    }
+
+    public DateTime LastUpdateTime;
 
     public GlobalData()
     {

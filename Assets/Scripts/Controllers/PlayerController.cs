@@ -23,6 +23,7 @@ public class PlayerController :MonoBehaviour
     private Animator animator;
     private CharacterController controller;
     private AudioSource audioSource;
+    private GlobalData globalData;
 
     private float moveSpeed;
     private Vector3 movement;
@@ -48,14 +49,17 @@ public class PlayerController :MonoBehaviour
 
     void Start()
     {
+        globalData = GameManager.Instance.GlobalData;
+        baseSpeed *= globalData.SpeedUpRate();
+        baseCapacity += globalData.CapacityUpCount();
         moveSpeed = baseSpeed;
         Capacity = baseCapacity;
     }
 
     void Update()
     {
-        moveSpeed = GameManager.Instance.GlobalData.IsPlayerSpeedActive ? baseSpeed * 2 : baseSpeed;
-        Capacity = GameManager.Instance.GlobalData.IsPlayerCapacityActive ? baseCapacity * 2 : baseCapacity;
+        moveSpeed = globalData.IsPlayerSpeedActive ? baseSpeed * 2 : baseSpeed;
+        Capacity = globalData.IsPlayerCapacityActive ? baseCapacity * 2 : baseCapacity;
 
         // スタックが満タンかどうか
         bool isMax = (Stack.Count >= Capacity);
