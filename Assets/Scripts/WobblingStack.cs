@@ -19,7 +19,7 @@ public class WobblingStack :MonoBehaviour
 
     private List<Transform> stack = new List<Transform>();
 
-    private float stackOffset => GameManager.Instance.GetStackOffset(MaterialType);
+    private float stackOffset => 0.3f;
 
     Vector2 movement;  // Used to store player input for wobble movement
 
@@ -102,6 +102,7 @@ public class WobblingStack :MonoBehaviour
 public enum MaterialType
 {
     None = 0,
+
     Wood_1 = 11,
     Rock_1 = 12,
 
@@ -112,9 +113,33 @@ public enum MaterialType
     Wood_3 = 31,
     Rock_3 = 32,
     Snow_3 = 33,
-    Crop_3 = 34,
+    Tomato_3 = 34,
 
     Wood_4 = 41,
     Rock_4 = 42,
+    Flower_4 = 43,
+    Car_4 = 44,
+    Pig_4 = 45,
 
+    Wood_5 = 51,
+    Snow_5 = 52,
+    Rock_5 = 53,
+    Juice_5 = 54,
+    Skeleton_5 = 55,
+    Wood2_5 = 56,
+
+    Wood_6 = 61,
+    Flower_6 = 62,
+    MushRoom_6 = 63,
+    Car_6 = 64,
+    Rock_6 = 65,
+    Wood2_6 = 66,
+
+
+    Wood_7 = 71,
+    Saboten_7 = 72,
+    Pumpkin_7 = 73,
+    Hoge_7 = 74,
+    Foo_7 = 75,
+    Wood2_7 = 76,
 }

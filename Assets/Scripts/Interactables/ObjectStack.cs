@@ -29,7 +29,7 @@ public class ObjectStack :Interactable
 
     void Start()
     {
-        stackOffset = GameManager.Instance.GetStackOffset(MaterialType);
+        stackOffset = 0.3f;
 
         // 必要に応じて初期表示をオフにしておく場合はこちら
         if (arrowObj != null)

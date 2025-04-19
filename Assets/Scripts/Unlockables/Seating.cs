@@ -40,7 +40,7 @@
     void Start()
     {
         // Get the food stack offset from the restaurant manager
-        foodStackOffset = RestaurantManager.Instance.GetStackOffset(MaterialType.Food);
+        foodStackOffset = 0.3f;
     }
 
     /// <summary>

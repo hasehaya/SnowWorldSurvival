@@ -174,16 +174,6 @@ public class GameManager :MonoBehaviour
         }
     }
 
-    public float GetStackOffset(MaterialType materialType) => materialType switch
-    {
-        MaterialType.Log => 0.3f,
-        MaterialType.Rock => 0.3f,
-        MaterialType.Snow => 0.3f,
-        MaterialType.Tomato => 0.3f,
-        MaterialType.None => 0f,
-        _ => 0f
-    };
-
     public void AdjustMoney(int change)
     {
         stageData.Money += change;

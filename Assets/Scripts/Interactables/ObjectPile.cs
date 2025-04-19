@@ -37,7 +37,7 @@ public class ObjectPile :Interactable
 
     protected virtual void Start()
     {
-        spacing.y = GameManager.Instance.GetStackOffset(materialType); // Set vertical spacing based on the stack type.
+        spacing.y = 0.3f; // Set vertical spacing based on the stack type.
     }
 
     void Update()
