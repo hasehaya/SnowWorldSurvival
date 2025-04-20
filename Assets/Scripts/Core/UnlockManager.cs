@@ -216,7 +216,7 @@ public class UnlockManager :MonoBehaviour
                 order = new MaterialType[] { MaterialType.Wood_1, MaterialType.Rock_1 };
                 break;
             case 2:
-                order = new MaterialType[] { MaterialType.Wood_2, MaterialType.Flower_2 };
+                order = new MaterialType[] { MaterialType.Wood_2, MaterialType.Flower_2, MaterialType.Rock_2 };
                 break;
             case 3:
                 order = new MaterialType[] { MaterialType.Wood_3, MaterialType.Rock_3, MaterialType.Snow_3, MaterialType.Tomato_3 };
@@ -231,7 +231,7 @@ public class UnlockManager :MonoBehaviour
                 order = new MaterialType[] { MaterialType.Wood_6, MaterialType.Flower_6, MaterialType.MushRoom_6, MaterialType.Car_6, MaterialType.Rock_6, MaterialType.Wood2_6 };
                 break;
             case 7:
-                order = new MaterialType[] { MaterialType.Wood_7, MaterialType.Saboten_7, MaterialType.Pumpkin_7, MaterialType.Hoge_7, MaterialType.Foo_7, MaterialType.Wood2_7 };
+                order = new MaterialType[] { MaterialType.Wood_7, MaterialType.Saboten_7, MaterialType.Pumpkin_7, MaterialType.Dumbbell_7, MaterialType.Flower_7, MaterialType.Wood2_7 };
                 break;
             default:
                 order = new MaterialType[] { };

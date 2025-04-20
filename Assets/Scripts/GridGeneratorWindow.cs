@@ -35,6 +35,15 @@ public class GridGenerator :MonoBehaviour
         int index = 1;
 
         var sourcePrefab = PrefabUtility.GetCorrespondingObjectFromSource(firstChild.gameObject);
+        if (sourcePrefab != null)
+        {
+            var sourceTree = sourcePrefab.GetComponent<MaterialProducer>();
+            if (sourceTree != null)
+            {
+                sourceTree.Row = 1;
+                sourceTree.Column = 1;
+            }
+        }
 
         for (int row = 0; row < rows; row++)
         {
