@@ -139,7 +139,7 @@ public enum MaterialType
     Wood_7 = 71,
     Saboten_7 = 72,
     Pumpkin_7 = 73,
-    Hoge_7 = 74,
-    Foo_7 = 75,
+    Dumbbell_7 = 74,
+    Food_7 = 75,
     Wood2_7 = 76,
 }
