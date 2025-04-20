@@ -7966,7 +7966,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 7afef1a8f80d8034f8e73418705f19e7, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 4aaaec566515d5b41a521d3b1466a4d7, type: 2}
   m_BuildHeightMesh: 0
 --- !u!4 &1705699538
 Transform:
@@ -9912,6 +9912,22 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1445975462145279437, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445975462145279437, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445975462145279437, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1445975462145279437, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2958468410039826277, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -10339,6 +10355,22 @@ PrefabInstance:
     - target: {fileID: 7813929140839000098, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
       propertyPath: m_Name
       value: Manager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501280879035639470, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501280879035639470, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501280879035639470, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8501280879035639470, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
