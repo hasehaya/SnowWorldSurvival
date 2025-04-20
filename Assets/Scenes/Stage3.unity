@@ -9800,6 +9800,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4610304847824034626, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: pools.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 3422527401986349637, guid: 176c859a25fec89479040f47af12b946, type: 3}
     - target: {fileID: 4810410480614815512, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
