@@ -114,22 +114,7 @@ public class ObjectPile :Interactable
     /// </summary>
     private void PlayObjectSound()
     {
-        // Play specific sounds based on the stack type (food, trash, etc.).
-        switch (materialType)
-        {
-            case MaterialType.Log:
-            case MaterialType.Rock:
-                AudioManager.Instance.PlaySFX(AudioID.Pop); // Play the "Pop" sound for food and package stacks.
-                break;
-
-            //case MaterialType.Trash:
-            //    AudioManager.Instance.PlaySFX(AudioID.Trash);
-            //break;
-
-            case MaterialType.None:
-            default:
-                break;
-        }
+        AudioManager.Instance.PlaySFX(AudioID.Pop);
     }
 
 #if UNITY_EDITOR

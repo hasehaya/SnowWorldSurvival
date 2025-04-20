@@ -12,9 +12,6 @@ public class DriveThruCounter :Workstation
     [SerializeField, Tooltip("The base price for an order at the drive-thru.")]
     private int basePrice = 15;
 
-    [SerializeField, Tooltip("The rate at which the price increases with each upgrade.")]
-    private float priceIncrementRate = 1.25f;
-
     [SerializeField, Tooltip("The base stack capacity for the packages that can be served.")]
     private int baseStack = 30;
 

@@ -71,21 +71,15 @@ public class PlayerController :MonoBehaviour
             {
                 maxTextObj.SetActive(isMax);
             }
-
-            if (isMax)
+            
+            var objectStackList = FindObjectsOfType<ObjectStack>();
+            for (int i = 0; i < objectStackList.Length; i++)
             {
-                var objectStackList = FindObjectsOfType<ObjectStack>();
-                for (int i = 0; i < objectStackList.Length; i++)
+                if (objectStackList[i].MaterialType == stack.MaterialType)
                 {
-                    if (objectStackList[i].MaterialType == stack.MaterialType)
-                    {
-                        objectStackList[i].ShowArrow();
-                    }
+                    objectStackList[i].ShowArrow();
+                    break;
                 }
-            }
-            else
-            {
-                // 満タンが解除された場合に必要があればここで矢印などを消す処理
             }
         }
 

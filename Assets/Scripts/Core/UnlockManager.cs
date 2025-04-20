@@ -205,8 +205,38 @@ public class UnlockManager :MonoBehaviour
     /// </summary>
     private void TryUnlockNextGroups()
     {
-        // MaterialType の順序：Log, Rock, Snow, Tomato
-        MaterialType[] order = new MaterialType[] { MaterialType.Log, MaterialType.Rock, MaterialType.Snow, MaterialType.Tomato };
+        // 現在のステージ番号を取得
+        int currentStageNumber = int.Parse(new string(restaurantID.Where(char.IsDigit).ToArray()));
+        
+        // 現在のステージのマテリアルタイプの順序を設定
+        MaterialType[] order;
+        switch (currentStageNumber)
+        {
+            case 1:
+                order = new MaterialType[] { MaterialType.Wood_1, MaterialType.Rock_1 };
+                break;
+            case 2:
+                order = new MaterialType[] { MaterialType.Wood_2, MaterialType.Flower_2 };
+                break;
+            case 3:
+                order = new MaterialType[] { MaterialType.Wood_3, MaterialType.Rock_3, MaterialType.Snow_3, MaterialType.Tomato_3 };
+                break;
+            case 4:
+                order = new MaterialType[] { MaterialType.Wood_4, MaterialType.Rock_4, MaterialType.Flower_4, MaterialType.Car_4, MaterialType.Pig_4 };
+                break;
+            case 5:
+                order = new MaterialType[] { MaterialType.Wood_5, MaterialType.Snow_5, MaterialType.Rock_5, MaterialType.Juice_5, MaterialType.Skeleton_5, MaterialType.Wood2_5 };
+                break;
+            case 6:
+                order = new MaterialType[] { MaterialType.Wood_6, MaterialType.Flower_6, MaterialType.MushRoom_6, MaterialType.Car_6, MaterialType.Rock_6, MaterialType.Wood2_6 };
+                break;
+            case 7:
+                order = new MaterialType[] { MaterialType.Wood_7, MaterialType.Saboten_7, MaterialType.Pumpkin_7, MaterialType.Hoge_7, MaterialType.Foo_7, MaterialType.Wood2_7 };
+                break;
+            default:
+                order = new MaterialType[] { };
+                break;
+        }
 
         // 2番目以降のグループについて、前のグループの進捗をチェック
         for (int i = 1; i < order.Length; i++)

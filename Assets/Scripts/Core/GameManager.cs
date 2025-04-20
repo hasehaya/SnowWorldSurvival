@@ -252,7 +252,13 @@ public class GameManager :MonoBehaviour
     {
         int currentLevel = GetUpgradeLevel(upgradeType, materialType);
         float levelPrice = baseUpgradePrice * Mathf.Pow(upgradeGrowthFactor, currentLevel);
-        float typePrice = levelPrice * MathF.Pow(2, (int)materialType - (int)MaterialType.Log);
+        
+        // ステージ番号を取得（10の位の数字）
+        int stageNumber = (int)materialType / 10;
+        // そのステージの最初のマテリアル（Wood）の値を取得
+        int baseMaterialValue = stageNumber * 10 + 1; // Wood_Xの値
+        
+        float typePrice = levelPrice * MathF.Pow(2, (int)materialType - baseMaterialValue);
         return Mathf.RoundToInt(Mathf.Round(typePrice) / 50f) * 50;
     }
 

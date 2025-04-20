@@ -63,8 +63,36 @@ public class StageData
                 continue;
             UnlockCounts[material] = 0;
             PaidAmounts[material] = 0;
-            // Only the first group (assumed here to be Log) is initially unlocked.
-            MaterialUnlocked[material] = (material == MaterialType.Log);
+            
+            // Set the first material for each stage
+            int stageNumber = (int)material / 10;
+            switch (stageNumber)
+            {
+                case 1:
+                    MaterialUnlocked[material] = (material == MaterialType.Wood_1);
+                    break;
+                case 2:
+                    MaterialUnlocked[material] = (material == MaterialType.Wood_2);
+                    break;
+                case 3:
+                    MaterialUnlocked[material] = (material == MaterialType.Wood_3);
+                    break;
+                case 4:
+                    MaterialUnlocked[material] = (material == MaterialType.Wood_4);
+                    break;
+                case 5:
+                    MaterialUnlocked[material] = (material == MaterialType.Wood_5);
+                    break;
+                case 6:
+                    MaterialUnlocked[material] = (material == MaterialType.Wood_6);
+                    break;
+                case 7:
+                    MaterialUnlocked[material] = (material == MaterialType.Wood_7);
+                    break;
+                default:
+                    MaterialUnlocked[material] = false;
+                    break;
+            }
         }
     }
 

@@ -27,7 +27,7 @@ public class MaterialProducer :Interactable
     [SerializeField] protected float growthDuration = 0.5f;    // 成長にかかる時間
 
     [Header("プール設定")]
-    [SerializeField] protected MaterialType materialType = MaterialType.Log;
+    [SerializeField] protected MaterialType materialType = MaterialType.None;
 
     protected float timer = 0f;
     protected int initialHealth;

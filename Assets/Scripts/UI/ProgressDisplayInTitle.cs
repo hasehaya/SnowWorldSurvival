@@ -1,5 +1,6 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressDisplayInTitle : MonoBehaviour
 {
@@ -9,14 +10,14 @@ public class ProgressDisplayInTitle : MonoBehaviour
     [SerializeField, Tooltip("Stage index to display progress for. If not set, will use current stage.")]
     private int stageIndex = -1;
 
-    private SlicedFilledImage progressFill;
+    private Image progressFill;
     private TMP_Text progressText;
     private StageData stageData;
 
     void Awake()
     {
         // Initializes references to child components for progress display.
-        progressFill = GetComponentInChildren<SlicedFilledImage>();
+        progressFill = GetComponentInChildren<Image>();
         progressText = GetComponentInChildren<TMP_Text>();
 
         // Load stage data based on stage index
@@ -45,7 +46,7 @@ public class ProgressDisplayInTitle : MonoBehaviour
     {
         string stageID = stageIndex >= 0 ? $"Stage{stageIndex}" : UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
         stageData = SaveSystem.LoadData<StageData>(stageID);
-        
+
         if (stageData != null)
         {
             UpdateProgress(stageData.CalculateProgress());

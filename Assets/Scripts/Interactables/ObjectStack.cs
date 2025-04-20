@@ -24,9 +24,6 @@ public class ObjectStack :Interactable
     private float stackOffset;
     private float stackTimer;
 
-    // ★ 追加：IsShow管理用フラグ
-    private bool isShow;
-
     void Start()
     {
         stackOffset = 0.3f;
@@ -67,7 +64,6 @@ public class ObjectStack :Interactable
     // ★ 新規：Arrowを表示して上下動させる
     public void ShowArrow()
     {
-        isShow = true;
         if (arrowObj == null)
             return;
 
@@ -88,8 +84,6 @@ public class ObjectStack :Interactable
     // オブジェクトをスタックに加える
     public void AddToStack(GameObject obj)
     {
-        // ★ AddToStack呼び出し時にArrowを非表示
-        isShow = false;
         if (arrowObj != null)
         {
             DOTween.Kill(arrowObj.transform);  // 上下動アニメーションを停止
