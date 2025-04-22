@@ -2160,6 +2160,10 @@ PrefabInstance:
       propertyPath: baseUnlockPrice
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: orderInfoSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: d00cea1797335ae4ea83fc9de250f277, type: 3}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
       value: MaterialObjectParent_2
@@ -6126,6 +6130,10 @@ PrefabInstance:
       propertyPath: baseUnlockPrice
       value: 2000
       objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: orderInfoSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: fefc94a639dac904a8fdd213c3c38e7e, type: 3}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
       value: MaterialObjectParent_3
@@ -8867,6 +8875,10 @@ PrefabInstance:
       propertyPath: baseUnlockPrice
       value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: orderInfoSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4d4a8d301be5dca4ca9fb8c6ba16a20b, type: 3}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
       value: MaterialObjectParent_1
@@ -10629,6 +10641,10 @@ PrefabInstance:
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 1641277939}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: orderInfoSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: e0eac6b76fdd842e88a7f8c75ecffaf4, type: 3}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
       value: MaterialObjectParent
