@@ -21,8 +21,10 @@ public class MaterialProducer :Interactable
     [SerializeField] protected int resourceCount = 1;          // 体力減少時に生成する最大リソース数
     [SerializeField] protected float decreaseInterval = 0.45f; // 体力が減る間隔
 
-    [Header("モデル・再生設定")]
-    [SerializeField] protected GameObject materialModel;       // 素材の見た目のモデル
+    [Header("木、岩など揺れて消えるもの")]
+    [SerializeField] protected GameObject model;       // 素材の見た目のモデル
+    [Header("生成されるObject")]
+    [SerializeField] protected GameObject materialObject;       // 素材の見た目のモデル
     [SerializeField] protected float regrowDelay = 12f;        // 再生までの待機時間
     [SerializeField] protected float growthDuration = 0.5f;    // 成長にかかる時間
 
@@ -37,9 +39,9 @@ public class MaterialProducer :Interactable
     void Start()
     {
         initialHealth = materialHealth;
-        if (materialModel != null)
+        if (model != null)
         {
-            initialScale = materialModel.transform.localScale;
+            initialScale = model.transform.localScale;
         }
     }
 
@@ -67,9 +69,9 @@ public class MaterialProducer :Interactable
                 materialHealth--;
 
                 // ★ HP 減少時に横揺れ演出を追加
-                if (materialModel != null)
+                if (model != null)
                 {
-                    materialModel.transform.DOShakePosition(
+                    model.transform.DOShakePosition(
                         duration: 0.2f,
                         strength: new Vector3(0.2f, 0f, 0f),
                         vibrato: 10,
@@ -95,9 +97,9 @@ public class MaterialProducer :Interactable
                     materialHealth--;
 
                     // ★ HP 減少時に横揺れ演出を追加
-                    if (materialModel != null)
+                    if (model != null)
                     {
-                        materialModel.transform.DOShakePosition(
+                        model.transform.DOShakePosition(
                             duration: 0.2f,
                             strength: new Vector3(0.2f, 0f, 0f),
                             vibrato: 10,
@@ -113,14 +115,14 @@ public class MaterialProducer :Interactable
         }
 
         // HP が 0 以下になったタイミングで振動完了後に RegrowMaterial
-        if (materialHealth <= 0 && materialModel != null)
+        if (materialHealth <= 0 && model != null)
         {
             // Deplete フラグをセット
             isDepleted = true;
 
             // まず横揺れアニメーションを改めて付与して、終了を待つ
             //   （すでに振動させたければ、同じ値でも OK。揺れを変更したければ違う値でもよい）
-            materialModel.transform.DOShakePosition(
+            model.transform.DOShakePosition(
                 duration: 0.2f,
                 strength: new Vector3(0.2f, 0f, 0f),
                 vibrato: 10,
@@ -197,7 +199,7 @@ public class MaterialProducer :Interactable
         }
 
         // PoolManager から生成する際に、poolKey を文字列へ変換
-        var resource = PoolManager.Instance.SpawnObject(materialType.ToString());
+        var resource = PoolManager.Instance.SpawnObject(materialObject.name);
         Vector3 startPos = transform.position + Vector3.up * index;
         resource.transform.position = startPos;
 
@@ -220,19 +222,19 @@ public class MaterialProducer :Interactable
     /// </summary>
     IEnumerator RegrowMaterial()
     {
-        if (materialModel != null)
-            materialModel.SetActive(false);
+        if (model != null)
+            model.SetActive(false);
 
         yield return new WaitForSeconds(regrowDelay);
 
         materialHealth = initialHealth;
         timer = 0f;
 
-        if (materialModel != null)
+        if (model != null)
         {
-            materialModel.transform.localScale = Vector3.zero;
-            materialModel.SetActive(true);
-            materialModel.transform.DOScale(initialScale, growthDuration);
+            model.transform.localScale = Vector3.zero;
+            model.SetActive(true);
+            model.transform.DOScale(initialScale, growthDuration);
         }
         isDepleted = false;
     }

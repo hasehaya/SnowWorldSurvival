@@ -73,7 +73,8 @@ MonoBehaviour:
   materialHealth: 2
   resourceCount: 1
   decreaseInterval: 0.45
-  materialModel: {fileID: 6439221091145675747}
+  model: {fileID: 6439221091145675747}
+  materialObject: {fileID: 3422527401986349637, guid: 53165682704ed2642b4b0908352a15c8, type: 3}
   regrowDelay: 12
   growthDuration: 0.5
   materialType: 21

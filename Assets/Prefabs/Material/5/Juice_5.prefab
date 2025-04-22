@@ -73,7 +73,8 @@ MonoBehaviour:
   materialHealth: 2
   resourceCount: 1
   decreaseInterval: 0.45
-  materialModel: {fileID: 0}
+  model: {fileID: 4628864573118063046}
+  materialObject: {fileID: 5233414496755891495, guid: c2004775e0ce89f48af3e88e6f9555a4, type: 3}
   regrowDelay: 12
   growthDuration: 0.5
   materialType: 4
@@ -173,6 +174,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8af648ebab05d9c4e9746ccabf5439ff, type: 3}
+--- !u!1 &4628864573118063046 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 366203475153727214, guid: 8af648ebab05d9c4e9746ccabf5439ff, type: 3}
+  m_PrefabInstance: {fileID: 4983237193097711400}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5437770413464091516 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1035498826632098900, guid: 8af648ebab05d9c4e9746ccabf5439ff, type: 3}
