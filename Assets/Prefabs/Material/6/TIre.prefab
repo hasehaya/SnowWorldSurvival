@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6203569354142238161}
   - component: {fileID: 8211036546891329819}
   m_Layer: 0
-  m_Name: Torus.027
+  m_Name: TIre
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
