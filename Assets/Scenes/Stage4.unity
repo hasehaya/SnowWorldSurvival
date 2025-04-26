@@ -5986,7 +5986,7 @@ PrefabInstance:
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
-      objectReference: {fileID: 955289197}
+      objectReference: {fileID: 1893593723}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
       value: 4000
