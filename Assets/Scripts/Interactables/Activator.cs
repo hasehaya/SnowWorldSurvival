@@ -1,12 +1,27 @@
 ﻿using UnityEngine;
 
-
-public class Activator :Interactable
+public class Activator : Interactable
 {
-    [SerializeField, Tooltip("The GameObject to be activated/deactivated.")]
     private GameObject linkedObject;
-
     [HideInInspector] public MaterialType MaterialType;
+
+    private void Start()
+    {
+        var employeeUpgrades = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (var obj in employeeUpgrades)
+        {
+            if (obj.CompareTag("EmployeeUpgrade"))
+            {
+                linkedObject = obj;
+                break;
+            }
+        }
+
+        if (linkedObject == null)
+        {
+            Debug.LogError("EmployeeUpgradeが見つかりませんでした。シーン内にEmployeeUpgradeタグを持つオブジェクトが存在することを確認してください。");
+        }
+    }
 
     /// <summary>
     /// Called when the player enters the trigger area. It activates the linked object.

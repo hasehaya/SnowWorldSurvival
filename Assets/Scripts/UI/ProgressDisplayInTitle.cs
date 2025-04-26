@@ -4,30 +4,14 @@ using UnityEngine.UI;
 
 public class ProgressDisplayInTitle : MonoBehaviour
 {
-    [SerializeField, Tooltip("Gradient used to visually represent progress from start to completion.")]
-    private Gradient progressGradient;
-
-    [SerializeField, Tooltip("Stage index to display progress for. If not set, will use current stage.")]
-    private int stageIndex = -1;
-
-    private Image progressFill;
-    private TMP_Text progressText;
-    private StageData stageData;
+    [SerializeField] private Gradient progressGradient;
+    [SerializeField] private SlicedFilledImage progressFill;
+    [SerializeField] private TMP_Text progressText;
 
     void Awake()
     {
-        // Initializes references to child components for progress display.
-        progressFill = GetComponentInChildren<Image>();
+        progressFill = GetComponentInChildren<SlicedFilledImage>();
         progressText = GetComponentInChildren<TMP_Text>();
-
-        // Load stage data based on stage index
-        LoadStageData();
-    }
-
-    public void SetStageIndex(int index)
-    {
-        stageIndex = index;
-        LoadStageData();
     }
 
     public void UpdateProgress(float progress)
@@ -40,16 +24,5 @@ public class ProgressDisplayInTitle : MonoBehaviour
 
         // Update progress text with percentage format
         progressText.text = $"PROGRESS {progress * 100:0.##}%";
-    }
-
-    private void LoadStageData()
-    {
-        string stageID = stageIndex >= 0 ? $"Stage{stageIndex}" : UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
-        stageData = SaveSystem.LoadData<StageData>(stageID);
-
-        if (stageData != null)
-        {
-            UpdateProgress(stageData.CalculateProgress());
-        }
     }
 }

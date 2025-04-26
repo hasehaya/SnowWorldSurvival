@@ -20,6 +20,10 @@ public class StageSelectCellView :MonoBehaviour
         stageNumText.text = stageIndex.ToString();
         string stageID = $"Stage{stageIndex}";
         stageData = SaveSystem.LoadData<StageData>(stageID);
+        if (stageData != null)
+        {
+            stageData.StageID = stageIndex;
+        }
 
         // Load previous stage data
         if (stageIndex > 1)
@@ -31,7 +35,6 @@ public class StageSelectCellView :MonoBehaviour
         // ステージインデックスをProgressDisplayに設定
         if (progressDisplay != null)
         {
-            progressDisplay.SetStageIndex(stageIndex);
             if (stageData == null)
             {
                 progressDisplay.UpdateProgress(0);

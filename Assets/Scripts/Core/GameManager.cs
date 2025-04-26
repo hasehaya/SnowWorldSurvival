@@ -18,8 +18,6 @@ public class GameManager :MonoBehaviour
     [SerializeField, Range(1.01f, 1.99f), Tooltip("アップグレード価格に掛ける成長率。")]
     private float upgradeGrowthFactor = 1.5f;
 
-    private long startingMoney = 200;
-
     [SerializeField]
     private Canvas canvas;
 
@@ -58,18 +56,18 @@ public class GameManager :MonoBehaviour
 
         // 現在のシーン名をレストランのIDとして使用
         stageID = SceneManager.GetActiveScene().name;
+        // 現在のシーンIDから数字のみ抽出（例："Stage1" -> 1）
+        int currentStageNumber = int.Parse(new string(stageID.Where(char.IsDigit).ToArray()));
 
         // セーブデータの読み込み。存在しなければ初期状態で作成する
         stageData = SaveSystem.LoadData<StageData>(stageID);
         if (stageData == null)
-            stageData = new StageData(stageID, startingMoney);
+            stageData = new StageData(currentStageNumber);
 
         globalData = SaveSystem.LoadData<GlobalData>(globalDataID);
         if (globalData == null)
             globalData = new GlobalData();
 
-        // 現在のシーンIDから数字のみ抽出（例："Stage1" -> 1）
-        int currentStageNumber = int.Parse(new string(stageID.Where(char.IsDigit).ToArray()));
 
         // 現在のシーン番号がグローバルデータのシーン番号より大きければ更新する
         if (currentStageNumber > globalData.StageId)
@@ -315,6 +313,14 @@ public class GameManager :MonoBehaviour
         {
             adMobOpen.DestroyAd();
         }
+    }
+
+    public void ChangeSceneStageSelect()
+    {
+        screenFader.FadeIn(() =>
+        {
+            SceneManager.LoadScene("StageSelect");
+        });
     }
 
     public bool IsAdBlocked() => globalData.IsAdRemoved;

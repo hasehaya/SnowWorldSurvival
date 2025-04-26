@@ -40,7 +40,7 @@ public class ObjectPile :Interactable
         spacing.y = 0.3f; // Set vertical spacing based on the stack type.
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (player == null || objects.Count == 0)
             return; // Don't update if the player is not set or there are no objects in the pile.

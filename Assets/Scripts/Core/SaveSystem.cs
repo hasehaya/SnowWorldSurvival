@@ -42,7 +42,7 @@ public static class SaveSystem
         }
         else
         {
-            return default(T);
+            return default;
         }
     }
 

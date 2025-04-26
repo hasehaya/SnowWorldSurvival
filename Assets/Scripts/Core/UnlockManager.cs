@@ -135,15 +135,28 @@ public class UnlockManager :MonoBehaviour
         SaveSystem.SaveData<StageData>(data, restaurantID);
 
         // 前のグループの進捗が50%以上の場合、次のグループを順次解放
-        TryUnlockNextGroups();
+        bool unlockedNewGroup = TryUnlockNextGroups();
 
         // 全グループの UnlockableBuyer UI を更新
         UpdateAllUnlockableBuyers();
-        // Also update camera focus so that it now visits all active unlockable points.
-        UpdateCameraFocusForAll();
 
-        // オプション：購入時に対象 Unlockable の位置へカメラを移動（ここは省略または個別対応）
-        // cameraController.FocusOnPointAndReturn(unlockable.GetBuyingPoint());
+        // カメラフォーカスの更新
+        if (unlockedNewGroup)
+        {
+            // 新しいグループが解放された場合は2つのUnlockableにフォーカス
+            UpdateCameraFocusForGroupUnlock(material);
+        }
+        else
+        {
+            // 新しいグループが解放されなかった場合は次のUnlockableのみにフォーカス
+            List<Vector3> focusPoints = new List<Vector3>();
+            int nextCount = data.UnlockCounts.ContainsKey(material) ? data.UnlockCounts[material] : 0;
+            if (nextCount < group.unlockables.Count)
+            {
+                focusPoints.Add(group.unlockables[nextCount].GetBuyingPoint());
+                cameraController.FocusOnPointsAndReturn(focusPoints);
+            }
+        }
     }
 
     /// <summary>
@@ -203,8 +216,10 @@ public class UnlockManager :MonoBehaviour
     /// <summary>
     /// 前の MaterialGroup の進捗が50%以上の場合、順次次の MaterialGroup を解放します。
     /// </summary>
-    private void TryUnlockNextGroups()
+    /// <returns>新しいグループが解放された場合はtrue、それ以外はfalse</returns>
+    private bool TryUnlockNextGroups()
     {
+        bool unlockedNewGroup = false;
         // 現在のステージ番号を取得
         int currentStageNumber = int.Parse(new string(restaurantID.Where(char.IsDigit).ToArray()));
         
@@ -257,8 +272,10 @@ public class UnlockManager :MonoBehaviour
                 // オプション：新しく解放されたグループの最初の Unlockable を自動購入（進捗 1 にする）
                 data.UnlockCounts[curr] = 1;
                 data.PaidAmounts[curr] = 0;
+                unlockedNewGroup = true;
             }
         }
+        return unlockedNewGroup;
     }
 
     /// <summary>
@@ -310,6 +327,37 @@ public class UnlockManager :MonoBehaviour
             {
                 focusPoints.Add(group.unlockables[count].GetBuyingPoint());
             }
+        }
+
+        if (focusPoints.Count > 0)
+        {
+            cameraController.FocusOnPointsAndReturn(focusPoints);
+        }
+    }
+
+    /// <summary>
+    /// グループ解放時に2つのUnlockableにフォーカスする
+    /// </summary>
+    private void UpdateCameraFocusForGroupUnlock(MaterialType unlockedMaterial)
+    {
+        List<Vector3> focusPoints = new List<Vector3>();
+        
+        // 解放されたグループの次のUnlockable
+        var unlockedGroup = materialUnlockables.FirstOrDefault(g => g.materialType == unlockedMaterial);
+        if (unlockedGroup != null)
+        {
+            int count = data.UnlockCounts.ContainsKey(unlockedMaterial) ? data.UnlockCounts[unlockedMaterial] : 0;
+            if (count < unlockedGroup.unlockables.Count)
+            {
+                focusPoints.Add(unlockedGroup.unlockables[count].GetBuyingPoint());
+            }
+        }
+
+        // 次のグループの最初のUnlockable
+        var nextGroup = materialUnlockables.FirstOrDefault(g => !data.MaterialUnlocked.ContainsKey(g.materialType) || !data.MaterialUnlocked[g.materialType]);
+        if (nextGroup != null)
+        {
+            focusPoints.Add(nextGroup.unlockables[0].GetBuyingPoint());
         }
 
         if (focusPoints.Count > 0)

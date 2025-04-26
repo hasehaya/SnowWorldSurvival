@@ -755,7 +755,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 347f77ec13357124098d711de8a30934, type: 3}
   m_FillDirection: 0
-  m_FillAmount: 0.7
+  m_FillAmount: 0.627
   m_FillCenter: 1
   m_PixelsPerUnitMultiplier: 1
 --- !u!1 &7162432031409760193
@@ -1134,7 +1134,8 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  stageIndex: -1
+  progressFill: {fileID: 2593577337212772942}
+  progressText: {fileID: 1448102099907982274}
 --- !u!1 &9068104138519781769
 GameObject:
   m_ObjectHideFlags: 0

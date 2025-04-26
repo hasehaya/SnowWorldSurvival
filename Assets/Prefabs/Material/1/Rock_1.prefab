@@ -68,13 +68,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32f299f09d7fa24da5746f17b90c503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Row: 0
-  Column: 0
+  Row: 1
+  Column: 1
   materialHealth: 2
   resourceCount: 1
   decreaseInterval: 0.45
   model: {fileID: 6439221091145675747}
-  materialObject: {fileID: 0}
+  materialObject: {fileID: 3422527401986349637, guid: 275983e4b30b4d348a0cefd35f93d45c, type: 3}
   regrowDelay: 12
   growthDuration: 0.5
   materialType: 12

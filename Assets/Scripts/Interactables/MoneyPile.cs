@@ -21,8 +21,9 @@ public class MoneyPile :ObjectPile
         // Start method intentionally left blank to prevent altering the stack height for money objects.
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         // もしグローバルな金収集がアクティブなら、積んでいる金をすべてプレイヤーの所持金に加算する。
         if (GameManager.Instance.GlobalData.IsMoneyCollectionActive && (objects.Count > 0 || hiddenMoney > 0))
         {
@@ -46,17 +47,13 @@ public class MoneyPile :ObjectPile
         if (!isCollectingMoney)
             return; // 収集中でなければ何もしない。
 
-        // グローバルな収集が無効な場合のみ、従来通りアニメーション付きの金オブジェクトのドロップ処理を行う
-        if (!GameManager.Instance.GlobalData.IsMoneyCollectionActive)
-        {
-            var moneyObj = PoolManager.Instance.SpawnObject("Money");
-            moneyObj.transform.position = objects.Peek().transform.position;
+        var moneyObj = PoolManager.Instance.SpawnObject("Money");
+        moneyObj.transform.position = objects.Peek().transform.position;
 
-            moneyObj.transform.DOJump(player.transform.position + Vector3.up * 2, 3f, 1, 0.5f)
-                .OnComplete(() => PoolManager.Instance.ReturnObject(moneyObj));
+        moneyObj.transform.DOJump(player.transform.position + Vector3.up * 2, 3f, 1, 0.5f)
+            .OnComplete(() => PoolManager.Instance.ReturnObject(moneyObj));
 
-            AudioManager.Instance.PlaySFX(AudioID.Money);
-        }
+        AudioManager.Instance.PlaySFX(AudioID.Money);
     }
 
     /// <summary>
@@ -91,7 +88,8 @@ public class MoneyPile :ObjectPile
                 }
 
                 // オブジェクトを取り除き、直接所持金に加算
-                objects.Pop();
+                var removedMoney = objects.Pop(); // Remove the top money object from the pile.
+                PoolManager.Instance.ReturnObject(removedMoney);
                 GameManager.Instance.AdjustMoney(1);
             }
 

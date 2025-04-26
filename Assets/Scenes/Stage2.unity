@@ -7464,6 +7464,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1866492793}
     - target: {fileID: 3850210384162758894, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: materialUnlockables.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3850210384162758894, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
       propertyPath: materialUnlockables.Array.data[0]
       value: 
       objectReference: {fileID: 8204810722704286537}
