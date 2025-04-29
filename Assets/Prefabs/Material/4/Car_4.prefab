@@ -76,7 +76,7 @@ MonoBehaviour:
   materialObject: {fileID: 5327963178059423916, guid: 2085c57d7576f874e83ffa2d211a27ea, type: 3}
   regrowDelay: 12
   growthDuration: 0.5
-  materialType: 56
+  materialType: 44
 --- !u!1001 &9172106146292747317
 PrefabInstance:
   m_ObjectHideFlags: 0

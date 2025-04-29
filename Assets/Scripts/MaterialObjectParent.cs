@@ -33,8 +33,8 @@ public class MaterialObjectParent :MonoBehaviour
 
         unlockables = new List<Unlockable>
         {
-            materialParent,
             counterTable1,
+            materialParent,
             counterTable2,
             materialParent,
             counterTable1,

@@ -73,10 +73,10 @@ MonoBehaviour:
   resourceCount: 1
   decreaseInterval: 0.45
   model: {fileID: 835817969096821484}
-  materialObject: {fileID: 3422527401986349637, guid: b75efbb8f0da02846941b1507c45a546, type: 3}
+  materialObject: {fileID: 3422527401986349637, guid: 64cf216e71700ce4ebe442c634744e87, type: 3}
   regrowDelay: 12
   growthDuration: 0.5
-  materialType: 53
+  materialType: 42
 --- !u!1001 &837053562851595780
 PrefabInstance:
   m_ObjectHideFlags: 0

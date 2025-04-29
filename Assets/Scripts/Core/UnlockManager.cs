@@ -269,9 +269,6 @@ public class UnlockManager :MonoBehaviour
             if (progress >= 0.5f)
             {
                 data.MaterialUnlocked[curr] = true;
-                // オプション：新しく解放されたグループの最初の Unlockable を自動購入（進捗 1 にする）
-                data.UnlockCounts[curr] = 1;
-                data.PaidAmounts[curr] = 0;
                 unlockedNewGroup = true;
             }
         }
