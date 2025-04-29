@@ -210,7 +210,7 @@ public class UnlockManager :MonoBehaviour
             buyerUI.gameObject.SetActive(true);
         }
         // 全体の進捗を通知
-        OnUnlock?.Invoke(ComputeOverallProgress());
+        OnUnlock?.Invoke(data.CalculateProgress());
     }
 
     /// <summary>
@@ -286,26 +286,6 @@ public class UnlockManager :MonoBehaviour
             data.PaidAmounts[material] = amount;
         UpdateAllUnlockableBuyers();
         UpdateCameraFocusForAll();
-    }
-
-    /// <summary>
-    /// すべての解放済みグループに対する全体の進捗（各グループの進捗の平均）を計算します。
-    /// </summary>
-    private float ComputeOverallProgress()
-    {
-        float totalProgress = 0f;
-        int groupCount = 0;
-        foreach (var group in materialUnlockables)
-        {
-            if (!data.MaterialUnlocked.ContainsKey(group.materialType) || !data.MaterialUnlocked[group.materialType])
-                continue;
-            groupCount++;
-            int count = data.UnlockCounts.ContainsKey(group.materialType) ? data.UnlockCounts[group.materialType] : 0;
-            totalProgress += (group.unlockables.Count > 0 ? (count / (float)group.unlockables.Count) : 0);
-        }
-        if (groupCount == 0)
-            return 0f;
-        return totalProgress / groupCount;
     }
 
     /// <summary>

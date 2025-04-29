@@ -31,7 +31,6 @@ public class PlayerController :MonoBehaviour
     private bool isGrounded;
     private float IK_Weight;
 
-    private bool previousIsMax;
     private const float gravityValue = -9.81f;
 
     void Awake()
@@ -54,6 +53,9 @@ public class PlayerController :MonoBehaviour
         baseCapacity += globalData.CapacityUpCount();
         moveSpeed = baseSpeed;
         Capacity = baseCapacity;
+
+        // Set this stack as player's stack
+        stack.SetOwner(true);
     }
 
     void Update()
@@ -63,25 +65,7 @@ public class PlayerController :MonoBehaviour
 
         // スタックが満タンかどうか
         bool isMax = (Stack.Count >= Capacity);
-
-        // 状態が切り替わった時にだけ UI を切り替え
-        if (isMax != previousIsMax)
-        {
-            if (maxTextObj != null)
-            {
-                maxTextObj.SetActive(isMax);
-            }
-            
-            var objectStackList = FindObjectsOfType<ObjectStack>();
-            for (int i = 0; i < objectStackList.Length; i++)
-            {
-                if (objectStackList[i].MaterialType == stack.MaterialType)
-                {
-                    objectStackList[i].ShowArrow();
-                    break;
-                }
-            }
-        }
+        maxTextObj.SetActive(isMax);
 
         // isMax 中は毎フレーム LookAt でカメラを向かせる
         // 後ろ向きになってしまう場合は LookAt 後に180度回転させる
@@ -94,8 +78,6 @@ public class PlayerController :MonoBehaviour
                 maxTextObj.transform.Rotate(0f, 180f, 0f);
             }
         }
-
-        previousIsMax = isMax;
 
         // 以下、移動やアニメーションの処理
         isGrounded = controller.isGrounded;

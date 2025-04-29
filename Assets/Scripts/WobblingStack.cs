@@ -16,12 +16,18 @@ public class WobblingStack :MonoBehaviour
 
     public MaterialType MaterialType { get; private set; }  // The current type of the stack (Food, Trash, or Package)
     public int Count => stack.Count;
+    public bool IsPlayerStack { get; private set; }
 
     private List<Transform> stack = new List<Transform>();
 
     private float stackOffset => 0.3f;
 
     Vector2 movement;  // Used to store player input for wobble movement
+
+    public void SetOwner(bool isPlayer)
+    {
+        IsPlayerStack = isPlayer;
+    }
 
     void Update()
     {
@@ -72,6 +78,19 @@ public class WobblingStack :MonoBehaviour
         child.DOJump(peakPoint, 5f, 1, 0.3f);
 
         stack.Add(child);
+
+        // Show arrows only when this is the player's stack
+        if (IsPlayerStack)
+        {
+            var objectStackList = FindObjectsOfType<ObjectStack>();
+            for (int i = 0; i < objectStackList.Length; i++)
+            {
+                if (objectStackList[i].MaterialType == MaterialType)
+                {
+                    objectStackList[i].ShowArrow();
+                }
+            }
+        }
     }
 
     /// <summary>

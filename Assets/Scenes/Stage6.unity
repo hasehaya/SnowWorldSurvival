@@ -895,7 +895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyingPoint: {x: 0, y: 0, z: -1.95}
   punchScale: {x: 0.1, y: 0.2, z: 0.1}
-  contentIcon: {fileID: 21300000, guid: f3936d5f703d1734cbd9c9b216814fd0, type: 3}
+  contentIcon: {fileID: 21300000, guid: e0527e081437084428d8bd52700add80, type: 3}
   MaterialType: 0
   materialGrid: {fileID: 1058519408}
 --- !u!4 &150499933
@@ -3139,7 +3139,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyingPoint: {x: 0, y: 0, z: -1.95}
   punchScale: {x: 0.1, y: 0.2, z: 0.1}
-  contentIcon: {fileID: 21300000, guid: 2a7da7658c4c4f940a80a7bf63f17c2a, type: 3}
+  contentIcon: {fileID: 21300000, guid: 353880f211b39ee41b577c477bd7950a, type: 3}
   MaterialType: 0
   materialGrid: {fileID: 998501547}
 --- !u!4 &526539866
