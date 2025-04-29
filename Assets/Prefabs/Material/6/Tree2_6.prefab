@@ -145,7 +145,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Palm2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8175963522955766867, guid: cada4b56ef44b8b40929cc4aa9747686, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
