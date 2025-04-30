@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2221315784606873392, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5f150aad46fc5bc45bc7e415aa535213, type: 3}
+    - target: {fileID: 4989701456529968520, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 336.2
+      objectReference: {fileID: 0}
     - target: {fileID: 5823442217875245221, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -55,6 +63,14 @@ PrefabInstance:
     - target: {fileID: 7286416346391331960, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: rewardEffect
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9020955094240112484, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_text
+      value: "\u5BB9\u91CF\u30A2\u30C3\u30D7"
+      objectReference: {fileID: 0}
+    - target: {fileID: 9020955094240112484, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_fontSize
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 9127932103767105456, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_Name

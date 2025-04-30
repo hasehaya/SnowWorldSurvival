@@ -36,6 +36,9 @@ public class UnlockManager :MonoBehaviour
     [SerializeField, Tooltip("Reference to the camera controller to focus on unlock points.")]
     private CameraController cameraController;
 
+    [SerializeField, Tooltip("Reference to the progress display to show next stage text.")]
+    private ProgressDisplay progressDisplay;
+
     // イベント：全体のアンロック進捗を通知
     public event Action<float> OnUnlock;
 
@@ -52,6 +55,12 @@ public class UnlockManager :MonoBehaviour
             return;
         }
         instance = this;
+        
+        // ProgressDisplayの参照を取得
+        if (progressDisplay == null)
+        {
+            progressDisplay = FindObjectOfType<ProgressDisplay>();
+        }
     }
 
     /// <summary>
@@ -82,6 +91,12 @@ public class UnlockManager :MonoBehaviour
         UpdateAllUnlockableBuyers();
         // Update camera focus to show all active unlockable points.
         UpdateCameraFocusForAll();
+        
+        // NextStagePromptフラグがONの場合は、NextStageTextを表示
+        if (data.NextStagePrompt && progressDisplay != null)
+        {
+            progressDisplay.ShowNextStageText();
+        }
     }
 
     /// <summary>
@@ -210,7 +225,18 @@ public class UnlockManager :MonoBehaviour
             buyerUI.gameObject.SetActive(true);
         }
         // 全体の進捗を通知
-        OnUnlock?.Invoke(data.CalculateProgress());
+        float progress = data.CalculateProgress();
+        OnUnlock?.Invoke(progress);
+        
+        // 進捗率が80%以上で、まだNextStagePromptが表示されていない場合に次のステージへの誘導を表示
+        // NextStagePromptShownOnceフラグが一度でもtrueになったら、二度と案内は表示されない
+        if (progress >= 0.8f && !data.NextStagePrompt && !data.NextStagePromptShownOnce)
+        {
+            data.NextStagePrompt = true;
+            data.NextStagePromptShownOnce = true;
+            SaveSystem.SaveData<StageData>(data, restaurantID);
+            progressDisplay.ShowNextStageText();
+        }
     }
 
     /// <summary>

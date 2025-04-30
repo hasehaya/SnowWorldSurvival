@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class CoolTimePresenter :MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class CoolTimePresenter :MonoBehaviour
     private GlobalData globalData;
 
     private const float TotalDuration = 180f;
+    
+    // 効果終了時のイベント
+    public static event Action<RewardType> OnEffectEnded;
 
     private void Start()
     {
@@ -23,8 +27,15 @@ public class CoolTimePresenter :MonoBehaviour
 
         if (globalData.PlayerSpeedRemainingSeconds > 0f)
         {
+            float prevValue = globalData.PlayerSpeedRemainingSeconds;
             globalData.PlayerSpeedRemainingSeconds = Mathf.Max(0f, globalData.PlayerSpeedRemainingSeconds - dt);
             UpdateCoolTimeView(globalData.PlayerSpeedRemainingSeconds, coolTimes[0]);
+            
+            // 効果が終了したときにイベントを発火
+            if (prevValue > 0f && globalData.PlayerSpeedRemainingSeconds <= 0f)
+            {
+                OnEffectEnded?.Invoke(RewardType.PlayerSpeed);
+            }
         }
         else
         {
@@ -33,8 +44,15 @@ public class CoolTimePresenter :MonoBehaviour
 
         if (globalData.PlayerCapacityRemainingSeconds > 0f)
         {
+            float prevValue = globalData.PlayerCapacityRemainingSeconds;
             globalData.PlayerCapacityRemainingSeconds = Mathf.Max(0f, globalData.PlayerCapacityRemainingSeconds - dt);
             UpdateCoolTimeView(globalData.PlayerCapacityRemainingSeconds, coolTimes[1]);
+            
+            // 効果が終了したときにイベントを発火
+            if (prevValue > 0f && globalData.PlayerCapacityRemainingSeconds <= 0f)
+            {
+                OnEffectEnded?.Invoke(RewardType.PlayerCapacity);
+            }
         }
         else
         {
@@ -43,8 +61,15 @@ public class CoolTimePresenter :MonoBehaviour
 
         if (globalData.MoneyCollectionRemainingSeconds > 0f)
         {
+            float prevValue = globalData.MoneyCollectionRemainingSeconds;
             globalData.MoneyCollectionRemainingSeconds = Mathf.Max(0f, globalData.MoneyCollectionRemainingSeconds - dt);
             UpdateCoolTimeView(globalData.MoneyCollectionRemainingSeconds, coolTimes[2]);
+            
+            // 効果が終了したときにイベントを発火
+            if (prevValue > 0f && globalData.MoneyCollectionRemainingSeconds <= 0f)
+            {
+                OnEffectEnded?.Invoke(RewardType.MoneyCollection);
+            }
         }
         else
         {

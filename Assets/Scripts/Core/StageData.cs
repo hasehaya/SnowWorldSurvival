@@ -16,6 +16,12 @@ public class StageData
     public float ElapsedTime;
 
     public bool IsAdRemoved;
+    
+    // 次のステージへの誘導フラグ
+    public bool NextStagePrompt;
+    
+    // 次のステージへの誘導が一度でも表示されたかを記録するフラグ
+    public bool NextStagePromptShownOnce;
 
     // Dictionaries to track the number of unlockables purchased and the paid amount for each material.
     public Dictionary<MaterialType, int> UnlockCounts;
@@ -33,6 +39,8 @@ public class StageData
         PlayerCapacity = 1;
         Profit = 0;
         ElapsedTime = 0;
+        NextStagePrompt = false;
+        NextStagePromptShownOnce = false;
         InitUpgrades();
         InitUnlockData();
     }

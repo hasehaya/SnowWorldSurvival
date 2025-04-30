@@ -20,6 +20,10 @@ public class AdObjectManager :MonoBehaviour
     private Transform[] popPoses;
     private List<AdObject> activeAdObjects = new List<AdObject>();
     private Dictionary<AdObject, Transform> activeAdPositions = new Dictionary<AdObject, Transform>();
+    
+    // 最後に生成したAdObjectのプレハブインデックスを記録
+    private List<int> recentlyUsedAdObjectIndices = new List<int>();
+    private const int MAX_RECENT_HISTORY = 3; // 過去何個のAdObjectを記憶するか
 
     // 効果の持続時間（例：180秒＝3分）
     private const float TreeMinutesDuration = 180f;
@@ -30,6 +34,14 @@ public class AdObjectManager :MonoBehaviour
     // GlobalData への参照（GameManager 経由で取得）
     private GlobalData globalData;
 
+    // マップ上に表示するAdObjectの最大数（実際のpopPosesの半分）
+    private int maxActiveAdObjects;
+    
+    // 効果が切れたときの確認用
+    private bool wasPlayerSpeedActive;
+    private bool wasPlayerCapacityActive;
+    private bool wasMoneyCollectionActive;
+
     private void Start()
     {
         availableRewardTypes.Add(RewardType.PlayerSpeed);
@@ -37,11 +49,67 @@ public class AdObjectManager :MonoBehaviour
         availableRewardTypes.Add(RewardType.MoneyCollection);
 
         popPoses = GetComponentsInChildren<Transform>();
-        // 初期生成処理やポジションシャッフルなど
-
+        // popPosesの一つ目は自分自身なので除外して、半分の数を計算
+        maxActiveAdObjects = (popPoses.Length - 1) / 2;
+        
         // GameManager 経由で GlobalData を参照
         globalData = GameManager.Instance.GlobalData;
-        RepopAdObject();
+        
+        // 初期状態を記録
+        wasPlayerSpeedActive = globalData.IsPlayerSpeedActive;
+        wasPlayerCapacityActive = globalData.IsPlayerCapacityActive;
+        wasMoneyCollectionActive = globalData.IsMoneyCollectionActive;
+        
+        // 効果終了イベントを購読
+        CoolTimePresenter.OnEffectEnded += HandleEffectEnded;
+        
+        // 初期生成処理
+        RepopAllAdObjects();
+    }
+    
+    private void OnDestroy()
+    {
+        // イベント購読を解除
+        CoolTimePresenter.OnEffectEnded -= HandleEffectEnded;
+    }
+    
+    // 効果終了時の処理
+    private void HandleEffectEnded(RewardType rewardType)
+    {
+        if (rewardType == RewardType.PlayerSpeed ||
+            rewardType == RewardType.PlayerCapacity ||
+            rewardType == RewardType.MoneyCollection)
+        {
+            availableRewardTypes.Add(rewardType);
+            RepopAdObject();
+        }
+    }
+
+    private void Update()
+    {
+        // 効果の有効状態が変わった場合（効果が切れた場合）に再生成する
+        if (wasPlayerSpeedActive && !globalData.IsPlayerSpeedActive)
+        {
+            availableRewardTypes.Add(RewardType.PlayerSpeed);
+            RepopAdObject();
+        }
+        
+        if (wasPlayerCapacityActive && !globalData.IsPlayerCapacityActive)
+        {
+            availableRewardTypes.Add(RewardType.PlayerCapacity);
+            RepopAdObject();
+        }
+        
+        if (wasMoneyCollectionActive && !globalData.IsMoneyCollectionActive)
+        {
+            availableRewardTypes.Add(RewardType.MoneyCollection);
+            RepopAdObject();
+        }
+        
+        // 状態を更新
+        wasPlayerSpeedActive = globalData.IsPlayerSpeedActive;
+        wasPlayerCapacityActive = globalData.IsPlayerCapacityActive;
+        wasMoneyCollectionActive = globalData.IsMoneyCollectionActive;
     }
 
     private void OnAdObjectShow(AdObject adObj)
@@ -76,15 +144,80 @@ public class AdObjectManager :MonoBehaviour
         RepopAdObject();
     }
 
-    private void RepopAdObject()
+    // すべての利用可能なポジションに対してAdObjectを再生成
+    private void RepopAllAdObjects()
+    {
+        // 既存のオブジェクトをクリア
+        foreach (var adObj in activeAdObjects)
+        {
+            adObj.OnShowAd -= OnAdObjectShow;
+            Destroy(adObj.gameObject);
+        }
+        activeAdObjects.Clear();
+        activeAdPositions.Clear();
+        recentlyUsedAdObjectIndices.Clear();
+
+        // 最大数まで再生成
+        for (int i = 0; i < maxActiveAdObjects; i++)
+        {
+            RepopAdObject();
+            
+            // 利用可能なポジションがなくなった場合は終了
+            if (GetAvailablePoses().Count == 0)
+                break;
+        }
+    }
+
+    // 利用可能なポジションのリストを取得
+    private List<Transform> GetAvailablePoses()
     {
         List<Transform> availablePoses = new List<Transform>();
-        foreach (Transform pos in popPoses)
+        // popPosesの0番目は自分自身なので、1から開始
+        for (int i = 1; i < popPoses.Length; i++)
         {
-            if (!activeAdPositions.ContainsValue(pos))
-                availablePoses.Add(pos);
+            if (!activeAdPositions.ContainsValue(popPoses[i]))
+                availablePoses.Add(popPoses[i]);
         }
+        return availablePoses;
+    }
 
+    // 有効なAdObjectの最大数を計算
+    private int CalculateMaxAdObjects()
+    {
+        // 基本は最大数の半分
+        int maxCount = maxActiveAdObjects;
+        
+        // 効果が有効なRewardTypeの数だけ減らす
+        int activeEffects = 0;
+        if (globalData.IsPlayerSpeedActive) activeEffects++;
+        if (globalData.IsPlayerCapacityActive) activeEffects++;
+        if (globalData.IsMoneyCollectionActive) activeEffects++;
+        
+        // 最低でも1つは残す
+        return Mathf.Max(1, maxCount - activeEffects);
+    }
+
+    // 直近に使用したAdObjectインデックスを記録
+    private void AddToRecentlyUsed(int index)
+    {
+        recentlyUsedAdObjectIndices.Add(index);
+        if (recentlyUsedAdObjectIndices.Count > MAX_RECENT_HISTORY)
+        {
+            recentlyUsedAdObjectIndices.RemoveAt(0);
+        }
+    }
+
+    private void RepopAdObject()
+    {
+        // 現在の最大AdObject数を計算
+        int currentMaxAdObjects = CalculateMaxAdObjects();
+        
+        // すでに最大数に達している場合は生成しない
+        if (activeAdObjects.Count >= currentMaxAdObjects)
+            return;
+            
+        List<Transform> availablePoses = GetAvailablePoses();
+        
         if (availablePoses.Count == 0)
         {
             Debug.LogWarning("利用可能なポジションがありません。");
@@ -93,28 +226,69 @@ public class AdObjectManager :MonoBehaviour
 
         Transform spawnPos = availablePoses[UnityEngine.Random.Range(0, availablePoses.Count)];
         List<AdObject> candidateAds = new List<AdObject>();
+        List<int> candidateIndices = new List<int>();
 
-        foreach (var ad in adObjects)
+        for (int i = 0; i < adObjects.Length; i++)
         {
-            if (ad.RewardEffect == RewardEffect.TreeMinutes &&
-               (ad.RewardType == RewardType.PlayerSpeed || ad.RewardType == RewardType.PlayerCapacity || ad.RewardType == RewardType.MoneyCollection))
+            var ad = adObjects[i];
+            
+            // 最近使用したAdObjectは除外
+            if (recentlyUsedAdObjectIndices.Contains(i))
+                continue;
+                
+            // 効果が発動中のRewardTypeと同じAdObjectは除外
+            if (ad.RewardEffect == RewardEffect.TreeMinutes)
             {
-                // 該当する効果が既にアクティブなら候補から除外
                 if ((ad.RewardType == RewardType.PlayerSpeed && globalData.IsPlayerSpeedActive) ||
                     (ad.RewardType == RewardType.PlayerCapacity && globalData.IsPlayerCapacityActive) ||
                     (ad.RewardType == RewardType.MoneyCollection && globalData.IsMoneyCollectionActive))
                     continue;
             }
+            
+            // 効果が発動中のRewardTypeと同じAdObjectは除外(別のRewardEffectでも)
+            if (globalData.IsPlayerSpeedActive && ad.RewardType == RewardType.PlayerSpeed)
+                continue;
+            if (globalData.IsPlayerCapacityActive && ad.RewardType == RewardType.PlayerCapacity)
+                continue;
+            if (globalData.IsMoneyCollectionActive && ad.RewardType == RewardType.MoneyCollection)
+                continue;
+            
+            // アクティブなAdObjectとして既に存在する場合はスキップ
+            bool alreadyActive = false;
+            foreach (var activeAd in activeAdObjects)
+            {
+                if (activeAd.RewardType == ad.RewardType && activeAd.RewardEffect == ad.RewardEffect)
+                {
+                    alreadyActive = true;
+                    break;
+                }
+            }
+            if (alreadyActive)
+                continue;
+                
             candidateAds.Add(ad);
+            candidateIndices.Add(i);
         }
 
         if (candidateAds.Count == 0)
         {
             Debug.LogWarning("利用可能な RewardType の AdObject がありません。");
+            
+            // 候補がない場合は履歴をリセットして再トライ
+            if (recentlyUsedAdObjectIndices.Count > 0)
+            {
+                recentlyUsedAdObjectIndices.Clear();
+                RepopAdObject();
+            }
             return;
         }
 
-        AdObject newAd = Instantiate(candidateAds[UnityEngine.Random.Range(0, candidateAds.Count)], spawnPos.position, spawnPos.rotation);
+        int selectedIndex = UnityEngine.Random.Range(0, candidateAds.Count);
+        AdObject newAd = Instantiate(candidateAds[selectedIndex], spawnPos.position, spawnPos.rotation);
+        
+        // 使用したインデックスを記録
+        AddToRecentlyUsed(candidateIndices[selectedIndex]);
+        
         newAd.OnShowAd += OnAdObjectShow;
         activeAdObjects.Add(newAd);
         activeAdPositions.Add(newAd, spawnPos);

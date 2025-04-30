@@ -56,6 +56,14 @@ PrefabInstance:
       propertyPath: rewardEffect
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 9020955094240112484, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_text
+      value: "\u81EA\u52D5\u96C6\u91D1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 9020955094240112484, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_fontSize
+      value: 72
+      objectReference: {fileID: 0}
     - target: {fileID: 9127932103767105456, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_Name
       value: AdObjectMoneyCollection

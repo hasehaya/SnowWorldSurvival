@@ -1,6 +1,7 @@
 ﻿using TMPro;
 
 using UnityEngine;
+using UnityEngine.Rendering.PostProcessing;
 using UnityEngine.SceneManagement;
 
 public class DebugManager :MonoBehaviour
@@ -32,12 +33,14 @@ public class DebugManager :MonoBehaviour
         }
     }
 
-    public void ClearData()
+    public static void ClearData()
     {
-        saveFileName = SceneManager.GetActiveScene().name;
-
         // セーブデータを削除
-        SaveSystem.DeleteData(saveFileName);
+        for (int i = 1; i <= 7; i++)
+        {
+            var stageName = $"Stage{i}";
+            SaveSystem.DeleteData(stageName);
+        }
         SaveSystem.DeleteData("GlobalData");
         // 現在のシーンをリロード
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);

@@ -23,6 +23,7 @@ public class ObjectStack :Interactable
     private Stack<GameObject> objects = new Stack<GameObject>();
     private float stackOffset;
     private float stackTimer;
+    private Vector3 arrowStartPosition; // 矢印の初期位置を保存するための変数
 
     void Start()
     {
@@ -30,7 +31,10 @@ public class ObjectStack :Interactable
 
         // 必要に応じて初期表示をオフにしておく場合はこちら
         if (arrowObj != null)
+        {
+            arrowStartPosition = arrowObj.transform.position; // 初期位置を保存
             arrowObj.SetActive(false);
+        }
     }
 
     void Update()
@@ -61,7 +65,6 @@ public class ObjectStack :Interactable
         }
     }
 
-    // ★ 新規：Arrowを表示して上下動させる
     public void ShowArrow()
     {
         if (arrowObj == null)
@@ -71,12 +74,12 @@ public class ObjectStack :Interactable
         // 繰り返しアニメーションをリセットするために一度Kill
         DOTween.Kill(arrowObj.transform);
 
-        // 原点位置を確保
-        Vector3 startPos = arrowObj.transform.position;
+        // 矢印を初期位置に戻す
+        arrowObj.transform.position = arrowStartPosition;
 
         // 矢印を上下に動かし続ける
         arrowObj.transform
-            .DOMoveY(startPos.y + 0.3f, 0.5f)
+            .DOMoveY(arrowStartPosition.y + 0.3f, 0.5f)
             .SetLoops(-1, LoopType.Yoyo)
             .SetEase(Ease.Linear);
     }

@@ -5,21 +5,15 @@ using UnityEngine;
 
 public class ProgressDisplay :MonoBehaviour
 {
-    [SerializeField, Tooltip("Gradient used to visually represent progress from start to completion.")]
-    private Gradient progressGradient;
+    [SerializeField] private Gradient progressGradient;
 
-    private SlicedFilledImage progressFill;
-    private TMP_Text progressText;
-
-    void Awake()
-    {
-        // Initializes references to child components for progress display.
-        progressFill = GetComponentInChildren<SlicedFilledImage>();
-        progressText = GetComponentInChildren<TMP_Text>();
-    }
+    [SerializeField] private SlicedFilledImage progressFill;
+    [SerializeField] private TMP_Text progressText;
+    [SerializeField] private GameObject nextStageText;
 
     void Start()
     {
+        nextStageText.SetActive(false);
         // Subscribes to the RestaurantManager's OnUnlock event when enabled.
         UnlockManager.Instance.OnUnlock += UpdateProgress;
     }
@@ -44,5 +38,10 @@ public class ProgressDisplay :MonoBehaviour
 
         // Update progress text with percentage format
         progressText.text = $"PROGRESS {progress * 100:0.##}%";
+    }
+
+    public void ShowNextStageText()
+    {
+        nextStageText.SetActive(true);
     }
 }

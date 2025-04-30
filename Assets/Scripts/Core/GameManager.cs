@@ -317,6 +317,12 @@ public class GameManager :MonoBehaviour
 
     public void ChangeSceneStageSelect()
     {
+        if (stageData.NextStagePrompt)
+        {
+            stageData.NextStagePrompt = false;
+            SaveSystem.SaveData<StageData>(stageData, stageID);
+        }
+        
         screenFader.FadeIn(() =>
         {
             SceneManager.LoadScene("StageSelect");

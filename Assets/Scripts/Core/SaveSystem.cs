@@ -58,9 +58,5 @@ public static class SaveSystem
             File.Delete(filePath);
             Debug.Log("Deleted save file: " + filePath);
         }
-        else
-        {
-            Debug.LogWarning("No save file found to delete at: " + filePath);
-        }
     }
 }
