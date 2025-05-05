@@ -976,7 +976,7 @@ GameObject:
   - component: {fileID: 6208640355485254289}
   - component: {fileID: 6019659625696766840}
   - component: {fileID: 2338841701877152951}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: MaxCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1024,7 +1024,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 20
   m_TargetDisplay: 0
 --- !u!114 &6019659625696766840
 MonoBehaviour:
@@ -1141,7 +1141,7 @@ GameObject:
   - component: {fileID: 7089489185104262736}
   - component: {fileID: 1231049243791272956}
   - component: {fileID: 9189048163392847271}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1165,7 +1165,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 2.38}
-  m_SizeDelta: {x: 2.32, y: 0.41}
+  m_SizeDelta: {x: 7.48, y: 0.41}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5544791671586246052
 CanvasRenderer:
@@ -1222,8 +1222,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.62
-  m_fontSizeBase: 0.62
+  m_fontSize: 1.96
+  m_fontSizeBase: 1.96
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

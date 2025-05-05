@@ -130,6 +130,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 557247592495445282, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 10515217289175040
+      objectReference: {fileID: 0}
     - target: {fileID: 933632799540591100, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: stageIndex
       value: 2
@@ -792,6 +796,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 557247592495445282, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 10515291649990656
+      objectReference: {fileID: 0}
     - target: {fileID: 933632799540591100, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: stageIndex
       value: 6
@@ -1044,6 +1052,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 557247592495445282, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 10515291649990656
+      objectReference: {fileID: 0}
     - target: {fileID: 933632799540591100, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: stageIndex
       value: 7
@@ -1655,6 +1667,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 557247592495445282, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 10515291649990656
+      objectReference: {fileID: 0}
     - target: {fileID: 933632799540591100, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: stageIndex
       value: 3
@@ -2052,6 +2068,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 397443174}
     m_Modifications:
+    - target: {fileID: 557247592495445282, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 10515217289175040
+      objectReference: {fileID: 0}
     - target: {fileID: 933632799540591100, guid: c625126c410bd334d9c05bfd776f8dbd, type: 3}
       propertyPath: stageIndex
       value: 5

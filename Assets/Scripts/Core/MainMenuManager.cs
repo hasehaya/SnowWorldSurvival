@@ -16,17 +16,11 @@ public class MainMenuManager :MonoBehaviour
     [SerializeField, Tooltip("Background music for the main menu")]
     private AudioClip backgroundMusic;
 
-    private int targetScene; // Scene index to load when starting the game
-
     void Start()
     {
         // Set the frame rate and disable vertical sync
         QualitySettings.vSyncCount = 0;
         Application.targetFrameRate = 60;
-
-        // Load the last scene index from saved data, default to scene index 1 if not found
-        int lastSceneIndex = SaveSystem.LoadData<int>("LastSceneIndex");
-        targetScene = lastSceneIndex == 0 ? 1 : lastSceneIndex;
 
         // Add listener to start button
         startButton.onClick.AddListener(StartGame);
@@ -45,7 +39,7 @@ public class MainMenuManager :MonoBehaviour
         DOTween.Kill(startButton.transform);
 
         // Fade the screen and load the target scene
-        screenFader.FadeIn(() => SceneManager.LoadScene(targetScene));
+        screenFader.FadeIn(() => SceneManager.LoadScene("StageSelect"));
 
         // Play magical sound effect when starting the game
         AudioManager.Instance.PlaySFX(AudioID.Magical);

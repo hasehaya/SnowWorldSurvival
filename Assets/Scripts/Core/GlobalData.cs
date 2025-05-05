@@ -5,6 +5,7 @@ public class GlobalData
 {
     public bool IsAdRemoved;
     public int StageId;
+    public string SelectedLocaleCode;
 
     public float PlayerSpeedRemainingSeconds;
     public float PlayerCapacityRemainingSeconds;

@@ -126,7 +126,13 @@ public class UnlockManager :MonoBehaviour
         // 全体のUnlockCountを計算
         int overallUnlockCount = data.UnlockCounts.Values.Sum();
         // 全体のUnlockCountが3で割った余りが2の場合、広告を表示する
-        if (overallUnlockCount % 3 == 2)
+        // ステージ1の場合、6で割った余りが5の場合に広告を表示
+        int currentStageNumber = int.Parse(new string(restaurantID.Where(char.IsDigit).ToArray()));
+        if (currentStageNumber == 1 && overallUnlockCount % 6 == 5)
+        {
+            AdMobInterstitial.Instance.ShowAdMobInterstitial();
+        }
+        else if (overallUnlockCount % 3 == 2)
         {
             AdMobInterstitial.Instance.ShowAdMobInterstitial();
         }

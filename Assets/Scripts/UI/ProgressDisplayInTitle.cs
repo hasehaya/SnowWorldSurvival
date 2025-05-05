@@ -23,6 +23,6 @@ public class ProgressDisplayInTitle : MonoBehaviour
         progressFill.fillAmount = progress;
 
         // Update progress text with percentage format
-        progressText.text = $"PROGRESS {progress * 100:0.##}%";
+        progressText.text = $"{progress * 100:0.##}%";
     }
 }
