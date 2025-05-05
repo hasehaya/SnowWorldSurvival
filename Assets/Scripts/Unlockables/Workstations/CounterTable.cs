@@ -9,8 +9,6 @@ public class CounterTable :Workstation
 
     [SerializeField, Tooltip("Base time interval for customer spawn in seconds.")]
     private float baseInterval = 1.5f;
-
-    [SerializeField, Tooltip("Base price of food served at the counter.")]
     private int sellPrice = 5;
 
     [SerializeField, Tooltip("Base stack capacity of the food stack.")]
@@ -62,6 +60,15 @@ public class CounterTable :Workstation
         spawnInterval = (baseInterval * 3) - unlockLevel;
         serveInterval = baseInterval / unlockLevel;
         foodStack.MaxStack = baseStack + 10 * unlockLevel;
+    }
+
+    /// <summary>
+    /// Sets the sell price for this counter table.
+    /// </summary>
+    /// <param name="price">The new sell price</param>
+    public void SetSellPrice(int price)
+    {
+        sellPrice = price;
     }
 
     /// <summary>

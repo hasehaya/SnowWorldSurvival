@@ -1523,6 +1523,10 @@ PrefabInstance:
       value: 63
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseSellPrice
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 150499932}
@@ -6840,12 +6844,16 @@ PrefabInstance:
       value: 65
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseSellPrice
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 1893593723}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
-      value: 4000
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: orderInfoSprite
@@ -8056,12 +8064,16 @@ PrefabInstance:
       value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseSellPrice
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 955289197}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
-      value: 2000
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: orderInfoSprite
@@ -12837,6 +12849,10 @@ PrefabInstance:
       value: 62
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseSellPrice
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 526539865}
@@ -13202,12 +13218,16 @@ PrefabInstance:
       value: 66
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseSellPrice
+      value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 828909669}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
-      value: 6000
+      value: 2500
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: orderInfoSprite

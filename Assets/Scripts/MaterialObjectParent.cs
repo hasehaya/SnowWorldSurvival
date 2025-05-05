@@ -7,6 +7,7 @@ public class MaterialObjectParent :MonoBehaviour
     public MaterialType materialType;
     public int baseUnlockPrice = 75;
     public float unlockGrowthFactor = 1.1f;
+    public int baseSellPrice = 5;
     [SerializeField] private Sprite orderInfoSprite;
 
     [SerializeField] private CounterTable counterTable1;
@@ -24,6 +25,10 @@ public class MaterialObjectParent :MonoBehaviour
         counterTable1.CustomerPrefab.OrderInfo.IconImage.sprite = orderInfoSprite;
         counterTable2.CustomerPrefab.OrderInfo.IconImage.sprite = orderInfoSprite;
         counterTable3.CustomerPrefab.OrderInfo.IconImage.sprite = orderInfoSprite;
+
+        counterTable1.SetSellPrice(baseSellPrice);
+        counterTable2.SetSellPrice(baseSellPrice);
+        counterTable3.SetSellPrice(baseSellPrice);
 
         objectStack.MaterialType = materialType;
 
