@@ -1,5 +1,40 @@
 {
   "dependencies": {
+    "com.google.android.appbundle": {
+      "version": "file:../GooglePackages/com.google.android.appbundle-1.9.0.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
+    "com.google.external-dependency-manager": {
+      "version": "file:../GooglePackages/com.google.external-dependency-manager-1.2.172.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
+    "com.google.play.common": {
+      "version": "file:../GooglePackages/com.google.play.common-1.9.2.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {}
+    },
+    "com.google.play.core": {
+      "version": "file:../GooglePackages/com.google.play.core-1.8.5.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.google.external-dependency-manager": "1.2.172"
+      }
+    },
+    "com.google.play.review": {
+      "version": "file:../GooglePackages/com.google.play.review-1.8.3.tgz",
+      "depth": 0,
+      "source": "local-tarball",
+      "dependencies": {
+        "com.google.play.common": "1.9.2",
+        "com.google.play.core": "1.8.5"
+      }
+    },
     "com.unity.addressables": {
       "version": "1.22.2",
       "depth": 1,
