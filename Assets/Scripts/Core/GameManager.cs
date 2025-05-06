@@ -13,11 +13,8 @@ public class GameManager :MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    [SerializeField, Tooltip("レストランのアップグレード基礎価格。")]
-    private int baseUpgradePrice = 250;
-
-    [SerializeField, Range(1.01f, 1.99f), Tooltip("アップグレード価格に掛ける成長率。")]
-    private float upgradeGrowthFactor = 1.5f;
+    private int baseUpgradePrice = 200;
+    private float upgradeGrowthFactor = 1.2f;
 
     [SerializeField]
     private Canvas canvas;
@@ -37,8 +34,8 @@ public class GameManager :MonoBehaviour
     [SerializeField, Tooltip("レストラン内で再生するBGM。")]
     private AudioClip backgroundMusic;
 
-    // ゲーム進行時間（ステージデータから取得）
-    public float ElapsedTime => stageData?.ElapsedTime ?? 0f;
+    // ゲーム進行時間（グローバルデータから取得）
+    public float ElapsedTime => globalData?.TotalElapsedTime ?? 0f;
 
     public Canvas Canvas => canvas;
 
@@ -168,10 +165,10 @@ public class GameManager :MonoBehaviour
 
     void Update()
     {
-        // 経過時間を更新する
-        if (stageData != null)
+        // 経過時間を更新する（グローバルデータに格納）
+        if (globalData != null)
         {
-            stageData.ElapsedTime += Time.unscaledDeltaTime;
+            globalData.TotalElapsedTime += Time.unscaledDeltaTime;
         }
     }
 
@@ -259,8 +256,8 @@ public class GameManager :MonoBehaviour
         // そのステージの最初のマテリアル（Wood）の値を取得
         int baseMaterialValue = stageNumber * 10 + 1; // Wood_Xの値
         
-        float typePrice = levelPrice * MathF.Pow(2, (int)materialType - baseMaterialValue);
-        return Mathf.RoundToInt(Mathf.Round(typePrice) / 50f) * 50;
+        float typePrice = levelPrice * MathF.Pow(1.5f, (int)materialType - baseMaterialValue);
+        return Mathf.RoundToInt(Mathf.Round(typePrice) / 20f) * 20;
     }
 
     public int GetUpgradeLevel(Upgrade.UpgradeType upgradeType, MaterialType materialType)
@@ -277,6 +274,7 @@ public class GameManager :MonoBehaviour
         screenFader.FadeIn(() =>
         {
             SaveSystem.SaveData<StageData>(stageData, stageID);
+            SaveSystem.SaveData(globalData, globalDataID);
             SceneManager.LoadScene(index);
         });
     }
@@ -324,11 +322,15 @@ public class GameManager :MonoBehaviour
         {
             stageData.NextStagePrompt = false;
             SaveSystem.SaveData<StageData>(stageData, stageID);
+            //もし初めて進捗解除後にマップボタンを押した時はまだ
         }
         
         screenFader.FadeIn(() =>
         {
+            SaveSystem.SaveData(globalData, globalDataID);
             SceneManager.LoadScene("StageSelect");
+            // ステージセレクト画面ではAdを表示しない
+            AdMobReward.Instance.DestroyAd();
         });
     }
 

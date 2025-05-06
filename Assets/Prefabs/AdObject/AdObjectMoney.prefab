@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: rewardEffect
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7706785035258641712, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.086
+      objectReference: {fileID: 0}
     - target: {fileID: 9020955094240112484, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_text
       value: "\u304A\u91D1"

@@ -8,12 +8,6 @@ public class ProgressDisplayInTitle : MonoBehaviour
     [SerializeField] private SlicedFilledImage progressFill;
     [SerializeField] private TMP_Text progressText;
 
-    void Awake()
-    {
-        progressFill = GetComponentInChildren<SlicedFilledImage>();
-        progressText = GetComponentInChildren<TMP_Text>();
-    }
-
     public void UpdateProgress(float progress)
     {
         // Update fill color based on gradient evaluation

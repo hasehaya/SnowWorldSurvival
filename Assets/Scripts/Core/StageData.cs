@@ -13,8 +13,6 @@ public class StageData
     public int PlayerCapacity;
     public int Profit;
 
-    public float ElapsedTime;
-
     public bool IsAdRemoved;
     
     // 次のステージへの誘導フラグ
@@ -38,7 +36,6 @@ public class StageData
         PlayerSpeed = 1;
         PlayerCapacity = 1;
         Profit = 0;
-        ElapsedTime = 0;
         NextStagePrompt = false;
         NextStagePromptShownOnce = false;
         InitUpgrades();

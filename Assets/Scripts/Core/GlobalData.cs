@@ -11,6 +11,9 @@ public class GlobalData
     public float PlayerCapacityRemainingSeconds;
     public float MoneyCollectionRemainingSeconds;
 
+    // 全ステージの合計プレイ時間
+    public float TotalElapsedTime;
+
     public bool IsPlayerSpeedActive => PlayerSpeedRemainingSeconds > 0f;
     public bool IsPlayerCapacityActive => PlayerCapacityRemainingSeconds > 0f;
     public bool IsMoneyCollectionActive => MoneyCollectionRemainingSeconds > 0f;
@@ -65,6 +68,7 @@ public class GlobalData
         PlayerSpeedRemainingSeconds = 0f;
         PlayerCapacityRemainingSeconds = 0f;
         MoneyCollectionRemainingSeconds = 0f;
+        TotalElapsedTime = 0f;
         LastUpdateTime = DateTime.Now;
     }
 }

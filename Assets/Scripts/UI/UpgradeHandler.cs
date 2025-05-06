@@ -64,13 +64,27 @@ public class UpgradeHandler :MonoBehaviour
             priceLabel.text = GameManager.Instance.GetFormattedMoney(price);
 
             bool hasEnoughMoney = GameManager.Instance.GetMoney() >= price;
-            upgradeButton.interactable = hasEnoughMoney;
+            
+            // EmployeeAmountのレベルをチェック
+            int employeeAmountLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeAmount, this.materialType);
+            
+            // EmployeeAmount以外のアップグレードの場合、EmployeeAmountが1以上でないと有効にしない
+            if (upgradeType != Upgrade.UpgradeType.EmployeeAmount && employeeAmountLevel < 1)
+            {
+                upgradeButton.interactable = false;
+                adButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                upgradeButton.interactable = hasEnoughMoney;
+                adButton.gameObject.SetActive(true);
+            }
         }
         else
         {
             priceLabel.text = "MAX";
             upgradeButton.interactable = false;
-            adButton.interactable = false;
+            adButton.gameObject.SetActive(false);
         }
     }
 }
