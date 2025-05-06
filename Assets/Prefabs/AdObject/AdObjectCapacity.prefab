@@ -8,6 +8,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1051162174560742783, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_StringReference.m_TableEntryReference.m_KeyId
+      value: 11211283894493184
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051162174560742783, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
+      propertyPath: m_StringReference.m_TableReference.m_TableCollectionName
+      value: GUID:62913652b763fbd4f95fd3ad0a0039ff
+      objectReference: {fileID: 0}
     - target: {fileID: 2221315784606873392, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -66,11 +74,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9020955094240112484, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_text
-      value: "\u5BB9\u91CF\u30A2\u30C3\u30D7"
+      value: "3\u5206\u9593\u5BB9\u91CF2\u500D!"
       objectReference: {fileID: 0}
     - target: {fileID: 9020955094240112484, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_fontSize
-      value: 72
+      value: 59.8
       objectReference: {fileID: 0}
     - target: {fileID: 9127932103767105456, guid: d583f376929b2da498f63ff9c845fb75, type: 3}
       propertyPath: m_Name
