@@ -78,6 +78,18 @@ MonoBehaviour:
     m_Localized: Money +15%
     m_Metadata:
       m_Items: []
+  - m_Id: 11211283894493184
+    m_Localized: Double Capacity for 3 Minutes!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11214675853303808
+    m_Localized: Earn Double Money!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11214827150237696
+    m_Localized: Auto-Collect Money for 3 Minutes!
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
