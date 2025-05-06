@@ -10,6 +10,9 @@ public class MainMenuManager :MonoBehaviour
     [SerializeField, Tooltip("The button to start the game")]
     private Button startButton;
 
+    [SerializeField, Tooltip("The button to quit the game")]
+    private GameObject startText;
+
     [SerializeField, Tooltip("Screen fader for transitioning between scenes")]
     private ScreenFader screenFader;
 
@@ -26,7 +29,7 @@ public class MainMenuManager :MonoBehaviour
         startButton.onClick.AddListener(StartGame);
 
         // Animate the start button with a scaling effect
-        startButton.transform.DOScale(Vector3.one * 1.1f, 0.5f)
+        startText.transform.DOScale(Vector3.one * 1.1f, 0.5f)
             .SetLoops(-1, LoopType.Yoyo);
 
         // Play background music
@@ -36,7 +39,7 @@ public class MainMenuManager :MonoBehaviour
     void StartGame()
     {
         // Stop the button scale animation
-        DOTween.Kill(startButton.transform);
+        DOTween.Kill(startText.transform);
 
         // Fade the screen and load the target scene
         screenFader.FadeIn(() => SceneManager.LoadScene("StageSelect"));
