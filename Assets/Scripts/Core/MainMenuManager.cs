@@ -41,8 +41,20 @@ public class MainMenuManager :MonoBehaviour
         // Stop the button scale animation
         DOTween.Kill(startText.transform);
 
+        // グローバルデータを読み込み
+        GlobalData globalData = SaveSystem.LoadData<GlobalData>("GlobalData");
+        
+        // 解放されている最新のステージIDを取得
+        string targetScene = "StageSelect"; // デフォルト値
+        
+        if (globalData != null && globalData.StageId > 0)
+        {
+            // 最新のアンロックされたステージに直接遷移
+            targetScene = "Stage" + globalData.StageId;
+        }
+
         // Fade the screen and load the target scene
-        screenFader.FadeIn(() => SceneManager.LoadScene("StageSelect"));
+        screenFader.FadeIn(() => SceneManager.LoadScene(targetScene));
 
         // Play magical sound effect when starting the game
         AudioManager.Instance.PlaySFX(AudioID.Magical);

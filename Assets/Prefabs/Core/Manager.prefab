@@ -2655,6 +2655,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CoolTime: 0
+  minMoneyReward: 1000
 --- !u!1 &4788738823323592142
 GameObject:
   m_ObjectHideFlags: 0
@@ -4475,6 +4476,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 5226408523744041290}
   adButton: {fileID: 0}
   priceLabel: {fileID: 5226408524571261831}
+  jpFont: {fileID: 0}
   indicators:
   - {fileID: 5226408524976645788}
   - {fileID: 5226408524920554880}
@@ -5402,6 +5404,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 5226408524502917515}
   adButton: {fileID: 0}
   priceLabel: {fileID: 5226408524793544294}
+  jpFont: {fileID: 0}
   indicators:
   - {fileID: 5226408524006375603}
   - {fileID: 5226408525201729067}
@@ -7681,6 +7684,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 5226408524885927003}
   adButton: {fileID: 1112109512080012577}
   priceLabel: {fileID: 5226408523813072409}
+  jpFont: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
   indicators:
   - {fileID: 5226408524463274238}
   - {fileID: 5226408524184596335}
@@ -11126,6 +11130,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 5226408525217738547}
   adButton: {fileID: 8783371925937118658}
   priceLabel: {fileID: 5226408524079781047}
+  jpFont: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
   indicators:
   - {fileID: 5226408523782103411}
   - {fileID: 5226408525153461097}
@@ -11304,6 +11309,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 5226408524389200998}
   adButton: {fileID: 1695400912641943363}
   priceLabel: {fileID: 5226408524970255824}
+  jpFont: {fileID: 11400000, guid: b1a927b5ce64de840885fd50ec6ffdad, type: 2}
   indicators:
   - {fileID: 5226408525332762150}
   - {fileID: 5226408524166542262}
@@ -11481,6 +11487,7 @@ MonoBehaviour:
   upgradeButton: {fileID: 5226408524377258654}
   adButton: {fileID: 0}
   priceLabel: {fileID: 5226408524608499717}
+  jpFont: {fileID: 0}
   indicators:
   - {fileID: 5226408523897960968}
   - {fileID: 5226408525326780515}

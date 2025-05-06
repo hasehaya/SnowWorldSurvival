@@ -1,6 +1,8 @@
-﻿using TMPro;
+﻿using System.Runtime.CompilerServices;
+using TMPro;
 
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.UI;
 
 
@@ -19,6 +21,9 @@ public class UpgradeHandler :MonoBehaviour
 
     [SerializeField, Tooltip("Text label displaying the upgrade price.")]
     private TMP_Text priceLabel;
+
+    [SerializeField]
+    private TMP_FontAsset jpFont;
 
     [SerializeField, Tooltip("Visual indicators for the upgrade level.")]
     private Image[] indicators;
@@ -62,6 +67,7 @@ public class UpgradeHandler :MonoBehaviour
         {
             int price = GameManager.Instance.GetUpgradePrice(upgradeType, this.materialType);
             priceLabel.text = GameManager.Instance.GetFormattedMoney(price);
+            priceLabel.font = jpFont;
 
             bool hasEnoughMoney = GameManager.Instance.GetMoney() >= price;
             
@@ -83,6 +89,7 @@ public class UpgradeHandler :MonoBehaviour
         else
         {
             priceLabel.text = "MAX";
+            priceLabel.font = jpFont;
             upgradeButton.interactable = false;
             adButton.gameObject.SetActive(false);
         }
