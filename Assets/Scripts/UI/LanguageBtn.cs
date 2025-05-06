@@ -29,6 +29,18 @@ public class LanguageBtn : MonoBehaviour
         // LocalizationSettings の初期化を待つ
         yield return LocalizationSettings.InitializationOperation;
         
+        // 保存されていた言語設定を適用（GameManagerに依存しない方法）
+        string savedLocaleCode = LocaleSettings.GetSavedLocaleCode();
+        if (!string.IsNullOrEmpty(savedLocaleCode))
+        {
+            var savedLocale = LocalizationSettings.AvailableLocales.GetLocale(savedLocaleCode);
+            if (savedLocale != null)
+            {
+                LocalizationSettings.SelectedLocale = savedLocale;
+                Debug.Log($"保存されていた言語設定 {savedLocaleCode} を適用しました。");
+            }
+        }
+        
         // 現在の選択状態を更新
         UpdateSelectedState();
         
@@ -75,11 +87,8 @@ public class LanguageBtn : MonoBehaviour
             LocalizationSettings.SelectedLocale = newLocale;
             Debug.Log($"Locale を {localeCode} に切り替えました。");
             
-            // 言語設定をGameManagerを通じて保存
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.SaveLocaleSettings(localeCode);
-            }
+            // 言語設定を保存
+            LocaleSettings.SaveLocale(localeCode);
         }
         else
         {

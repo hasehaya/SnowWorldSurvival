@@ -66,9 +66,6 @@ public class GameManager :MonoBehaviour
         if (globalData == null)
             globalData = new GlobalData();
 
-        // 保存されていた言語設定があれば適用
-        LoadSavedLocale();
-
         // 現在のシーン番号がグローバルデータのシーン番号より大きければ更新する
         if (currentStageNumber > globalData.StageId)
         {
@@ -322,7 +319,7 @@ public class GameManager :MonoBehaviour
         {
             stageData.NextStagePrompt = false;
             SaveSystem.SaveData<StageData>(stageData, stageID);
-            //もし初めて進捗解除後にマップボタンを押した時はまだ
+            StartCoroutine(InAppReviewManager.RequestReview());
         }
         
         screenFader.FadeIn(() =>
@@ -354,36 +351,6 @@ public class GameManager :MonoBehaviour
     void OnDisable()
     {
         DOTween.KillAll();
-    }
-
-    private void LoadSavedLocale()
-    {
-        if (!string.IsNullOrEmpty(globalData.SelectedLocaleCode))
-        {
-            StartCoroutine(ApplySavedLocale());
-        }
-    }
-    
-    private System.Collections.IEnumerator ApplySavedLocale()
-    {
-        // LocalizationSettingsの初期化を待つ
-        yield return UnityEngine.Localization.Settings.LocalizationSettings.InitializationOperation;
-        
-        // 保存されていた言語コードに対応するロケールを探す
-        var savedLocale = UnityEngine.Localization.Settings.LocalizationSettings.AvailableLocales.GetLocale(globalData.SelectedLocaleCode);
-        if (savedLocale != null)
-        {
-            UnityEngine.Localization.Settings.LocalizationSettings.SelectedLocale = savedLocale;
-            Debug.Log($"保存されていた言語設定 {globalData.SelectedLocaleCode} を適用しました。");
-        }
-    }
-    
-    // 言語設定の保存
-    public void SaveLocaleSettings(string localeCode)
-    {
-        globalData.SelectedLocaleCode = localeCode;
-        SaveSystem.SaveData(globalData, globalDataID);
-        Debug.Log($"言語設定 {localeCode} を保存しました。");
     }
 }
 
