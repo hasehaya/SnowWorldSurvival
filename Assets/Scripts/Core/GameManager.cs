@@ -360,6 +360,14 @@ public class GameManager :MonoBehaviour
         {
             adMobOpen.DestroyAd();
         }
+        
+        // AdBlockBtnオブジェクトを取得し、非表示にする
+        AdBlockBtn adBlockBtn = FindObjectOfType<AdBlockBtn>();
+        if (adBlockBtn != null)
+        {
+            adBlockBtn.ClosePopup();
+            adBlockBtn.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

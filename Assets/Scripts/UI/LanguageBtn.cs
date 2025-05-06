@@ -20,26 +20,14 @@ public class LanguageBtn : MonoBehaviour
         // ボタンクリック時に言語切り替えを実行
         languageBtn.onClick.AddListener(() => StartCoroutine(ChangeLocaleCoroutine(language)));
         
-        // 初期状態の設定
-        StartCoroutine(InitializeSelectedState());
+        // UI表示の初期化
+        StartCoroutine(InitializeUI());
     }
     
-    private IEnumerator InitializeSelectedState()
+    private IEnumerator InitializeUI()
     {
         // LocalizationSettings の初期化を待つ
         yield return LocalizationSettings.InitializationOperation;
-        
-        // 保存されていた言語設定を適用（GameManagerに依存しない方法）
-        string savedLocaleCode = LocaleSettings.GetSavedLocaleCode();
-        if (!string.IsNullOrEmpty(savedLocaleCode))
-        {
-            var savedLocale = LocalizationSettings.AvailableLocales.GetLocale(savedLocaleCode);
-            if (savedLocale != null)
-            {
-                LocalizationSettings.SelectedLocale = savedLocale;
-                Debug.Log($"保存されていた言語設定 {savedLocaleCode} を適用しました。");
-            }
-        }
         
         // 現在の選択状態を更新
         UpdateSelectedState();

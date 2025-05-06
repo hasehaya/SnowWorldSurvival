@@ -3,7 +3,8 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using UnityEngine.Localization;
+using UnityEngine.Localization.Settings;
 
 public class MainMenuManager :MonoBehaviour
 {
@@ -18,6 +19,12 @@ public class MainMenuManager :MonoBehaviour
 
     [SerializeField, Tooltip("Background music for the main menu")]
     private AudioClip backgroundMusic;
+
+    void Awake()
+    {
+        // 言語設定の初期化
+        StartCoroutine(InitializeLocalizationSettings());
+    }
 
     void Start()
     {
@@ -34,6 +41,24 @@ public class MainMenuManager :MonoBehaviour
 
         // Play background music
         AudioManager.Instance.PlayBGM(backgroundMusic);
+    }
+
+    private System.Collections.IEnumerator InitializeLocalizationSettings()
+    {
+        // LocalizationSettingsの初期化を待つ
+        yield return LocalizationSettings.InitializationOperation;
+        
+        // 保存されていた言語設定を適用
+        string savedLocaleCode = LocaleSettings.GetSavedLocaleCode();
+        if (!string.IsNullOrEmpty(savedLocaleCode))
+        {
+            var savedLocale = LocalizationSettings.AvailableLocales.GetLocale(savedLocaleCode);
+            if (savedLocale != null)
+            {
+                LocalizationSettings.SelectedLocale = savedLocale;
+                Debug.Log($"保存されていた言語設定 {savedLocaleCode} を適用しました。");
+            }
+        }
     }
 
     void StartGame()

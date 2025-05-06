@@ -78,11 +78,13 @@ public class UpgradeHandler :MonoBehaviour
             if (upgradeType != Upgrade.UpgradeType.EmployeeAmount && employeeAmountLevel < 1)
             {
                 upgradeButton.interactable = false;
-                adButton.gameObject.SetActive(false);
+                adButton.interactable = false;
+                adButton.gameObject.SetActive(true);
             }
             else
             {
                 upgradeButton.interactable = hasEnoughMoney;
+                adButton.interactable = true;
                 adButton.gameObject.SetActive(true);
             }
         }
