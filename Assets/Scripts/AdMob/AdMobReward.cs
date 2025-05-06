@@ -14,6 +14,9 @@ public enum RewardType
     MoneyCollection,
 }
 
+/// <summary>
+/// リワード広告の表示と報酬イベントの発火を担当するクラス
+/// </summary>
 public class AdMobReward :MonoBehaviour
 {
     private static AdMobReward instance;
@@ -28,16 +31,16 @@ public class AdMobReward :MonoBehaviour
             return instance;
         }
     }
+    
+    /// <summary>
+    /// 広告報酬受け取り時のイベント
+    /// </summary>
     public event Action<RewardType> OnRewardReceived;
 
-    //やること
-    //1.リワード広告IDの入力
-    //2.GetReward関数に報酬内容を入力
-    //3.リワード起動設定　ShowAdMobReward()を使う
-
-
+    //リワード広告用の変数
     private RewardedAd rewardedAd;//RewardedAd型の変数 rewardedAdを宣言 この中にリワード広告の情報が入る
 
+    // 広告IDと報酬タイプ
     private string adUnitId;
     private RewardType rewardType;
 
@@ -68,6 +71,9 @@ public class AdMobReward :MonoBehaviour
         LoadRewardedAd();//リワード広告読み込み
     }
 
+    /// <summary>
+    /// 広告を破棄
+    /// </summary>
     public void DestroyAd()
     {
         if (rewardedAd != null)
@@ -77,17 +83,19 @@ public class AdMobReward :MonoBehaviour
         }
     }
 
-    //リワード広告を表示する関数
-    //ボタンに割付けして使用
+    /// <summary>
+    /// リワード広告を表示する
+    /// </summary>
     public void ShowAdMobReward(RewardType rewardType)
     {
-        // 広告削除済みならリクエストしない
+        // 広告削除済みなら直接報酬を付与
         if (GameManager.Instance != null && GameManager.Instance.IsAdBlocked())
         {
             OnRewardReceived?.Invoke(rewardType);
             return;
         }
-        //変数rewardedAdの中身が存在しており、広告の読み込みが完了していたら広告表示
+        
+        // 広告の読み込みが完了していたら広告表示
         if (rewardedAd != null && rewardedAd.CanShowAd() == true)
         {
             this.rewardType = rewardType;
@@ -95,26 +103,29 @@ public class AdMobReward :MonoBehaviour
         }
         else
         {
-            //リワード広告読み込み未完了
+            // 広告読み込み未完了の場合はログ出力
             Debug.Log("Rewarded ad not loaded");
         }
     }
 
-    //報酬受け取り処理
+    /// <summary>
+    /// 報酬受け取り処理
+    /// </summary>
     private void GetReward(Reward reward)
     {
+        // イベント発火のみを行い、実際の報酬処理はAdManagerに委譲
         OnRewardReceived?.Invoke(rewardType);
     }
 
-
-    //リワード広告を読み込む関数 再読み込みにも使用
+    /// <summary>
+    /// リワード広告を読み込む
+    /// </summary>
     public void LoadRewardedAd()
     {
-        //広告の再読み込みのための処理
-        //rewardedAdの中身が入っていた場合処理
+        // 広告の再読み込みのための処理
         if (rewardedAd != null)
         {
-            //リワード広告は使い捨てなので一旦破棄
+            // リワード広告は使い捨てなので一旦破棄
             rewardedAd.Destroy();
             rewardedAd = null;
         }
@@ -124,10 +135,10 @@ public class AdMobReward :MonoBehaviour
             return;
         }
 
-        //リクエストを生成
+        // リクエストを生成
         AdRequest request = new AdRequest();
 
-        //広告のキーワードを追加
+        // 広告のキーワードを追加
         //===================================================================
         // アプリに関連するキーワードを文字列で設定するとアプリと広告の関連性が高まります。
         // 結果、収益が上がる可能性があります。
@@ -150,62 +161,60 @@ public class AdMobReward :MonoBehaviour
         }
         //==================================================================
 
-        //広告をロード  その後、関数OnRewardedAdLoadedを呼び出す
+        // 広告をロード
         RewardedAd.Load(adUnitId, request, OnRewardedAdLoaded);
     }
 
-
-    // 広告のロードを実施した後に呼び出される関数
+    /// <summary>
+    /// 広告ロード完了時のコールバック
+    /// </summary>
     private void OnRewardedAdLoaded(RewardedAd ad, LoadAdError error)
     {
-        //変数errorに情報が入っている　または、変数adに情報がはいっていなかったら実行
+        // エラーがあるか広告情報がない場合
         if (error != null || ad == null)
         {
-            //リワード 読み込み失敗
-            Debug.LogError("Failed to load reward ad : " + error);//error:エラー内容 
+            // 読み込み失敗
+            Debug.LogError("Failed to load reward ad : " + error);
             Invoke("LoadRewardedAd", 3f);
-            return;//この時点でこの関数の実行は終了
+            return;
         }
 
-        //リワード 読み込み完了
+        // 読み込み完了
         Debug.Log("Reward ad loaded");
 
-        //RewardedAd.Load(~略~)関数を実行することにより、RewardedAd型の変数adにRewardedAdのインスタンスを生成する。
-        //生成したRewardedAd型のインスタンスを変数rewardedAdへ割り当て
+        // 広告情報を保存
         rewardedAd = ad;
 
-        //広告の 表示・表示終了・表示失敗 の内容を登録
+        // 広告の 表示・表示終了・表示失敗 の内容を登録
         RegisterEventHandlers(rewardedAd);
     }
 
-
-    //広告の 表示・表示終了・表示失敗 の内容
+    /// <summary>
+    /// 広告イベントハンドラの登録
+    /// </summary>
     private void RegisterEventHandlers(RewardedAd ad)
     {
-        //リワード広告が表示された時に起動する内容
+        // リワード広告が表示された時
         ad.OnAdFullScreenContentOpened += () =>
         {
-            //リワード広告 表示
             Debug.Log("Rewarded ad full screen content opened.");
         };
 
-        //リワード広告が表示終了 となった時に起動する内容
+        // リワード広告が表示終了 となった時
         ad.OnAdFullScreenContentClosed += () =>
         {
-            //リワード広告 表示終了
             Debug.Log("Rewarded ad full screen content closed.");
 
-            //リワード 再読み込み
+            // リワード再読み込み
             LoadRewardedAd();
         };
 
-        //リワード広告の表示失敗 となった時に起動する内容
+        // リワード広告の表示失敗 となった時
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
-            //エラー表示
             Debug.LogError("Rewarded ad failed to open full screen content with error : " + error);
 
-            //リワード 再読み込み
+            // リワード再読み込み
             LoadRewardedAd();
         };
     }

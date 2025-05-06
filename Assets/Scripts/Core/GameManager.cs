@@ -47,6 +47,10 @@ public class GameManager :MonoBehaviour
     public GlobalData GlobalData => globalData;
     private string globalDataID = "GlobalData";
 
+    // アップグレード報酬用の一時保存変数
+    private Upgrade.UpgradeType pendingUpgradeType;
+    private MaterialType pendingMaterialType;
+
     void Awake()
     {
         // シングルトンの設定
@@ -93,6 +97,19 @@ public class GameManager :MonoBehaviour
 
         // BGM の再生
         AudioManager.Instance.PlayBGM(backgroundMusic);
+        
+        // アップグレード報酬用のイベント購読
+        AdMobReward.Instance.OnRewardReceived += OnUpgradeRewardReceived;
+    }
+    
+    void OnDestroy()
+    {
+        if (AdMobReward.Instance != null)
+        {
+            AdMobReward.Instance.OnRewardReceived -= OnUpgradeRewardReceived;
+        }
+        
+        DOTween.KillAll();
     }
 
     void SpawnEmployee()
@@ -169,14 +186,29 @@ public class GameManager :MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 所持金を変更する
+    /// </summary>
     public void AdjustMoney(int change)
     {
         stageData.Money += change;
         moneyDisplay.text = GetFormattedMoney(stageData.Money);
+        
+        // 変更があった場合は保存
+        if (change != 0)
+        {
+            SaveSystem.SaveData<StageData>(stageData, stageID);
+        }
     }
 
+    /// <summary>
+    /// 現在の所持金を取得する
+    /// </summary>
     public long GetMoney() => stageData.Money;
 
+    /// <summary>
+    /// 所持金を読みやすい形式に整形する
+    /// </summary>
     public string GetFormattedMoney(long money)
     {
         if (money < 1000)
@@ -191,6 +223,9 @@ public class GameManager :MonoBehaviour
             return (money / 1000000000000f).ToString("0.##") + "t";
     }
 
+    /// <summary>
+    /// アップグレードを購入する
+    /// </summary>
     public void PurchaseUpgrade(Upgrade.UpgradeType upgradeType, MaterialType materialType)
     {
         int price = GetUpgradePrice(upgradeType, materialType);
@@ -208,29 +243,31 @@ public class GameManager :MonoBehaviour
         OnUpgrade?.Invoke();
     }
 
+    /// <summary>
+    /// 広告を視聴してアップグレードを行うリクエスト
+    /// </summary>
     public void RequestUpgradeByAd(Upgrade.UpgradeType upgradeType, MaterialType materialType)
     {
-        AdMobReward.Instance.OnRewardReceived += OnAdRewardReceived;
-
         pendingUpgradeType = upgradeType;
         pendingMaterialType = materialType;
 
         AdMobReward.Instance.ShowAdMobReward(RewardType.Upgrade);
     }
 
-    private Upgrade.UpgradeType pendingUpgradeType;
-    private MaterialType pendingMaterialType;
-
-    private void OnAdRewardReceived(RewardType rewardType)
+    /// <summary>
+    /// アップグレード報酬を受け取ったときの処理
+    /// </summary>
+    private void OnUpgradeRewardReceived(RewardType rewardType)
     {
         if (rewardType != RewardType.Upgrade)
             return;
 
         PurchaseUpgradeByAd(pendingUpgradeType, pendingMaterialType);
-
-        AdMobReward.Instance.OnRewardReceived -= OnAdRewardReceived;
     }
 
+    /// <summary>
+    /// 広告報酬によるアップグレード実施
+    /// </summary>
     private void PurchaseUpgradeByAd(Upgrade.UpgradeType upgradeType, MaterialType materialType)
     {
         stageData.UpgradeUpgrade(upgradeType, materialType);
@@ -243,6 +280,9 @@ public class GameManager :MonoBehaviour
         OnUpgrade?.Invoke();
     }
 
+    /// <summary>
+    /// アップグレードの価格を計算する
+    /// </summary>
     public int GetUpgradePrice(Upgrade.UpgradeType upgradeType, MaterialType materialType)
     {
         int currentLevel = GetUpgradeLevel(upgradeType, materialType);
@@ -257,11 +297,17 @@ public class GameManager :MonoBehaviour
         return Mathf.RoundToInt(Mathf.Round(typePrice) / 20f) * 20;
     }
 
+    /// <summary>
+    /// アップグレードのレベルを取得する
+    /// </summary>
     public int GetUpgradeLevel(Upgrade.UpgradeType upgradeType, MaterialType materialType)
     {
         return stageData.FindUpgrade(upgradeType, materialType).Level;
     }
 
+    /// <summary>
+    /// 指定したレストランシーンを読み込む
+    /// </summary>
     public void LoadRestaurant(int index)
     {
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
@@ -276,6 +322,9 @@ public class GameManager :MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// 広告ブロック機能を購入する
+    /// </summary>
     public void PurchaseAdBlock()
     {
         globalData.IsAdRemoved = true;
@@ -313,6 +362,9 @@ public class GameManager :MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// ステージ選択画面に戻る
+    /// </summary>
     public void ChangeSceneStageSelect()
     {
         if (stageData.NextStagePrompt)
@@ -331,6 +383,9 @@ public class GameManager :MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// 広告ブロック機能が有効かどうか
+    /// </summary>
     public bool IsAdBlocked() => globalData.IsAdRemoved;
 
     void OnApplicationPause(bool pauseStatus)

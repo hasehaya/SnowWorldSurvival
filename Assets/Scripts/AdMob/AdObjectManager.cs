@@ -2,6 +2,9 @@
 
 using UnityEngine;
 
+/// <summary>
+/// マップ上のAdObjectの生成・配置・管理を担当するクラス
+/// </summary>
 public class AdObjectManager :MonoBehaviour
 {
     private static AdObjectManager instance;
@@ -47,6 +50,7 @@ public class AdObjectManager :MonoBehaviour
         availableRewardTypes.Add(RewardType.PlayerSpeed);
         availableRewardTypes.Add(RewardType.PlayerCapacity);
         availableRewardTypes.Add(RewardType.MoneyCollection);
+        availableRewardTypes.Add(RewardType.Money);
 
         popPoses = GetComponentsInChildren<Transform>();
         // popPosesの一つ目は自分自身なので除外して、半分の数を計算
@@ -63,6 +67,9 @@ public class AdObjectManager :MonoBehaviour
         // 効果終了イベントを購読
         CoolTimePresenter.OnEffectEnded += HandleEffectEnded;
         
+        // AdMobRewardのイベントを購読（効果付与後に使用可能なRewardTypeを更新するため）
+        AdMobReward.Instance.OnRewardReceived += HandleRewardReceived;
+        
         // 初期生成処理
         RepopAllAdObjects();
     }
@@ -71,6 +78,11 @@ public class AdObjectManager :MonoBehaviour
     {
         // イベント購読を解除
         CoolTimePresenter.OnEffectEnded -= HandleEffectEnded;
+        
+        if (AdMobReward.Instance != null)
+        {
+            AdMobReward.Instance.OnRewardReceived -= HandleRewardReceived;
+        }
     }
     
     // 効果終了時の処理
@@ -81,6 +93,21 @@ public class AdObjectManager :MonoBehaviour
             rewardType == RewardType.MoneyCollection)
         {
             availableRewardTypes.Add(rewardType);
+            RepopAdObject();
+        }
+    }
+    
+    // 報酬受け取り時の処理（利用可能なRewardTypeを更新）
+    private void HandleRewardReceived(RewardType rewardType)
+    {
+        // 効果が付与されるRewardTypeの場合、利用可能リストから削除
+        if (rewardType == RewardType.PlayerSpeed ||
+            rewardType == RewardType.PlayerCapacity ||
+            rewardType == RewardType.MoneyCollection)
+        {
+            availableRewardTypes.Remove(rewardType);
+            
+            // AdObjectを再配置
             RepopAdObject();
         }
     }
@@ -119,28 +146,7 @@ public class AdObjectManager :MonoBehaviour
         activeAdPositions.Remove(adObj);
         Destroy(adObj.gameObject);
 
-        if (adObj.RewardEffect == RewardEffect.TreeMinutes)
-        {
-            if (adObj.RewardType == RewardType.PlayerSpeed && !globalData.IsPlayerSpeedActive)
-            {
-                availableRewardTypes.Remove(RewardType.PlayerSpeed);
-                globalData.PlayerSpeedRemainingSeconds = TreeMinutesDuration;
-                return;
-            }
-            else if (adObj.RewardType == RewardType.PlayerCapacity && !globalData.IsPlayerCapacityActive)
-            {
-                availableRewardTypes.Remove(RewardType.PlayerCapacity);
-                globalData.PlayerCapacityRemainingSeconds = TreeMinutesDuration;
-                return;
-            }
-            else if (adObj.RewardType == RewardType.MoneyCollection && !globalData.IsMoneyCollectionActive)
-            {
-                availableRewardTypes.Remove(RewardType.MoneyCollection);
-                globalData.MoneyCollectionRemainingSeconds = TreeMinutesDuration;
-                return;
-            }
-        }
-
+        // AdObject表示後、新しいオブジェクトを生成
         RepopAdObject();
     }
 
@@ -237,15 +243,6 @@ public class AdObjectManager :MonoBehaviour
                 continue;
                 
             // 効果が発動中のRewardTypeと同じAdObjectは除外
-            if (ad.RewardEffect == RewardEffect.TreeMinutes)
-            {
-                if ((ad.RewardType == RewardType.PlayerSpeed && globalData.IsPlayerSpeedActive) ||
-                    (ad.RewardType == RewardType.PlayerCapacity && globalData.IsPlayerCapacityActive) ||
-                    (ad.RewardType == RewardType.MoneyCollection && globalData.IsMoneyCollectionActive))
-                    continue;
-            }
-            
-            // 効果が発動中のRewardTypeと同じAdObjectは除外(別のRewardEffectでも)
             if (globalData.IsPlayerSpeedActive && ad.RewardType == RewardType.PlayerSpeed)
                 continue;
             if (globalData.IsPlayerCapacityActive && ad.RewardType == RewardType.PlayerCapacity)

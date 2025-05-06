@@ -28,7 +28,6 @@ public class AdObject :Interactable
     private RewardEffect rewardEffect = RewardEffect.None;
     public RewardEffect RewardEffect => rewardEffect;
 
-
     private float timeToPopup = 1.5f;
     private Coroutine adCoroutine;
 
@@ -98,7 +97,8 @@ public class AdObject :Interactable
     public void ShowAd()
     {
         OnShowAd?.Invoke(this);
-
+        
+        // AdManagerに処理を委譲し、広告表示のみを担当
         AdMobReward.Instance.ShowAdMobReward(rewardType);
     }
 }
