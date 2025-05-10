@@ -7,12 +7,9 @@ public class CounterTable :Workstation
 {
     public CustomerController CustomerPrefab;
 
-    [SerializeField, Tooltip("Base time interval for customer spawn in seconds.")]
-    private float baseInterval = 1.5f;
+    private float baseInterval = 1.4f;
     private int sellPrice = 5;
-
-    [SerializeField, Tooltip("Base stack capacity of the food stack.")]
-    private int baseStack = 30;
+    private int baseStack = 40;
 
     [SerializeField, Tooltip("Point where customers spawn.")]
     private Transform spawnPoint;
@@ -39,7 +36,7 @@ public class CounterTable :Workstation
     private float serveTimer;    // 食事提供用タイマー
 
     // 最大顧客数は unlockLevel に応じて増加する
-    private int maxCustomers => unlockLevel;
+    private int maxCustomers => unlockLevel + 1;
 
     void Start()
     {
@@ -58,7 +55,7 @@ public class CounterTable :Workstation
     protected override void UpdateStats()
     {
         spawnInterval = (baseInterval * 3) - unlockLevel;
-        serveInterval = baseInterval / unlockLevel;
+        serveInterval = baseInterval / (unlockLevel + 1);
         foodStack.MaxStack = baseStack + 10 * unlockLevel;
     }
 

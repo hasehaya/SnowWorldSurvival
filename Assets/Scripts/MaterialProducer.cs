@@ -17,16 +17,16 @@ public class MaterialProducer :Interactable
     public int Column;
 
     [Header("素材パラメータ")]
-    [SerializeField] protected int materialHealth = 2;         // 素材の体力
-    [SerializeField] protected int resourceCount = 1;          // 体力減少時に生成する最大リソース数
-    [SerializeField] protected float decreaseInterval = 0.45f; // 体力が減る間隔
+    protected int materialHealth = 2;         // 素材の体力
+    protected int resourceCount = 1;          // 体力減少時に生成する最大リソース数
+    protected float decreaseInterval = 0.4f; // 体力が減る間隔
 
     [Header("木、岩など揺れて消えるもの")]
     [SerializeField] protected GameObject model;       // 素材の見た目のモデル
     [Header("生成されるObject")]
     [SerializeField] protected GameObject materialObject;       // 素材の見た目のモデル
-    [SerializeField] protected float regrowDelay = 12f;        // 再生までの待機時間
-    [SerializeField] protected float growthDuration = 0.5f;    // 成長にかかる時間
+    protected float regrowDelay = 10f;        // 再生までの待機時間
+    protected float growthDuration = 0.4f;    // 成長にかかる時間
 
     [Header("プール設定")]
     [SerializeField] protected MaterialType materialType = MaterialType.None;

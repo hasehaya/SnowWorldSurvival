@@ -1477,7 +1477,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.25
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3512,7 +3512,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: PROFIT
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -198006408105109762, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -6649,7 +6649,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: SPEED
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -198006408105109762, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -7990,7 +7990,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10.05M
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -198006408105109762, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -8124,7 +8124,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10.05M
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -198006408105109762, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -8467,7 +8467,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 10.05M
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -198006408105109762, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -9767,7 +9767,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: PLAYER UPGRADES
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -198006408105109762, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -10530,7 +10530,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: CAPACITY
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
+  m_fontAsset: {fileID: 0}
   m_sharedMaterial: {fileID: -198006408105109762, guid: 31dff687ed3c41a448be35712f9fa610, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
