@@ -182,7 +182,7 @@ public class GameManager :MonoBehaviour
         // 経過時間を更新する（グローバルデータに格納）
         if (globalData != null)
         {
-            globalData.TotalElapsedTime += Time.unscaledDeltaTime;
+            globalData.TotalElapsedTime += Time.deltaTime;
         }
     }
 

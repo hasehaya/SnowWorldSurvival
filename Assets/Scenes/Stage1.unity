@@ -4203,7 +4203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseSellPrice
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
@@ -4211,7 +4211,7 @@ PrefabInstance:
       objectReference: {fileID: 526539865}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
-      value: 300
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: orderInfoSprite
@@ -5622,6 +5622,42 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: baseBGMVolume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: baseSFXVolume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: loudThreshold
+      value: 0.924
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: quietThreshold
+      value: 0.434
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: quietBoostFactor
+      value: 2.346
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: loudReductionFactor
+      value: 0.224
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: equalizationIntensity
+      value: 0.533
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: equalizationSmoothTime
+      value: 0.062
+      objectReference: {fileID: 0}
+    - target: {fileID: 7632695223462868290, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: defaultBGMNormalizedVolume
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7813929140839000098, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
       propertyPath: m_Name
       value: Manager
@@ -6049,12 +6085,16 @@ PrefabInstance:
       value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseSellPrice
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 1641277939}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
-      value: 50
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: orderInfoSprite

@@ -130,7 +130,7 @@ public class UnlockManager :MonoBehaviour
         int currentStageNumber = int.Parse(new string(restaurantID.Where(char.IsDigit).ToArray()));
         if (currentStageNumber == 1)
         {
-            if(overallUnlockCount % 6 == 5)
+            if(overallUnlockCount % 7 == 6)
             {
                 AdMobInterstitial.Instance.ShowAdMobInterstitial();
             }
