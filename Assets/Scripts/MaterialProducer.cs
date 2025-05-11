@@ -35,6 +35,8 @@ public class MaterialProducer :Interactable
     protected int initialHealth;
     protected Vector3 initialScale;
     protected bool isDepleted = false; // 素材が使い果たされたかどうか
+    protected bool isRegrowing = false; // 再生中かどうか
+    protected float regrowTimer = 0f;   // 再生タイマー
 
     void Start()
     {
@@ -42,6 +44,33 @@ public class MaterialProducer :Interactable
         if (model != null)
         {
             initialScale = model.transform.localScale;
+        }
+    }
+
+    private void Update()
+    {
+        // 再生処理中の場合
+        if (isRegrowing)
+        {
+            regrowTimer += Time.deltaTime;
+            
+            // 再生時間が経過したら素材を再生成
+            if (regrowTimer >= regrowDelay)
+            {
+                materialHealth = initialHealth;
+                timer = 0f;
+
+                if (model != null)
+                {
+                    model.transform.localScale = Vector3.zero;
+                    model.SetActive(true);
+                    model.transform.DOScale(initialScale, growthDuration);
+                }
+                
+                isRegrowing = false;
+                isDepleted = false;
+                regrowTimer = 0f;
+            }
         }
     }
 
@@ -114,7 +143,7 @@ public class MaterialProducer :Interactable
             }
         }
 
-        // HP が 0 以下になったタイミングで振動完了後に RegrowMaterial
+        // HP が 0 以下になったタイミングで振動完了後に 再生処理を開始
         if (materialHealth <= 0 && model != null)
         {
             // Deplete フラグをセット
@@ -132,8 +161,8 @@ public class MaterialProducer :Interactable
             )
             .OnComplete(() =>
             {
-                // 振動完了後に再生コルーチンを起動
-                StartCoroutine(RegrowMaterial());
+                // 振動完了後に再生処理を開始
+                StartRegrowMaterial();
             });
         }
 
@@ -218,24 +247,14 @@ public class MaterialProducer :Interactable
     }
 
     /// <summary>
-    /// 素材の再生処理。一定時間待機後、体力をリセットし再び成長させます。
+    /// 素材の再生処理を開始します。
     /// </summary>
-    IEnumerator RegrowMaterial()
+    void StartRegrowMaterial()
     {
         if (model != null)
             model.SetActive(false);
 
-        yield return new WaitForSeconds(regrowDelay);
-
-        materialHealth = initialHealth;
-        timer = 0f;
-
-        if (model != null)
-        {
-            model.transform.localScale = Vector3.zero;
-            model.SetActive(true);
-            model.transform.DOScale(initialScale, growthDuration);
-        }
-        isDepleted = false;
+        isRegrowing = true;
+        regrowTimer = 0f;
     }
 }

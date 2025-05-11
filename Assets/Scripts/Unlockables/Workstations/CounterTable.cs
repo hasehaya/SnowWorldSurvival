@@ -39,6 +39,8 @@ public class CounterTable :Workstation
     // 最大顧客数は unlockLevel に応じて増加する
     private int maxCustomers => unlockLevel + 1;
 
+    private const int moneyValue = 5;
+
     void Start()
     {
         // 初期化処理（必要に応じて seating などの初期化を行う）
@@ -67,6 +69,7 @@ public class CounterTable :Workstation
     public void SetSellPrice(int price)
     {
         sellPrice = price;
+        moneyPile.SetMoneyValue(sellPrice / moneyValue);
     }
 
     public void SetOrderIconSprite(Sprite sprite)
@@ -135,21 +138,13 @@ public class CounterTable :Workstation
             {
                 var food = foodStack.RemoveFromStack();
                 customers.Peek().FillOrder(food);
-                CollectPayment();
+            moneyPile.AddMoney(moneyValue);
             }
             if (customers.Peek().OrderCount == 0)
             {
                 var servedCustomer = customers.Dequeue();
                 UpdateQueuePositions();
             }
-        }
-    }
-
-    void CollectPayment()
-    {
-        for (int i = 0; i < sellPrice; i++)
-        {
-            moneyPile.AddMoney();
         }
     }
 

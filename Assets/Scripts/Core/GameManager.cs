@@ -13,8 +13,8 @@ public class GameManager :MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    private int baseUpgradePrice = 200;
-    private float upgradeGrowthFactor = 1.3f;
+    private int baseUpgradePrice = 250;
+    private float upgradeGrowthFactor = 1.35f;
 
     [SerializeField]
     private Canvas canvas;

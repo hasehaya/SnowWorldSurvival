@@ -7,12 +7,14 @@ using UnityEngine;
 public class MoneyPile :ObjectPile
 {
     [SerializeField, Tooltip("Maximum number of money objects allowed in the pile.")]
-    private int maxPile = 120;
+    private int maxPile = 80;
 
     [SerializeField, Range(1, 8), Tooltip("Multiplier for the collection rate based on the number of objects in the pile.")]
     private int collectMultiplier = 2;
 
-    private int hiddenMoney; // The number of money that are hidden when the pile is full.
+    [SerializeField, Tooltip("The value of each money object in the pile.")]
+    private int moneyValue = 1;
+
     private bool isCollectingMoney; // Flag to indicate if the collection process is ongoing.
     private int collectRate => objects.Count > 8 ? collectMultiplier : 1; // Collection rate based on current pile size.
 
@@ -25,15 +27,14 @@ public class MoneyPile :ObjectPile
     {
         base.Update();
         // もしグローバルな金収集がアクティブなら、積んでいる金をすべてプレイヤーの所持金に加算する。
-        if (GameManager.Instance.GlobalData.IsMoneyCollectionActive && (objects.Count > 0 || hiddenMoney > 0))
+        if (GameManager.Instance.GlobalData.IsMoneyCollectionActive && objects.Count > 0)
         {
-            int totalMoney = objects.Count + hiddenMoney;
+            int totalMoney = objects.Count * moneyValue;
             // スタック内のすべての金オブジェクトを返却し、隠し金もクリア
             while (objects.Count > 0)
             {
                 PoolManager.Instance.ReturnObject(objects.Pop());
             }
-            hiddenMoney = 0;
             GameManager.Instance.AdjustMoney(totalMoney);
         }
     }
@@ -65,21 +66,18 @@ public class MoneyPile :ObjectPile
     }
 
     /// <summary>
-    /// コルーチン。金のオブジェクトを順次収集して、プレイヤーの所持金を増加させる。
+    /// コルーチン。金のオブジェクトを3個ずつ収集して、プレイヤーの所持金を増加させる。
     /// グローバル収集がアクティブでない場合にのみ、オブジェクト単位での収集処理を実施する。
     /// </summary>
     IEnumerator CollectMoney()
     {
         isCollectingMoney = true;
 
-        // まずは隠し金を加算
-        GameManager.Instance.AdjustMoney(hiddenMoney);
-        hiddenMoney = 0;
-
         // オブジェクトが存在する限り収集処理を継続
         while (player != null && objects.Count > 0)
         {
-            for (int i = 0; i < collectRate; i++)
+            // 常に3個ずつ収集する
+            for (int i = 0; i < 4; i++)
             {
                 if (objects.Count == 0)
                 {
@@ -90,13 +88,10 @@ public class MoneyPile :ObjectPile
                 // オブジェクトを取り除き、直接所持金に加算
                 var removedMoney = objects.Pop(); // Remove the top money object from the pile.
                 PoolManager.Instance.ReturnObject(removedMoney);
-                GameManager.Instance.AdjustMoney(1);
+                GameManager.Instance.AdjustMoney(moneyValue);
             }
 
-            if (collectRate > 1)
-                yield return null;
-            else
-                yield return new WaitForSeconds(0.03f);
+            yield return null;
         }
 
         isCollectingMoney = false;
@@ -104,31 +99,45 @@ public class MoneyPile :ObjectPile
 
     /// <summary>
     /// 金を追加する際、グローバル収集がアクティブであれば即座に加算し、
-    /// そうでなければ従来通り処理（容量内なら直接加算、満杯なら hiddenMoney に蓄える）します。
-    /// また、金オブジェクトをスポーンさせずに、直接調整処理を行います。
+    /// そうでなければ従来通り処理（容量内なら直接加算、満杯なら追加しない）します。
+    /// 引数で金額を指定できます。
     /// </summary>
-    public void AddMoney()
+    /// <param name="amount">追加する金額（デフォルト: 1）</param>
+    public void AddMoney(int amount = 1)
     {
         if (GameManager.Instance.GlobalData.IsMoneyCollectionActive)
         {
             // 収集がアクティブなら、新たな金は即座に所持金に加算（スポーンしない）
-            GameManager.Instance.AdjustMoney(1);
+            GameManager.Instance.AdjustMoney(amount * moneyValue);
         }
         else
         {
-            if (objects.Count < maxPile)
+            // グローバル収集が無効の場合、指定された金額分のオブジェクトを追加
+            for (int i = 0; i < amount; i++)
             {
-                var moneyObj = PoolManager.Instance.SpawnObject("Money"); // Spawn a new money object.
-                AddObject(moneyObj);
-            }
-            else
-            {
-                // 既に最大数に達している場合は hiddenMoney に加算
-                hiddenMoney++;
+                if (objects.Count < maxPile)
+                {
+                    var moneyObj = PoolManager.Instance.SpawnObject("Money"); // Spawn a new money object.
+                    AddObject(moneyObj);
+                }
+                else
+                {
+                    // maxPileに達したらループを抜ける
+                    break;
+                }
             }
         }
 
         if (!isCollectingMoney && player != null)
             StartCoroutine(CollectMoney());
+    }
+
+    /// <summary>
+    /// お金の価値を設定します。
+    /// </summary>
+    /// <param name="value">設定する価値</param>
+    public void SetMoneyValue(int value)
+    {
+        moneyValue = value;
     }
 }
