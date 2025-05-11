@@ -4203,7 +4203,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseSellPrice
-      value: 50
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
@@ -5590,6 +5590,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6352777111268230987, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7293495236477140808, guid: 10fc1c0dbaf3b9049b63ec75aab5966a, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -6086,7 +6090,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseSellPrice
-      value: 20
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent

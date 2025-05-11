@@ -946,7 +946,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseSellPrice
-      value: 30
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
@@ -954,12 +954,16 @@ PrefabInstance:
       objectReference: {fileID: 526539865}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
-      value: 800
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: orderInfoSprite
       value: 
       objectReference: {fileID: 21300000, guid: b03809224f4bb604a943d7d4eb259667, type: 3}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: unlockGrowthFactor
+      value: 1.05
+      objectReference: {fileID: 0}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
       value: MaterialObjectParent_2
@@ -6608,7 +6612,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseSellPrice
-      value: 15
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
@@ -6616,12 +6620,16 @@ PrefabInstance:
       objectReference: {fileID: 150499932}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: baseUnlockPrice
-      value: 400
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: orderInfoSprite
       value: 
       objectReference: {fileID: 21300000, guid: 1449f76c052ce2249892690743dd85b7, type: 3}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: unlockGrowthFactor
+      value: 1.05
+      objectReference: {fileID: 0}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
       value: MaterialObjectParent_1
@@ -8275,6 +8283,10 @@ PrefabInstance:
       value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: baseSellPrice
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: materialParent
       value: 
       objectReference: {fileID: 1641277939}
@@ -8282,6 +8294,10 @@ PrefabInstance:
       propertyPath: orderInfoSprite
       value: 
       objectReference: {fileID: 21300000, guid: e0eac6b76fdd842e88a7f8c75ecffaf4, type: 3}
+    - target: {fileID: 689631424050500434, guid: 51b34882182eae04697c651f2b505214, type: 3}
+      propertyPath: unlockGrowthFactor
+      value: 1.05
+      objectReference: {fileID: 0}
     - target: {fileID: 5776678964066411515, guid: 51b34882182eae04697c651f2b505214, type: 3}
       propertyPath: m_Name
       value: MaterialObjectParent

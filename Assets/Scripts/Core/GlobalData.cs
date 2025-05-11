@@ -18,13 +18,9 @@ public class GlobalData
     public bool IsMoneyCollectionActive => MoneyCollectionRemainingSeconds > 0f;
     public float SpeedUpRate()
     {
-        if (StageId >= 6)
-        {
-            return 1.2f;
-        }
         if (StageId >= 3)
         {
-            return 1.1f;
+            return 1.25f;
         }
         return 1.0f;
     }
@@ -44,11 +40,7 @@ public class GlobalData
 
     public float EarnedUpRate()
     {
-        if (StageId >= 8)
-        {
-            return 1.5f;
-        }
-        if (StageId >= 7)
+        if (StageId >= 6)
         {
             return 1.3f;
         }

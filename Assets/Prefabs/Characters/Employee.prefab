@@ -532,7 +532,7 @@ MonoBehaviour:
   baseSpeed: 2.5
   baseCapacity: 3
   capacity: 3
-  stackType: 0
+  MaterialType: 0
 --- !u!143 &-1656015386102720917
 CharacterController:
   m_ObjectHideFlags: 0
@@ -553,7 +553,7 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.3
+  m_Radius: 0.06
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.05
@@ -844,7 +844,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rateRange: {x: 0.8, y: 0.4}
   bendFactor: 0.1
-  tray: {fileID: 2463928885662212482}
 --- !u!1 &6061238882610096077
 GameObject:
   m_ObjectHideFlags: 0
