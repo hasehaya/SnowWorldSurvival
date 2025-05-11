@@ -6,6 +6,7 @@ using UnityEngine;
 public class CounterTable :Workstation
 {
     public CustomerController CustomerPrefab;
+    private Sprite orderIconSprite;
 
     private float baseInterval = 1.4f;
     private int sellPrice = 5;
@@ -68,6 +69,11 @@ public class CounterTable :Workstation
         sellPrice = price;
     }
 
+    public void SetOrderIconSprite(Sprite sprite)
+    {
+        orderIconSprite = sprite;
+    }
+
     /// <summary>
     /// Spawns a new customer at the spawn point if conditions allow.
     /// </summary>
@@ -81,6 +87,13 @@ public class CounterTable :Workstation
 
             // 顧客生成
             var newCustomer = Instantiate(CustomerPrefab, spawnPoint.position, spawnPoint.rotation);
+            
+            // カウンターテーブルに設定されたスプライトを顧客に設定
+            if (orderIconSprite != null)
+            {
+                newCustomer.SetOrderIconSprite(orderIconSprite);
+            }
+            
             newCustomer.ExitPoint = despawnPoint.position;
             customers.Enqueue(newCustomer);
 

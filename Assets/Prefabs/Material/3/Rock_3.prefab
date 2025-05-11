@@ -70,13 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Row: 0
   Column: 0
-  materialHealth: 2
-  resourceCount: 1
-  decreaseInterval: 0.45
   model: {fileID: 690093997576898484}
   materialObject: {fileID: 3422527401986349637, guid: 176c859a25fec89479040f47af12b946, type: 3}
-  regrowDelay: 12
-  growthDuration: 0.5
   materialType: 32
 --- !u!1 &6912978779625550378
 GameObject:
@@ -120,6 +115,46 @@ PrefabInstance:
     - target: {fileID: 1011319553682498, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
       propertyPath: m_Name
       value: Crystalsv01
+      objectReference: {fileID: 0}
+    - target: {fileID: 1011319553682498, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1074589251595736, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1139699565840664, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1139699565840664, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1206956574956022, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1559443152123992, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1674067898781560, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1681447167730702, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913812097790348, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1981982458890796, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4237741520885958, guid: 8ad137f6808375f4e885d60451f0c4fc, type: 3}
       propertyPath: m_LocalScale.x

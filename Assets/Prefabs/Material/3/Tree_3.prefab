@@ -70,13 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Row: 0
   Column: 0
-  materialHealth: 2
-  resourceCount: 1
-  decreaseInterval: 0.45
   model: {fileID: 2471243719934314439}
   materialObject: {fileID: 3422527401986349637, guid: ccb6786c588da9b43b7046aba69012a3, type: 3}
-  regrowDelay: 12
-  growthDuration: 0.5
   materialType: 31
 --- !u!1 &2471243719934314439
 GameObject:
@@ -89,7 +84,6 @@ GameObject:
   - component: {fileID: 3344879654514146321}
   - component: {fileID: 7951705959931404628}
   - component: {fileID: 2017087054293896}
-  - component: {fileID: 8481502602286668974}
   m_Layer: 0
   m_Name: Tree1
   m_TagString: Untagged
@@ -162,28 +156,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &8481502602286668974
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2471243719934314439}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3142649664740890969, guid: 4ea280423cccdfc41b0c21250ca8edee, type: 3}
 --- !u!1 &6912978779625550378
 GameObject:
   m_ObjectHideFlags: 0

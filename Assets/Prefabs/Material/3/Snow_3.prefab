@@ -70,14 +70,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Row: 0
   Column: 0
-  materialHealth: 2
-  resourceCount: 1
-  decreaseInterval: 0.45
   model: {fileID: 5937824117486178545}
   materialObject: {fileID: 3422527401986349637, guid: 383bd1d62638b924485ff1c4e3e86aaf, type: 3}
-  regrowDelay: 12
-  growthDuration: 0.5
-  materialType: 3
+  materialType: 33
 --- !u!1 &5937824117486178545
 GameObject:
   m_ObjectHideFlags: 0

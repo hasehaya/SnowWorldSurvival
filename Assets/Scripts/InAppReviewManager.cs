@@ -30,8 +30,8 @@ public static class InAppReviewManager
         }
 #else
         Debug.Log("RequestReview Not supported.");
+        yield break;
 #endif
-
     }
 
 }

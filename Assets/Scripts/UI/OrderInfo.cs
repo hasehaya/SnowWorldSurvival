@@ -39,6 +39,15 @@ public class OrderInfo :MonoBehaviour
         amountText.text = amount.ToString();
     }
 
+    public void ShowInfo(Transform displayer, int amount, Sprite icon)
+    {
+        ShowInfo(displayer, amount);
+        if (icon != null)
+        {
+            IconImage.sprite = icon;
+        }
+    }
+
     public void HideInfo()
     {
         gameObject.SetActive(false); // Disable the order info UI element

@@ -70,13 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Row: 1
   Column: 1
-  materialHealth: 2
-  resourceCount: 1
-  decreaseInterval: 0.45
   model: {fileID: 2048196306474399528}
   materialObject: {fileID: 3422527401986349637, guid: b75efbb8f0da02846941b1507c45a546, type: 3}
-  regrowDelay: 12
-  growthDuration: 0.5
   materialType: 53
 --- !u!1 &6912978779625550378
 GameObject:
@@ -121,8 +116,44 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crystalsv07
       objectReference: {fileID: 0}
+    - target: {fileID: 1288543304402976, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1321530897225034, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1351909297934818, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1369153397094552, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1419663843199650, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1568754634887232, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1665884905642766, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1747118710182212, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1747118710182212, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1853467687749980, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}
+      propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4081972669198088, guid: 67c6e02e204ef6244a8f475a94826851, type: 3}

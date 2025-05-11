@@ -44,7 +44,7 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0",
-    "com.google.external-dependency-manager": "file:../GooglePackages/com.google.external-dependency-manager-1.2.172.tgz",
+    "com.google.external-dependency-manager": "file:../GooglePackages/com.google.external-dependency-manager-1.2.185.tgz",
     "com.google.android.appbundle": "file:../GooglePackages/com.google.android.appbundle-1.9.0.tgz",
     "com.google.play.common": "file:../GooglePackages/com.google.play.common-1.9.2.tgz",
     "com.google.play.core": "file:../GooglePackages/com.google.play.core-1.8.5.tgz",

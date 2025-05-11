@@ -14,7 +14,7 @@ public class GameManager :MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     private int baseUpgradePrice = 200;
-    private float upgradeGrowthFactor = 1.2f;
+    private float upgradeGrowthFactor = 1.25f;
 
     [SerializeField]
     private Canvas canvas;
@@ -293,7 +293,7 @@ public class GameManager :MonoBehaviour
         // そのステージの最初のマテリアル（Wood）の値を取得
         int baseMaterialValue = stageNumber * 10 + 1; // Wood_Xの値
         
-        float typePrice = levelPrice * MathF.Pow(1.5f, (int)materialType - baseMaterialValue);
+        float typePrice = levelPrice * MathF.Pow(2.2f, (int)materialType - baseMaterialValue);
         return Mathf.RoundToInt(Mathf.Round(typePrice) / 20f) * 20;
     }
 

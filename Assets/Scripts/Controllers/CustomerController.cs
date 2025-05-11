@@ -10,7 +10,9 @@ public class CustomerController :MonoBehaviour
 {
     // どのキューに並ぶかを示すプロパティ（CounterTable から設定されます）
     public int QueueIndex { get; set; }
+    [SerializeField]
     public OrderInfo OrderInfo;
+    private OrderInfo orderInfoInstance;
 
     [SerializeField, Tooltip("Max number of orders a customer can place")]
     private int maxOrder = 5;
@@ -35,6 +37,9 @@ public class CustomerController :MonoBehaviour
 
     // 生成した OrderInfo インスタンスを保持する変数
     private OrderInfo currentOrderInfo;
+
+    // アイコン用のスプライト
+    private Sprite orderIconSprite;
 
     void Awake()
     {
@@ -95,9 +100,13 @@ public class CustomerController :MonoBehaviour
         OrderCount = Random.Range(1, maxOrder + 1);
         HasOrder = true;
 
-        // OrderInfo プレハブを生成し表示
-        currentOrderInfo = Instantiate(OrderInfo, GameManager.Instance.Canvas.transform);
-        currentOrderInfo.ShowInfo(transform, OrderCount);
+        // GetOrderInfoを使用して共有インスタンスを取得する
+        currentOrderInfo = GetOrderInfo();
+        if (currentOrderInfo.transform.parent == null)
+        {
+            currentOrderInfo.transform.SetParent(GameManager.Instance.Canvas.transform, false);
+        }
+        currentOrderInfo.ShowInfo(transform, OrderCount, orderIconSprite);
     }
 
     /// <summary>
@@ -113,7 +122,7 @@ public class CustomerController :MonoBehaviour
         // 既に生成している OrderInfo インスタンスを更新
         if (currentOrderInfo != null)
         {
-            currentOrderInfo.ShowInfo(transform, OrderCount);
+            currentOrderInfo.ShowInfo(transform, OrderCount, orderIconSprite);
         }
 
         if (OrderCount <= 0)
@@ -192,5 +201,25 @@ public class CustomerController :MonoBehaviour
                 }
             }
         }
+
+        // Order Info インスタンスも破棄
+        if (orderInfoInstance != null)
+        {
+            Destroy(orderInfoInstance.gameObject);
+        }
+    }
+
+    public OrderInfo GetOrderInfo()
+    {
+        if (orderInfoInstance == null)
+        {
+            orderInfoInstance = Instantiate(OrderInfo);
+        }
+        return orderInfoInstance;
+    }
+
+    public void SetOrderIconSprite(Sprite sprite)
+    {
+        orderIconSprite = sprite;
     }
 }

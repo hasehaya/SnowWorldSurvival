@@ -22,9 +22,9 @@ public class MaterialObjectParent :MonoBehaviour
 
     private void Awake()
     {
-        counterTable1.CustomerPrefab.OrderInfo.IconImage.sprite = orderInfoSprite;
-        counterTable2.CustomerPrefab.OrderInfo.IconImage.sprite = orderInfoSprite;
-        counterTable3.CustomerPrefab.OrderInfo.IconImage.sprite = orderInfoSprite;
+        counterTable1.SetOrderIconSprite(orderInfoSprite);
+        counterTable2.SetOrderIconSprite(orderInfoSprite);
+        counterTable3.SetOrderIconSprite(orderInfoSprite);
 
         counterTable1.SetSellPrice(baseSellPrice);
         counterTable2.SetSellPrice(baseSellPrice);

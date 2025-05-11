@@ -70,13 +70,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Row: 0
   Column: 0
-  materialHealth: 2
-  resourceCount: 1
-  decreaseInterval: 0.45
   model: {fileID: 8429778511681150842}
   materialObject: {fileID: 3422527401986349637, guid: 787d13a45b5cc094fa2b19d83876b4c5, type: 3}
-  regrowDelay: 12
-  growthDuration: 0.5
   materialType: 23
 --- !u!1 &6912978779625550378
 GameObject:
@@ -117,9 +112,45 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5503397796959661111}
     m_Modifications:
+    - target: {fileID: 1007422882885504, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1140380907173848, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1294500603521610, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
       propertyPath: m_Name
       value: Crystalsv10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1294500603521610, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315384930428862, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1447430095071684, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1602793075863126, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1634221500238398, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1859127031600784, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1931679348636892, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4534106693493108, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
       propertyPath: m_LocalScale.x
@@ -176,6 +207,10 @@ PrefabInstance:
     - target: {fileID: 4534106693493108, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108006731216870216, guid: 227f9257bcc7175478a7f935e3bfc552, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
