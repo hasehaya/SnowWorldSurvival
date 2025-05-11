@@ -39,9 +39,9 @@ public class AdMobInterstitial :MonoBehaviour
         // https://marumaro7.hatenablog.com/entry/platformsyoriwakeru
 
 #if UNITY_ANDROID
-        adUnitId = "ca-app-pub-3940256099942544/1033173712";//ここにAndroidのインタースティシャル広告IDを入力          
+        adUnitId = "ca-app-pub-2788807416533951/8187737891";//ここにAndroidのインタースティシャル広告IDを入力          
 #elif UNITY_IPHONE
-        adUnitId = "ca-app-pub-3940256099942544/4411468910";//ここにiOSのインタースティシャル広告IDを入力
+        adUnitId = "ca-app-pub-2788807416533951/9304544299";//ここにiOSのインタースティシャル広告IDを入力
 #else
         adUnitId = "unexpected_platform";
 #endif
