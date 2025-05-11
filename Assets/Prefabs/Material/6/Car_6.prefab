@@ -69,14 +69,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Row: 1
   Column: 1
-  materialHealth: 2
-  resourceCount: 1
-  decreaseInterval: 0.45
   model: {fileID: 2997080252651563916}
   materialObject: {fileID: 7706655448289153230, guid: 9d88e56249cd24540b13dbb0e987bf16, type: 3}
-  regrowDelay: 12
-  growthDuration: 0.5
-  materialType: 55
+  materialType: 64
 --- !u!1001 &6266119705928850815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -103,7 +98,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8370413369695726665, guid: 52cbfbb167b6f444da5080650ba66bfd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.472
       objectReference: {fileID: 0}
     - target: {fileID: 8370413369695726665, guid: 52cbfbb167b6f444da5080650ba66bfd, type: 3}
       propertyPath: m_LocalPosition.z

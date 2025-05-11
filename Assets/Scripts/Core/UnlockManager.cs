@@ -258,35 +258,8 @@ public class UnlockManager :MonoBehaviour
         // 現在のステージ番号を取得
         int currentStageNumber = int.Parse(new string(restaurantID.Where(char.IsDigit).ToArray()));
         
-        // 現在のステージのマテリアルタイプの順序を設定
-        MaterialType[] order;
-        switch (currentStageNumber)
-        {
-            case 1:
-                order = new MaterialType[] { MaterialType.Wood_1, MaterialType.Rock_1 };
-                break;
-            case 2:
-                order = new MaterialType[] { MaterialType.Wood_2, MaterialType.Flower_2, MaterialType.Rock_2 };
-                break;
-            case 3:
-                order = new MaterialType[] { MaterialType.Wood_3, MaterialType.Rock_3, MaterialType.Snow_3, MaterialType.Tomato_3 };
-                break;
-            case 4:
-                order = new MaterialType[] { MaterialType.Wood_4, MaterialType.Rock_4, MaterialType.Flower_4, MaterialType.Car_4, MaterialType.Pig_4 };
-                break;
-            case 5:
-                order = new MaterialType[] { MaterialType.Wood_5, MaterialType.Snow_5, MaterialType.Rock_5, MaterialType.Juice_5, MaterialType.Skeleton_5, MaterialType.Wood2_5 };
-                break;
-            case 6:
-                order = new MaterialType[] { MaterialType.Wood_6, MaterialType.Flower_6, MaterialType.MushRoom_6, MaterialType.Car_6, MaterialType.Rock_6, MaterialType.Wood2_6 };
-                break;
-            case 7:
-                order = new MaterialType[] { MaterialType.Wood_7, MaterialType.Saboten_7, MaterialType.Pumpkin_7, MaterialType.Dumbbell_7, MaterialType.Flower_7, MaterialType.Wood2_7 };
-                break;
-            default:
-                order = new MaterialType[] { };
-                break;
-        }
+        // 現在のステージのマテリアルタイプの順序を取得
+        MaterialType[] order = GetMaterialTypeOrder(currentStageNumber);
 
         // 2番目以降のグループについて、前のグループの進捗をチェック
         for (int i = 1; i < order.Length; i++)
@@ -365,16 +338,74 @@ public class UnlockManager :MonoBehaviour
             }
         }
 
-        // 次のグループの最初のUnlockable
-        var nextGroup = materialUnlockables.FirstOrDefault(g => !data.MaterialUnlocked.ContainsKey(g.materialType) || !data.MaterialUnlocked[g.materialType]);
-        if (nextGroup != null)
+        // 次のグループを見つける
+        MaterialType nextMaterialType = MaterialType.None;
+        
+        // 現在のステージ番号を取得
+        int currentStageNumber = int.Parse(new string(restaurantID.Where(char.IsDigit).ToArray()));
+        
+        // 現在のステージのマテリアルタイプの順序を取得
+        MaterialType[] order = GetMaterialTypeOrder(currentStageNumber);
+        
+        // unlockedMaterialの次のMaterialTypeを見つける
+        int unlockedIndex = -1;
+        for (int i = 0; i < order.Length; i++)
         {
-            focusPoints.Add(nextGroup.unlockables[0].GetBuyingPoint());
+            if (order[i] == unlockedMaterial)
+            {
+                unlockedIndex = i;
+                break;
+            }
+        }
+        
+        // 次のマテリアルタイプが存在し、かつ解放済みの場合
+        if (unlockedIndex >= 0 && unlockedIndex + 1 < order.Length)
+        {
+            nextMaterialType = order[unlockedIndex + 1];
+            // この次のマテリアルが解放済みか確認
+            if (data.MaterialUnlocked.ContainsKey(nextMaterialType) && data.MaterialUnlocked[nextMaterialType])
+            {
+                var nextGroup = materialUnlockables.FirstOrDefault(g => g.materialType == nextMaterialType);
+                if (nextGroup != null && nextGroup.unlockables.Count > 0)
+                {
+                    int nextCount = data.UnlockCounts.ContainsKey(nextMaterialType) ? data.UnlockCounts[nextMaterialType] : 0;
+                    if (nextCount < nextGroup.unlockables.Count)
+                    {
+                        focusPoints.Add(nextGroup.unlockables[nextCount].GetBuyingPoint());
+                    }
+                }
+            }
         }
 
         if (focusPoints.Count > 0)
         {
             cameraController.FocusOnPointsAndReturn(focusPoints);
+        }
+    }
+    
+    /// <summary>
+    /// 現在のステージのマテリアルタイプの順序を取得
+    /// </summary>
+    private MaterialType[] GetMaterialTypeOrder(int stageNumber)
+    {
+        switch (stageNumber)
+        {
+            case 1:
+                return new MaterialType[] { MaterialType.Wood_1, MaterialType.Rock_1 };
+            case 2:
+                return new MaterialType[] { MaterialType.Wood_2, MaterialType.Flower_2, MaterialType.Rock_2 };
+            case 3:
+                return new MaterialType[] { MaterialType.Wood_3, MaterialType.Rock_3, MaterialType.Snow_3, MaterialType.Tomato_3 };
+            case 4:
+                return new MaterialType[] { MaterialType.Wood_4, MaterialType.Rock_4, MaterialType.Flower_4, MaterialType.Car_4, MaterialType.Pig_4 };
+            case 5:
+                return new MaterialType[] { MaterialType.Wood_5, MaterialType.Snow_5, MaterialType.Rock_5, MaterialType.Juice_5, MaterialType.Skeleton_5, MaterialType.Wood2_5 };
+            case 6:
+                return new MaterialType[] { MaterialType.Wood_6, MaterialType.Flower_6, MaterialType.MushRoom_6, MaterialType.Car_6, MaterialType.Rock_6, MaterialType.Wood2_6 };
+            case 7:
+                return new MaterialType[] { MaterialType.Wood_7, MaterialType.Saboten_7, MaterialType.Pumpkin_7, MaterialType.Dumbbell_7, MaterialType.Flower_7, MaterialType.Wood2_7 };
+            default:
+                return new MaterialType[] { };
         }
     }
 }

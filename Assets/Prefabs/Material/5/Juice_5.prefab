@@ -67,16 +67,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32f299f09d7fa24da5746f17b90c503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Row: 0
-  Column: 0
-  materialHealth: 2
-  resourceCount: 1
-  decreaseInterval: 0.45
+  Row: 1
+  Column: 1
   model: {fileID: 4628864573118063046}
   materialObject: {fileID: 5233414496755891495, guid: c2004775e0ce89f48af3e88e6f9555a4, type: 3}
-  regrowDelay: 12
-  growthDuration: 0.5
-  materialType: 4
+  materialType: 54
 --- !u!1001 &4983237193097711400
 PrefabInstance:
   m_ObjectHideFlags: 0
