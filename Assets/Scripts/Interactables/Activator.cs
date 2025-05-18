@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class Activator : Interactable
 {
@@ -33,6 +35,27 @@ public class Activator : Interactable
         foreach (var upgradeHandler in upgradeHandlerList)
         {
             upgradeHandler.SetMaterialType(MaterialType);
+        }
+
+        // ステージ1かつWood_1の場合、EmployeeAmountアップグレードが0なら1にする
+        string currentSceneName = SceneManager.GetActiveScene().name;
+        int currentStageNumber = int.Parse(new string(currentSceneName.Where(char.IsDigit).ToArray()));
+        
+        if (currentStageNumber == 1 && MaterialType == MaterialType.Wood_1)
+        {
+            StageData stageData = SaveSystem.LoadData<StageData>(currentSceneName);
+            if (stageData != null)
+            {
+                Upgrade employeeAmountUpgrade = stageData.FindUpgrade(Upgrade.UpgradeType.EmployeeAmount, MaterialType.Wood_1);
+                if (employeeAmountUpgrade != null && employeeAmountUpgrade.Level == 0)
+                {
+                    // GameManagerの新しいメソッドを使用して自動アップグレード
+                    if (GameManager.Instance != null)
+                    {
+                        GameManager.Instance.AutoUpgradeEmployeeAmount(MaterialType.Wood_1);
+                    }
+                }
+            }
         }
     }
 

@@ -87,6 +87,7 @@ public class AdManager : MonoBehaviour
                 break;
             case RewardType.Upgrade:
                 // Upgrade報酬はGameManagerで処理されるため何もしない
+                // ここではUIの更新は行わない、GameManagerのOnUpgradeイベントが発火するため
                 break;
             default:
                 Debug.LogWarning($"未実装の報酬タイプ: {type}");

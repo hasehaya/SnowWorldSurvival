@@ -112,7 +112,7 @@ public class GameManager :MonoBehaviour
         DOTween.KillAll();
     }
 
-    void SpawnEmployee()
+    public void SpawnEmployee()
     {
         // シーン内の MaterialParent コンポーネントを全取得
         var materialManagerList = FindObjectsOfType<MaterialParent>(true);
@@ -278,6 +278,9 @@ public class GameManager :MonoBehaviour
 
         SaveSystem.SaveData<StageData>(stageData, stageID);
         OnUpgrade?.Invoke();
+        
+        // アップグレード効果音を再生
+        AudioManager.Instance.PlaySFX(AudioID.Magical);
     }
 
     /// <summary>
@@ -414,6 +417,19 @@ public class GameManager :MonoBehaviour
     void OnDisable()
     {
         DOTween.KillAll();
+    }
+
+    /// <summary>
+    /// EmployeeAmountの自動アップグレードを実施する
+    /// </summary>
+    public void AutoUpgradeEmployeeAmount(MaterialType materialType)
+    {
+        // アップグレードの実施
+        stageData.UpgradeUpgrade(Upgrade.UpgradeType.EmployeeAmount, materialType);
+        SpawnEmployee();
+        
+        SaveSystem.SaveData<StageData>(stageData, stageID);
+        OnUpgrade?.Invoke();
     }
 }
 

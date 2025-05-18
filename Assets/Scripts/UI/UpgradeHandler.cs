@@ -42,13 +42,15 @@ public class UpgradeHandler :MonoBehaviour
         GameManager.Instance.OnUpgrade += UpdateHandler;
     }
 
-    void OnEnable()
+    void OnDestroy()
     {
-        // Updates the upgrade handler's state when enabled.
-        UpdateHandler();
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnUpgrade -= UpdateHandler;
+        }
     }
 
-    void UpdateHandler()
+    public void UpdateHandler()
     {
         SetMaterialType(materialType);
     }

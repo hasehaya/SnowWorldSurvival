@@ -28,7 +28,7 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
     private IExtensionProvider extensionProvider;
     [SerializeField] private TMP_Text priceText;
 
-    static string nonConsumableProductId = "SnowWorldSurvival_AdBlock";
+    static string nonConsumableProductId = "snowworldsurvival_adblock";
 
     void Start()
     {
