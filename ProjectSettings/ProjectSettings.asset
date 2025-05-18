@@ -162,7 +162,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.cryingsnow.fastfoodrush
+    Android: com.RunconaGames.SnowWorldSurvival
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -288,14 +288,16 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: c846ae35b7385c842a84de334f73c133, type: 3}
+      m_Icon: {fileID: 2800000, guid: 5f79f9f87bcc2b446880bf75fa6d4111, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
   m_BuildTargetPlatformIcons:
   - m_BuildTarget: Android
     m_Icons:
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: 5f79f9f87bcc2b446880bf75fa6d4111, type: 3}
+      - {fileID: 2800000, guid: 5f79f9f87bcc2b446880bf75fa6d4111, type: 3}
       m_Width: 432
       m_Height: 432
       m_Kind: 2
@@ -325,7 +327,8 @@ PlayerSettings:
       m_Height: 81
       m_Kind: 2
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: 5f79f9f87bcc2b446880bf75fa6d4111, type: 3}
       m_Width: 192
       m_Height: 192
       m_Kind: 1
@@ -355,7 +358,8 @@ PlayerSettings:
       m_Height: 36
       m_Kind: 1
       m_SubKind: 
-    - m_Textures: []
+    - m_Textures:
+      - {fileID: 2800000, guid: 5f79f9f87bcc2b446880bf75fa6d4111, type: 3}
       m_Width: 192
       m_Height: 192
       m_Kind: 0

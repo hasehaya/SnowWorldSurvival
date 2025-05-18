@@ -3,6 +3,7 @@
 using UnityEngine;
 using UnityEngine.Purchasing;
 using UnityEngine.Purchasing.Extension;
+using TMPro;
 
 public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
 {
@@ -25,13 +26,40 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
     }
     private IStoreController storeController;
     private IExtensionProvider extensionProvider;
+    [SerializeField] private TMP_Text priceText;
 
-    public string nonConsumableProductId = "com.example.myapp.nonconsumable";
+    static string nonConsumableProductId = "SnowWorldSurvival_AdBlock";
 
     void Start()
     {
         InitializePurchasing();
     }
+
+    public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
+    {
+        Debug.Log("IAPの初期化に成功しました。");
+        storeController = controller;
+        extensionProvider = extensions;
+
+        // 対象商品の Product を取得
+        Product product = storeController.products.WithID(nonConsumableProductId);
+        if (product != null && product.hasReceipt)
+        {
+            // metadata から表示用価格を取得
+            string localizedPriceText = product.metadata.localizedPriceString;    // 例: "¥980" / "$6.99" / "€6,99"
+            string currencyCode = product.metadata.isoCurrencyCode;         // 例: "JPY" / "USD" / "EUR"
+
+            // 取得した文字列を UI にセット
+            priceText.text = localizedPriceText + " (" + currencyCode + ")";
+            Debug.Log($"表示価格: {localizedPriceText} ({currencyCode})");
+        }
+
+        // Androidの場合は初期化完了時に自動的に購入状態をチェック
+#if UNITY_ANDROID
+        AutoRestoreForAndroid();
+#endif
+    }
+
 
     public void InitializePurchasing()
     {
@@ -127,18 +155,6 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
     }
 
     // IDetailedStoreListener の実装
-
-    public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
-    {
-        Debug.Log("IAPの初期化に成功しました。");
-        storeController = controller;
-        extensionProvider = extensions;
-
-        // Androidの場合は初期化完了時に自動的に購入状態をチェック
-#if UNITY_ANDROID
-        AutoRestoreForAndroid();
-#endif
-    }
 
     public void OnInitializeFailed(InitializationFailureReason error)
     {

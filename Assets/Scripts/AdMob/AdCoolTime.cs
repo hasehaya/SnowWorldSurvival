@@ -22,7 +22,7 @@ public class AdCoolTime :MonoBehaviour
             var coolTime = AdManager.Instance.CoolTime;
             bool isActive = coolTime <= 0;
             btn.interactable = isActive;
-            btnText.text = isActive ? "無料" : $"{coolTime}";
+            btnText.text = isActive ? "無料" : $"{coolTime:F1}";
             yield return new WaitForSeconds(1f);
         }
     }

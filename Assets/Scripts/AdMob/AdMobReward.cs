@@ -43,6 +43,11 @@ public class AdMobReward :MonoBehaviour
     // 広告IDと報酬タイプ
     private string adUnitId;
     private RewardType rewardType;
+    
+    /// <summary>
+    /// 広告がロード済みかどうかを確認するプロパティ
+    /// </summary>
+    public bool IsAdLoaded => rewardedAd != null && rewardedAd.CanShowAd();
 
     private void Start()
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -30,6 +31,10 @@ public class AdObjectManager :MonoBehaviour
 
     // 効果の持続時間（例：180秒＝3分）
     private const float TreeMinutesDuration = 180f;
+    
+    // AdObjectのリポップのクールタイム（1分間）
+    private const float RepopCooldownTime = 60f;
+    private bool isRepopCooldown = false;
 
     // 利用可能な RewardType を管理するリスト
     private List<RewardType> availableRewardTypes = new List<RewardType>();
@@ -107,8 +112,8 @@ public class AdObjectManager :MonoBehaviour
         {
             availableRewardTypes.Remove(rewardType);
             
-            // AdObjectを再配置
-            RepopAdObject();
+            // AdObjectを再配置（クールダウン付き）
+            StartCoroutine(RepopWithCooldown());
         }
     }
 
@@ -146,13 +151,34 @@ public class AdObjectManager :MonoBehaviour
         activeAdPositions.Remove(adObj);
         Destroy(adObj.gameObject);
 
-        // AdObject表示後、新しいオブジェクトを生成
-        RepopAdObject();
+        // AdObject表示後、クールダウン付きで新しいオブジェクトを生成
+        StartCoroutine(RepopWithCooldown());
+    }
+    
+    /// <summary>
+    /// クールダウン付きでAdObjectを再生成するコルーチン
+    /// </summary>
+    private IEnumerator RepopWithCooldown()
+    {
+        if (!isRepopCooldown)
+        {
+            isRepopCooldown = true;
+            yield return new WaitForSeconds(RepopCooldownTime);
+            isRepopCooldown = false;
+            RepopAdObject();
+        }
     }
 
     // すべての利用可能なポジションに対してAdObjectを再生成
     private void RepopAllAdObjects()
     {
+        // AdBlockされておらず、かつ広告がロードされていない場合は生成しない
+        if (GameManager.Instance != null && !GameManager.Instance.IsAdBlocked() && 
+            AdMobReward.Instance != null && !AdMobReward.Instance.IsAdLoaded)
+        {
+            return;
+        }
+        
         // 既存のオブジェクトをクリア
         foreach (var adObj in activeAdObjects)
         {
@@ -215,6 +241,19 @@ public class AdObjectManager :MonoBehaviour
 
     private void RepopAdObject()
     {
+        // AdBlockされておらず、かつ広告がロードされていない場合は生成しない
+        if (GameManager.Instance != null && !GameManager.Instance.IsAdBlocked() && 
+            AdMobReward.Instance != null && !AdMobReward.Instance.IsAdLoaded)
+        {
+            return;
+        }
+        
+        // クールダウン中は生成しない
+        if (isRepopCooldown)
+        {
+            return;
+        }
+        
         // 現在の最大AdObject数を計算
         int currentMaxAdObjects = CalculateMaxAdObjects();
         

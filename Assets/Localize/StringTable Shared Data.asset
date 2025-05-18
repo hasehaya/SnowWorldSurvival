@@ -15,10 +15,6 @@ MonoBehaviour:
   m_TableCollectionName: StringTable
   m_TableCollectionNameGuidString: 62913652b763fbd4f95fd3ad0a0039ff
   m_Entries:
-  - m_Id: 138525401088
-    m_Key: "\u4FA1\u683C"
-    m_Metadata:
-      m_Items: []
   - m_Id: 175551339945984
     m_Key: "\u7121\u6599"
     m_Metadata:

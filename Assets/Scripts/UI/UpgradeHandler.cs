@@ -71,6 +71,9 @@ public class UpgradeHandler :MonoBehaviour
 
             bool hasEnoughMoney = GameManager.Instance.GetMoney() >= price;
             
+            // AdMobRewardが読み込まれていない場合は広告ボタンを無効化
+            bool isAdLoaded = AdMobReward.Instance != null && AdMobReward.Instance.IsAdLoaded;
+            
             // EmployeeAmountのレベルをチェック
             int employeeAmountLevel = GameManager.Instance.GetUpgradeLevel(Upgrade.UpgradeType.EmployeeAmount, this.materialType);
             
@@ -84,7 +87,7 @@ public class UpgradeHandler :MonoBehaviour
             else
             {
                 upgradeButton.interactable = hasEnoughMoney;
-                adButton.interactable = true;
+                adButton.interactable = isAdLoaded; // 広告が読み込まれているかどうかに基づいて設定
                 adButton.gameObject.SetActive(true);
             }
         }
