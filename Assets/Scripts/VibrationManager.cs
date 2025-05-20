@@ -90,10 +90,6 @@ public static class VibrationManager
 #elif UNITY_ANDROID && !UNITY_EDITOR
         // Androidの場合: 20msほどの短い振動
         VibrateOneShot(20, -1);
-
-#else
-        // その他(エディタ含む)の場合はフォールバック
-        Handheld.Vibrate();
 #endif
     }
 
@@ -112,9 +108,6 @@ public static class VibrationManager
 
 #elif UNITY_ANDROID && !UNITY_EDITOR
         VibrateOneShot(100, -1);
-
-#else
-        Handheld.Vibrate();
 #endif
     }
 
@@ -132,8 +125,6 @@ public static class VibrationManager
         Handheld.Vibrate();
 #elif UNITY_ANDROID && !UNITY_EDITOR
         VibrateOneShot(milliseconds, -1);
-#else
-        Handheld.Vibrate();
 #endif
     }
 
@@ -180,9 +171,6 @@ public static class VibrationManager
         // 第2引数でリピートのインデックス指定(-1でリピートなし)
         Vibrator.Call("vibrate", pattern, -1);
     }
-#else
-        // エディタやその他プラットフォームではフォールバック
-        Handheld.Vibrate();
 #endif
     }
 
