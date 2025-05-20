@@ -385,12 +385,17 @@ public class GameManager :MonoBehaviour
             StartCoroutine(InAppReviewManager.RequestReview());
         }
         
+        // ステージセレクト画面ではAdを表示しない
+        AdMobBanner banner = FindObjectOfType<AdMobBanner>();
+        if (banner != null)
+        {
+            banner.BannerDestroy();
+        }
+        SaveSystem.SaveData(globalData, globalDataID);
+
         screenFader.FadeIn(() =>
         {
-            SaveSystem.SaveData(globalData, globalDataID);
             SceneManager.LoadScene("StageSelect");
-            // ステージセレクト画面ではAdを表示しない
-            AdMobReward.Instance.DestroyAd();
         });
     }
 

@@ -86,6 +86,16 @@ MonoBehaviour:
     m_Localized: Auto-Collect Money for 3 Minutes!
     m_Metadata:
       m_Items: []
+  - m_Id: 15625309009338368
+    m_Localized: English
+    m_Metadata:
+      m_Items: []
+  - m_Id: 15625221058977792
+    m_Localized: 'Double Speed for 3 Minutes!
+
+'
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []

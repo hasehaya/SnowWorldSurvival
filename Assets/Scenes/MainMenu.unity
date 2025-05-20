@@ -451,8 +451,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1673,8 +1673,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: -559625533, guid: 85703ee0d52ea0d479ea35a4259a0b41, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1782,16 +1782,33 @@ MonoBehaviour:
   SFXList:
   - id: 0
     clip: {fileID: 8300000, guid: 6b183fda7d2ecf44cb90d096fe85c0cb, type: 3}
+    isAnalyzed: 0
+    normalizedVolume: 1
   - id: 1
     clip: {fileID: 8300000, guid: 62504d63499854148ac75e435204cf00, type: 3}
+    isAnalyzed: 0
+    normalizedVolume: 1
   - id: 2
     clip: {fileID: 8300000, guid: fbddefc8a7bdb784caa99e8e993ec1c8, type: 3}
+    isAnalyzed: 0
+    normalizedVolume: 1
   - id: 3
     clip: {fileID: 8300000, guid: 260b94688093dfa4a83744305cf21796, type: 3}
+    isAnalyzed: 0
+    normalizedVolume: 1
   - id: 4
     clip: {fileID: 8300000, guid: 7333daddcc0583c4da7b1731088650a9, type: 3}
+    isAnalyzed: 0
+    normalizedVolume: 1
   - id: 5
     clip: {fileID: 8300000, guid: c6c46f49fca7c6a4f8835eb3ed9839d6, type: 3}
+    isAnalyzed: 0
+    normalizedVolume: 1
+  enableVolumeBalancing: 1
+  baseBGMVolume: 0.7
+  baseSFXVolume: 0.7
+  defaultBGMNormalizedVolume: 1
+  analyzeOnStart: 1
 --- !u!4 &1509247309
 Transform:
   m_ObjectHideFlags: 0
@@ -2561,7 +2578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7370489884791327792, guid: b71ce17ae3c208a4eb80eecc0298034c, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -68.350006
+      value: -68.35
       objectReference: {fileID: 0}
     - target: {fileID: 7370489884791327792, guid: b71ce17ae3c208a4eb80eecc0298034c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

@@ -1,6 +1,7 @@
 ﻿using TMPro;
 
 using UnityEngine;
+using DG.Tweening;
 
 
 public class ProgressDisplay :MonoBehaviour
@@ -14,6 +15,7 @@ public class ProgressDisplay :MonoBehaviour
     void Start()
     {
         nextStageText.SetActive(false);
+        nextStageText.transform.DOScale(1.1f, 1.2f).SetLoops(-1, LoopType.Yoyo);
         // Subscribes to the RestaurantManager's OnUnlock event when enabled.
         UnlockManager.Instance.OnUnlock += UpdateProgress;
     }

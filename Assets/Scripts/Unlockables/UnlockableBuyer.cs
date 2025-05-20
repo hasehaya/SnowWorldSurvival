@@ -10,13 +10,8 @@ using UnityEngine.UI;
 
 public class UnlockableBuyer :Interactable
 {
-    [SerializeField, Tooltip("The interval between each payment during the buying process.")]
     private float payingInterval = 0.03f;
-
-    [SerializeField, Tooltip("The total time it takes to complete the payment.")]
-    private float payingTime = 3f;
-
-    [SerializeField, Tooltip("Delay before starting the payment process after the player enters.")]
+    private float payingTime = 1.65f;
     private float delayBeforePay = 0.6f;
 
     [SerializeField, Tooltip("The UI image used to represent the payment progress.")]

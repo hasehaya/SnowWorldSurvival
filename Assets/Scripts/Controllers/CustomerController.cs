@@ -106,7 +106,8 @@ public class CustomerController :MonoBehaviour
         {
             currentOrderInfo.transform.SetParent(GameManager.Instance.Canvas.transform, false);
         }
-        currentOrderInfo.ShowInfo(transform, OrderCount, orderIconSprite);
+        currentOrderInfo.ShowInfo(transform, OrderCount, orderIconSprite);            currentOrderInfo.transform.SetAsLastSibling();
+        currentOrderInfo.transform.SetAsFirstSibling();
     }
 
     /// <summary>

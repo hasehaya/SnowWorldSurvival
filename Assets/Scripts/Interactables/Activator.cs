@@ -31,12 +31,17 @@ public class Activator : Interactable
     protected override void OnPlayerEnter()
     {
         linkedObject.SetActive(true);
+        AutoUpgradeEmployeeAmount();
+
         var upgradeHandlerList = FindObjectsOfType<UpgradeHandler>();
         foreach (var upgradeHandler in upgradeHandlerList)
         {
             upgradeHandler.SetMaterialType(MaterialType);
         }
+    }
 
+    private void AutoUpgradeEmployeeAmount()
+    {
         // ステージ1かつWood_1の場合、EmployeeAmountアップグレードが0なら1にする
         string currentSceneName = SceneManager.GetActiveScene().name;
         int currentStageNumber = int.Parse(new string(currentSceneName.Where(char.IsDigit).ToArray()));

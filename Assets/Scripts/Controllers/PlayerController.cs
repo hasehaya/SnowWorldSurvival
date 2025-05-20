@@ -6,7 +6,7 @@
 [RequireComponent(typeof(AudioSource))]
 public class PlayerController :MonoBehaviour
 {
-    private float baseSpeed = 3.5f;
+    private float baseSpeed = 3.2f;
     private float rotateSpeed = 360f;
     private int baseCapacity = 5;
     [SerializeField] private AudioClip[] footsteps;
