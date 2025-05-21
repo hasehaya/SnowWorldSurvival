@@ -30,6 +30,9 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
 
     static string nonConsumableProductId = "snowworldsurvival_adblock";
 
+    // 購入済み商品を見つけた時に発火するイベント
+    public event Action OnPurchasedProductFound;
+
     void Start()
     {
         InitializePurchasing();
@@ -149,6 +152,10 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
             {
                 Debug.Log("既に購入済みの商品が見つかりました: " + product.definition.id);
                 GameManager.Instance.PurchaseAdBlock();
+                
+                // 購入済み商品を見つけたことを通知
+                OnPurchasedProductFound?.Invoke();
+                
                 break;
             }
         }
@@ -172,6 +179,10 @@ public class NonConsumableIAP :MonoBehaviour, IDetailedStoreListener
         {
             Debug.Log("非消費型商品の購入に成功しました: " + args.purchasedProduct.definition.id);
             GameManager.Instance.PurchaseAdBlock();
+            
+            // 購入成功時にもイベントを発火
+            OnPurchasedProductFound?.Invoke();
+            
             return PurchaseProcessingResult.Complete;
         }
         else

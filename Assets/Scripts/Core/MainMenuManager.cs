@@ -20,6 +20,12 @@ public class MainMenuManager :MonoBehaviour
     [SerializeField, Tooltip("Background music for the main menu")]
     private AudioClip backgroundMusic;
 
+    [SerializeField]
+    private GameObject restorePopup;
+    
+    [SerializeField]
+    private GameObject restoreBtn;
+
     void Awake()
     {
         // 言語設定の初期化
@@ -41,6 +47,38 @@ public class MainMenuManager :MonoBehaviour
 
         // Play background music
         AudioManager.Instance.PlayBGM(backgroundMusic);
+        
+        // iOS以外のプラットフォームでは復元ボタンを非表示にする
+#if !UNITY_IOS
+        if (restoreBtn != null)
+        {
+            restoreBtn.SetActive(false);
+        }
+#endif
+        
+        // NonConsumableIAPのイベントを購読
+        if (NonConsumableIAP.Instance != null)
+        {
+            NonConsumableIAP.Instance.OnPurchasedProductFound += OnPurchasedProductFound;
+        }
+    }
+    
+    void OnDestroy()
+    {
+        // イベント購読の解除
+        if (NonConsumableIAP.Instance != null)
+        {
+            NonConsumableIAP.Instance.OnPurchasedProductFound -= OnPurchasedProductFound;
+        }
+    }
+    
+    // 購入済み商品が見つかった時の処理
+    private void OnPurchasedProductFound()
+    {
+        if (restorePopup != null)
+        {
+            restorePopup.SetActive(true);
+        }
     }
 
     private System.Collections.IEnumerator InitializeLocalizationSettings()

@@ -96,6 +96,14 @@ MonoBehaviour:
 '
     m_Metadata:
       m_Items: []
+  - m_Id: 16706496737959936
+    m_Localized: Restore
+    m_Metadata:
+      m_Items: []
+  - m_Id: 16706627205980160
+    m_Localized: "Purchases restored successfully!\t"
+    m_Metadata:
+      m_Items: []
   references:
     version: 2
     RefIds: []
